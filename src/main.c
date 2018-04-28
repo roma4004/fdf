@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/04/28 16:45:56 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/04/28 18:53:23 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,7 @@ int		ln_in_file(char *file_name)
 	while ((status = get_next_line(fd, &str)))
 	{
 		cnt++;
-		if (str != NULL)
-		{
-			free(str);
-			str = NULL;
-		}
+		ft_memdel((void *)&str);
 	}
 	close(fd);
 	return (cnt);
@@ -59,10 +55,7 @@ int		ch2int(char ch)
 int		parse_color(char *hex)
 {
 	if (hex == NULL || ft_strlen(hex) > 8 || hex[0] != '0' || hex[1] != 'x')
-	{
-		printf("%zu\n", ft_strlen(hex) );
-		return (0xffffff); //default color will be macros
-	}
+		return (DEF_COLOR);
 	return (ch2int(hex[2]) * 1048576
 			+ ch2int(hex[3]) * 65536
 			+ ch2int(hex[4]) * 4096
@@ -79,14 +72,8 @@ void	free_arr(char **arr)
 	{
 		i = 0;
 		while (arr[i])
-		{
-			if (arr[i] != NULL)
-				free(arr[i]);
-			arr[i++] = NULL;
-		}
-		if (arr != NULL)
-			free(arr);
-		arr = NULL;
+			ft_memdel((void *)&arr[i++]);
+		ft_memdel((void*)&arr);
 	}
 }
 
@@ -100,7 +87,7 @@ t_px	*parse_px(char *z_dt, int y, int x)
 		px->x = x;
 		px->y = y;
 		if((temp = ft_strsplit(z_dt, ',')))
-		{
+		{//need add check if split dont find comma separator
 			px->z = ft_atoi(temp[0]);
 			px->color = parse_color(temp[1]);
 		}
@@ -123,18 +110,12 @@ void	convert_map_and_free(t_win *win, char ***map)
 		while (map[y][x])
 		{
 			win->map[y] = parse_px(map[y][x], y, x);
-			if (map != NULL)
-			{
-				free(map[y]);
-				map[y] = NULL;
-			}
+			ft_memdel((void *)&map[y]);
 			x++;
 		}
-		if (map != NULL)
-			free(map);
-			map = NULL;
 		y++;
 	}
+	ft_memdel((void *)&map);
 }
 
 t_win	*parse_map(char *file_name, t_win *win)
@@ -152,8 +133,7 @@ t_win	*parse_map(char *file_name, t_win *win)
 		while (get_next_line(fd, &buf))
 		{
 			temp[i++] = ft_strsplit(buf, ' ');
-			if (buf != NULL)
-				free(buf);
+			ft_memdel((void *)&buf);
 		}
 		convert_map_and_free(win, temp);
 		close(fd);
@@ -162,21 +142,12 @@ t_win	*parse_map(char *file_name, t_win *win)
 }
 
 
-
-
-
-
 //  учесть возможность могих вайстпейсов между координатами
-
-
 //void	draw_line_h(int start_x, int statr_y, int end_x, int end_y)
 //{
-	
 //}
-
 //void	draw_px(t_map *map_data)
 //{
-
 //}
 
 void 	print_map(t_win *win)
@@ -188,7 +159,7 @@ void 	print_map(t_win *win)
 	while (win->map[++y])
 	{
 		x = 0;
-//---->>>		//printf("%f",win->map[y][x].z);
+		printf("%f\n",win->map[y][x].z);
 
 		//while (win->map[y][x].z != -1)
 		//{
@@ -217,29 +188,28 @@ int		main(int argc, char **argv)
 	{
 		if((win = (t_win *)malloc(sizeof(t_win))))
 		{
-			win->width = 1024;   //will be macros
-			win->height = 768;
-			win->offset_x = 50;
-			win->offset_y = 50;
-			win->scale_x = 20;
-			win->scale_y = 20;
-			win->scale_z = 20;
+			win->width = WIN_WIDTH;
+			win->height = WIN_HEIGHT;
+			win->offset_x = WIN_OFFSET;
+			win->offset_y = WIN_OFFSET;
+			win->scale_x = WIN_SCALE;
+			win->scale_y = WIN_SCALE;
+			win->scale_z = WIN_SCALE;
 			win->mlx_ptr = mlx_init();
-			win->win_ptr = mlx_new_window(win->mlx_ptr, win->width, win->height, "I Am minilibX"); //name will be macros
+			win->win_ptr = mlx_new_window(win->mlx_ptr, win->width, win->height, WIN_NAME);
 		}
-		if((win->map = (t_px **)malloc(sizeof(t_px *) * win->len)))
+		if((win->map = (t_px **)malloc(sizeof(t_px *) * win->len + 1)))
 		{
 			win->len = ln_in_file(argv[1]);
-			win->map[win->len] = 0;
-			printf("%d", parse_color("0x012def"));
-		
+			win->map[win->len] = NULL;
 			//printf("%p\n", win_ptr);
 			//printf("%d\n", ln_in_file(argv[1]));
-		//	print_map(parse_map(argv[1], win));
+			//print_map(parse_map(argv[1], win));
 		}
 	//	mlx_pixel_put(mlx_ptr, win_ptr, 5, 5, 0x009100FF);
 	//	mlx_string_put(mlx_ptr, win_ptr, 5, 5, 0x009100FF, "str");
-//		mlx_loop(win->mlx_ptr);
+		mlx_loop(win->mlx_ptr);
 	}
+	system("leaks ./fdf");
 	return (0);
 }

@@ -6,16 +6,19 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2018/04/21 19:10:14 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/04/28 17:37:30 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAIN_H
 # define MAIN_H
 
-# define WIN_HEIHGT 768
 # define WIN_WIDTH 1024
-# define WIN_NAME I_am_mlx
+# define WIN_HEIGHT 768
+# define WIN_OFFSET 50
+# define WIN_SCALE 20
+# define WIN_NAME "I_am_mlx"
+# define DEF_COLOR 0xffffff
 
 typedef struct	s_px
 {

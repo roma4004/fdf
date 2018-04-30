@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/04/29 13:47:11 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/04/30 21:07:37 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,13 @@ void	convert_map_and_free(t_win *win, char ***map)
 		x = 0;
 		while (map[y][x])
 		{
+			//segfaul in this func or in parse_px
+			//need test this part
 			win->map[y][x] = parse_px(map[y][x], y, x);
-			ft_memdel((void *)&map[y]);
+			
+
+			
+			free_arr(map[y]);
 			x++;
 		}
 		y++;
@@ -149,7 +154,8 @@ void	convert_map_and_free(t_win *win, char ***map)
 t_win	*parse_map(char *file_name, t_win *win)
 {
 	int		i;
-	//int		j;
+
+	int		j;
 	int		fd;
 	char	***temp;
 	char	*buf;
@@ -162,13 +168,13 @@ t_win	*parse_map(char *file_name, t_win *win)
 		while (get_next_line(fd, &buf))
 		{
 			temp[++i] = ft_strsplit(buf, ' ');
-		/*	j = -1;
+			j = -1;
 			while (temp[i] && temp[i][++j])
 				printf("%s \t", temp[i][j]);
 			printf("\n");
-		*/	ft_memdel((void *)&buf);
+			//ft_memdel((void *)&buf);
 		}
-		convert_map_and_free(win, temp);
+		//convert_map_and_free(win, temp);
 		close(fd);
 	}
 	return (win);

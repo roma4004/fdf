@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/04/30 21:07:37 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/05/09 14:42:14 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ int		arr_len(char **arr)
 {
 	int	len;
 
+	if (arr == NULL || *arr == NULL)
+		return (0);
 	len = 0;
 	while (arr[len])
 		len++;
@@ -104,6 +106,7 @@ t_px	*parse_px(char *z_dt, int y, int x)
 	char **temp;
 //z_dt = NULL;
 //temp = NULL;
+	printf("input parsePX, z=%s y=%d x=%d", z_dt, y, x);
 	if ((px = (t_px *)malloc(sizeof(t_px))))
 	{
 		init_px(px);
@@ -116,7 +119,7 @@ t_px	*parse_px(char *z_dt, int y, int x)
 			px->z = ft_atoi(temp[0]);
 			if (arr_len(temp) > 1)
 				parse_color_to(temp[1], px);
-		//	printf("prsPX: z = %f, color = %0x", px->z, px->color);
+			//printf("prsPX: z = %f, color = %0x", px->z, px->color);
 		//	printf("prsPX: z = %f, color = %0x", px->z, px->color);
 		}
 		free_arr(temp);
@@ -140,14 +143,12 @@ void	convert_map_and_free(t_win *win, char ***map)
 			//segfaul in this func or in parse_px
 			//need test this part
 			win->map[y][x] = parse_px(map[y][x], y, x);
-			
-
-			
-			free_arr(map[y]);
+		
 			x++;
 		}
 		y++;
 	}
+	free_arr(map[y]);
 	ft_memdel((void *)&map);
 }
 
@@ -169,10 +170,10 @@ t_win	*parse_map(char *file_name, t_win *win)
 		{
 			temp[++i] = ft_strsplit(buf, ' ');
 			j = -1;
-			while (temp[i] && temp[i][++j])
-				printf("%s \t", temp[i][j]);
-			printf("\n");
-			//ft_memdel((void *)&buf);
+			//while (temp[i] && temp[i][++j])
+			//	printf("%s \t", temp[i][j]);
+			//printf("\n");
+			ft_memdel((void *)&buf);
 		}
 		//convert_map_and_free(win, temp);
 		close(fd);
@@ -212,12 +213,12 @@ void 	print_map(t_win *win)
 	}
 }
 
-int		exit_x(void *par)
+/*int		exit_x(void *par)
 {
 	par = NULL;
 	exit(1);
 	return (0);
-}
+}*/
 
 int		main(int argc, char **argv)
 {
@@ -244,12 +245,12 @@ int		main(int argc, char **argv)
 			//printf("%p\n", win_ptr);
 			//printf("%d\n", ln_in_file(argv[1]));
 			//print_map(parse_map(argv[1], win));
-			parse_map(argv[1], win);
+			parse_map_to(argv[1], win);
 		}
 	//	mlx_pixel_put(mlx_ptr, win_ptr, 5, 5, 0x009100FF);
 	//	mlx_string_put(mlx_ptr, win_ptr, 5, 5, 0x009100FF, "str");
 	//	mlx_loop(win->mlx_ptr);
 	}
-	system("leaks ./fdf");
+	//system("leaks ./fdf");
 	return (0);
 }

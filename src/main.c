@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/05/09 14:42:14 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/06/05 11:39:18 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ t_px	*parse_px(char *z_dt, int y, int x)
 	return (px);
 }
 
-void	convert_map_and_free(t_win *win, char ***map)
+void	convert_map(t_win *win, char ***map)
 {
 	int		y;
 	int		x;
@@ -148,11 +148,9 @@ void	convert_map_and_free(t_win *win, char ***map)
 		}
 		y++;
 	}
-	free_arr(map[y]);
-	ft_memdel((void *)&map);
 }
 
-t_win	*parse_map(char *file_name, t_win *win)
+t_win	*parse_map_to(char *file_name, t_win *win)
 {
 	int		i;
 
@@ -170,12 +168,13 @@ t_win	*parse_map(char *file_name, t_win *win)
 		{
 			temp[++i] = ft_strsplit(buf, ' ');
 			j = -1;
-			//while (temp[i] && temp[i][++j])
-			//	printf("%s \t", temp[i][j]);
-			//printf("\n");
+			while (temp[i] && temp[i][++j])
+				printf("%s \t", temp[i][j]);
+			printf("\n");
 			ft_memdel((void *)&buf);
 		}
-		//convert_map_and_free(win, temp);
+		convert_map(win, temp);
+		free_arr(temp);
 		close(fd);
 	}
 	return (win);

@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/06/10 21:17:48 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/06/12 13:24:25 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,10 +142,7 @@ void	convert_map(t_win *win, char ***map)
 	{
 		row = 0;
 		while (map[col][row])
-		{
-			//need malloc for map[col]
-			//segfaul in this func or in parse_px
-			//need test this part
+		{		//need test this
 			win->map[col][row] = parse_px(map[col][row], col, row);
 			row++;
 		}
@@ -183,6 +180,7 @@ t_win	*parse_map_to(char *file_name, t_win *win)
 	if ((temp = (char ***)malloc(sizeof(char **) * (win->len + 1))))
 	{
 		temp[win->len] = NULL;
+		win->map_cols = 0;
 		fd = open(file_name, O_RDONLY);
 		i = -1;
 		while (get_next_line(fd, &buf))
@@ -190,15 +188,26 @@ t_win	*parse_map_to(char *file_name, t_win *win)
 			temp[++i] = ft_strsplit(buf, ' ');
 			j = -1;
 			while (temp[i] && temp[i][++j])
-				printf("%s \t", temp[i][j]);
-			printf("\n");
+			{//why j so big?
+			}
+			if (win->map_cols != 0)
+			{
+				if (win->map_cols != j)
+					printf("error map width is invalid i%d j%d c%d\n", i, j, win->map_cols);
+			}
+			else
+			{
+				win->map_cols = j;
+			}
+			//printf("%s \t", temp[i][j]);
+			//printf("\n");
 			ft_memdel((void *)&buf);
 		}
-		printf("height %d \t", i);
-		printf("width %d \t", j);
+		printf("height %d %d \t", i, win->map_cols);
+		printf("width %d %d \t", j, win->map_rows);
 
-		win->height = i;
-		win->width = j;
+		win->map_rows = i;
+		win->map_cols = j;
 
 		//count_map_size(win, temp);
 		//convert_map(win, temp);
@@ -267,7 +276,7 @@ int		main(int argc, char **argv)
 			win->win_ptr = mlx_new_window(win->mlx_ptr, win->width, win->height, WIN_NAME);
 			win->len = ln_in_file(argv[1]);
 		}
-		if((win->map = (t_px ***)malloc(sizeof(t_px **) * win->len + 1)))
+		if((win->map = (t_px ***)malloc(sizeof(t_px **) * (win->len + 1))))
 		{
 			win->map[win->len] = NULL;
 			//printf("%p\n", win_ptr);
@@ -275,9 +284,9 @@ int		main(int argc, char **argv)
 			//print_map(parse_map(argv[1], win));
 			parse_map_to(argv[1], win);
 		}
-	//	mlx_pixel_put(mlx_ptr, win_ptr, 5, 5, 0x009100FF);
-	//	mlx_string_put(mlx_ptr, win_ptr, 5, 5, 0x009100FF, "str");
-	//	mlx_loop(win->mlx_ptr);
+		mlx_pixel_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF);
+		mlx_string_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF, "str");
+		mlx_loop(win->mlx_ptr);
 	}
 	//system("leaks ./fdf");
 	return (0);

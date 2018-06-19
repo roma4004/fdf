@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/06/12 13:24:25 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/06/19 14:08:23 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,10 @@ int		init_px(t_px *px)
 t_px	*parse_px(char *z_dt, int y, int x)
 {
 	t_px *px;
-//	char **temp;
-//z_dt = NULL;
-//temp = NULL;
-	printf("input parsePX, z=%s y=%d x=%d", z_dt, y, x);
+	//char **temp;
+	//z_dt = NULL;
+	//temp = NULL;
+//	printf("input parsePX, z=%s y=%d x=%d", z_dt, y, x);
 	if ((px = (t_px *)malloc(sizeof(t_px))))
 	{
 		init_px(px);
@@ -137,42 +137,53 @@ void	convert_map(t_win *win, char ***map)
 
 	if (win == NULL || map == NULL)
 		return ;
-	col = 0;
-	while (map[col])
+	row = 0;
+	while (map[row])
 	{
-		row = 0;
-		while (map[col][row])
+		col = 0;
+		while (map[row][col])
 		{		//need test this
-			win->map[col][row] = parse_px(map[col][row], col, row);
-			row++;
+			printf("parse px\n");
+			win->map[row][col][0] = *parse_px(map[row][col], row, col);
+			printf("after parse px\n");
+			//printf("\nprsPX: x = %f, y = %f, z = %f \n", win->map[row][col]->x, win->map[row][col]->y, win->map[row][col]->z);
+
+			col++;
 		}
-		col++;
+		row++;
 	}
 }
 
-void	count_map_size(t_win *win, char ***temp)
+int		set_map_size(t_win *win, char ***temp)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	int		first;
 
 	i = 0;
-	while (temp[i++])
+	first = 0;
+	while (temp[i])
 	{
 		j = 0;
 		while (temp[i][j])
 			j++;
+		if (first == 0)
+			first = j;
+		if (j != first)
+			return (1);
+		i++;
 	}
-	printf("height %d \t", i);
-	printf("width %d \t", j);
-	win->height = i;
-	win->width = j;
+	win->map_cols = i;
+   	win->map_rows = j;
+	//check tmp map width
+	//check allowed symbol
+	//need add validate on start func
+	return (0);
 }
 
-t_win	*parse_map_to(char *file_name, t_win *win)
+t_win	*parse_map(char *file_name, t_win *win)
 {
 	int		i;
-
-	int		j;
 	int		fd;
 	char	***temp;
 	char	*buf;
@@ -183,34 +194,14 @@ t_win	*parse_map_to(char *file_name, t_win *win)
 		win->map_cols = 0;
 		fd = open(file_name, O_RDONLY);
 		i = -1;
-		while (get_next_line(fd, &buf))
-		{
-			temp[++i] = ft_strsplit(buf, ' ');
-			j = -1;
-			while (temp[i] && temp[i][++j])
-			{//why j so big?
-			}
-			if (win->map_cols != 0)
-			{
-				if (win->map_cols != j)
-					printf("error map width is invalid i%d j%d c%d\n", i, j, win->map_cols);
-			}
-			else
-			{
-				win->map_cols = j;
-			}
-			//printf("%s \t", temp[i][j]);
-			//printf("\n");
+		printf("len %d \n", win->len);
+		while (get_next_line(fd, &buf) && (temp[++i] = ft_strsplit(buf, ' ')))
 			ft_memdel((void *)&buf);
-		}
-		printf("height %d %d \t", i, win->map_cols);
-		printf("width %d %d \t", j, win->map_rows);
-
-		win->map_rows = i;
-		win->map_cols = j;
-
-		//count_map_size(win, temp);
-		//convert_map(win, temp);
+		if (set_map_size(win, temp) == 1)
+			printf("map_invalid");
+		//printf("val width  %d \t", win->map_cols);
+		//printf("val height %d \t", win->map_rows);
+		convert_map(win, temp);
 		//free_arr***
 		//free_arr(temp);
 		close(fd);
@@ -282,7 +273,7 @@ int		main(int argc, char **argv)
 			//printf("%p\n", win_ptr);
 			//printf("%d\n", ln_in_file(argv[1]));
 			//print_map(parse_map(argv[1], win));
-			parse_map_to(argv[1], win);
+			parse_map(argv[1], win);
 		}
 		mlx_pixel_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF);
 		mlx_string_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF, "str");

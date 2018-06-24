@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/06/19 14:08:23 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/06/24 21:17:02 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int		ch2int(char ch)
 
 void	parse_color_to(char *hex, t_px *px)
 {
+	printf("parse_col hex: %s\n", hex);
 	if (!hex || !px || ft_strlen(hex) > 8 || hex[0] != '0' || hex[1] != 'x')
 		return ;
 	px->color = (ch2int(hex[2]) * 1048576
@@ -81,11 +82,12 @@ int		arr_len(char **arr)
 {
 	int	len;
 
-	if (arr == NULL || *arr == NULL)
+	if (arr == NULL)
 		return (0);
 	len = 0;
 	while (arr[len])
 		len++;
+	//printf("\nsizeof array:%d\n", len);
 	return (len);
 }
 
@@ -100,34 +102,23 @@ int		init_px(t_px *px)
 	return (0);
 }
 
-t_px	*parse_px(char *z_dt, int y, int x)
+void	parse_px(t_win *win, char ***map, int row, int col)//t_px *px, char *z_dt, int y, int x)
 {
-	t_px *px;
-	//char **temp;
-	//z_dt = NULL;
-	//temp = NULL;
-//	printf("input parsePX, z=%s y=%d x=%d", z_dt, y, x);
-	if ((px = (t_px *)malloc(sizeof(t_px))))
-	{
-		init_px(px);
-		px->x = x;
-		px->y = y;
-		px->z = ft_atoi(z_dt);
-
-		printf("\nprsPX: x = %f, y = %f, z = %f \n", px->x, px->y, px->z);
-
-		/*if((temp = ft_strsplit(z_dt, ',')))
+	char **temp;
+//need refactor this func
+	init_px(&win->map[row][col]);
+	
+		win->map[row][col].y = row;
+		win->map[row][col].x = col;
+		if((temp = ft_strsplit(map[row][col], ',')))
 		{
-			px->z = ft_atoi(temp[0]);
+			win->map[row][col].z = ft_atoi(temp[0]);
 			if (arr_len(temp) > 1)
-				parse_color_to(temp[1], px);
-		 printf("prsPX: z = %f, color = %0x", px->z, px->color);
-		 printf("prsPX: z = %f, color = %0x", px->z, px->color);
+				parse_color_to(temp[1], &win->map[row][col]);
 		}
-		*/
-		//free_arr(temp);
-	}
-	return (px);
+		//printf(" prsPX: x = %f, y = %f, z = %f, col=%d\n", px->x, px->y, px->z, px->color);
+		free_arr(temp);
+	
 }
 
 void	convert_map(t_win *win, char ***map)
@@ -140,14 +131,13 @@ void	convert_map(t_win *win, char ***map)
 	row = 0;
 	while (map[row])
 	{
+		win->map[row] = (t_px *)malloc(sizeof(t_px) * win->map_cols);
 		col = 0;
 		while (map[row][col])
-		{		//need test this
-			printf("parse px\n");
-			win->map[row][col][0] = *parse_px(map[row][col], row, col);
-			printf("after parse px\n");
-			//printf("\nprsPX: x = %f, y = %f, z = %f \n", win->map[row][col]->x, win->map[row][col]->y, win->map[row][col]->z);
-
+		{
+			parse_px(win, map, row, col);
+		printf(" prsPX1: x = %f, y = %f, z = %f, col=%d\n", win->map[row][col].x, 
+				win->map[row][col].y, win->map[row][col].z, win->map[row][col].color);
 			col++;
 		}
 		row++;
@@ -223,20 +213,25 @@ void 	print_map(t_win *win)
 	int	col;
 	int	row;
 
-	col = -1;
-	while (win->map[++col])
+	printf("rows=%d, cols=%d\n", win->map_rows, win->map_cols);
+	printf("x=%f, y=%f, z=%f", win->map[10][10].x, win->map[10][10].y, win->map[10][10].z);
+	row = -1;
+	while (++row < win->map_rows)
 	{
-		row = 0;
-		printf("%f\n",win->map[col][row]->z);
+		col = 0;
+		//printf("%f\n",win->map[col][row].z);
 
-		//while (win->map[y][x].z != -1)
-		//{
-		//	mlx_pixel_put(win->mlx_ptr, win->win_ptr,
-		//			win->offset_x + (x * win->scale_x), 
-		//			win->offset_y + (y * win->scale_y)
-		//		  	- (win->map[y][x].z) * win->scale_z, 0x009100FF); //win->map[y][x].color);
-	//		x++;
-	//	}	//printf("%d ", ft_atoi(map[y][x++]));
+		while (col < win->map_cols)
+		{
+			mlx_pixel_put(win->mlx_ptr, win->win_ptr,
+				   	win->offset_x + col * win->scale_x,
+				   	win->offset_y + row * win->scale_y, 0x009100FF);
+				   	//win->offset_x + (col * win->scale_x),
+				   	//win->offset_y + (row * win->scale_y)
+				  	//- (win->map[row][col].z) * win->scale_z, 
+					// win->map[row][col].color);
+			col++;
+		}
 		printf("\n");
 	}
 }
@@ -267,13 +262,13 @@ int		main(int argc, char **argv)
 			win->win_ptr = mlx_new_window(win->mlx_ptr, win->width, win->height, WIN_NAME);
 			win->len = ln_in_file(argv[1]);
 		}
-		if((win->map = (t_px ***)malloc(sizeof(t_px **) * (win->len + 1))))
+		if((win->map = (t_px **)malloc(sizeof(t_px *) * (win->len + 1))))
 		{
 			win->map[win->len] = NULL;
 			//printf("%p\n", win_ptr);
 			//printf("%d\n", ln_in_file(argv[1]));
-			//print_map(parse_map(argv[1], win));
 			parse_map(argv[1], win);
+			print_map(win);
 		}
 		mlx_pixel_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF);
 		mlx_string_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF, "str");

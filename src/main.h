@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2018/06/19 14:00:30 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/06/24 17:30:06 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef struct	s_px
 
 typedef struct	s_win
 {
-	t_px	***map;
+	t_px	**map;
 	int		len;
 	int		map_rows;
 	int		map_cols;

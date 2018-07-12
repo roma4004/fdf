@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2018/06/24 21:18:51 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/12 21:25:40 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,19 @@
 
 # define WIN_WIDTH 1024
 # define WIN_HEIGHT 768
-# define WIN_OFFSET 50
-# define WIN_SCALE 20
+# define WIN_OFFSET 150
+# define WIN_SCALE 120
 # define WIN_NAME "I_am_mlx"
 # define DEF_COLOR 0xffffff
-			
+
+typedef struct	s_dll
+{
+	struct s_dll	*prev;
+	struct s_dll	*next;
+	size_t			size;
+	void			*data;
+}				t_dll;
+
 typedef struct	s_px
 {
 	double	x;

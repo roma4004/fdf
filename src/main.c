@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/11 18:13:51 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/12 22:19:34 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	convert_map(t_win *win, char ***map, int y, int x)
 			{
 				win->map[y][x].y = y;
 				win->map[y][x].x = x;
-				//win->map[y][x].z = ft_atoi(temp[0]);
+				win->map[y][x].z = ft_atoi(temp[0]);
 				//if (arr_len(temp) > 1)
 				//	parse_color_to(temp[1], win, y, x);
 				free_arr(temp);
@@ -158,20 +158,49 @@ int		set_map_size(t_win *win, char ***temp)
 	return (0);
 }
 
+void	lst_mod(t_ddl *lst, char *buf)
+{
+	t_ddl *cur;
+
+	cur = lst;
+	if (!cur)
+		cur = (t_dll)malloc(sizeof(t_dll));
+	else
+	{
+		if ((cur = (t_dll *)malloc(sizeof(t_dll))))
+		{
+			cur->next = lst;
+		}
+	}
+	cur->data = (void *)ft_strdup(buf);
+	free(buf); //buf = NULL;
+	lst = cur;
+//_____________________________________________
+}
+
 t_win	*parse_map(char *file_name, t_win *win)
 {
 	int		i;
 	int		fd;
-	char	***temp;
+			char	***temp;
+	//char	*tmp_str;
+	t_dll	lst;
+	t_dll	lst_new;
+	size_t	len;
 	char	*buf;
 
 	if ((temp = (char ***)malloc(sizeof(char **) * (win->len + 1))))
 	{
 		temp[win->len] = NULL;
 		win->map_cols = 0;
+		win->map_rows = 0;
 		fd = open(file_name, O_RDONLY);
 		i = -1;
 		printf("len %d \n", win->len);
+		while (get_next_line(fd, &buf) && (win->map_rows++))
+			lst_mod(lst, buf);
+		
+
 		while (get_next_line(fd, &buf) && (temp[++i] = ft_strsplit(buf, ' ')))
 			ft_memdel((void *)&buf);
 		if (set_map_size(win, temp) == 1)
@@ -210,7 +239,7 @@ void 	print_map(t_win *win)
 	printf("cur rows=%d\n", row);
 		col = 0;
 
-		while ((void *)win->map[row][col] != NULL)
+		while (col < win->map_cols)
 		{
 	printf("cur cols=%d\n", col);
 	//printf("%f\n",win->map[col][row].z);

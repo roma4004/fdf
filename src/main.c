@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/12 22:19:34 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/13 18:59:20 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,11 @@ void	parse_color_to(char *hex, t_win *win, int y, int x)
 	if (!hex || !win || ft_strlen(hex) > 8 || hex[0] != '0' || hex[1] != 'x')
 		return ;
 	win->map[y][x].color = (ch2int(hex[2]) * 1048576
-					+ ch2int(hex[3]) * 65536
-					+ ch2int(hex[4]) * 4096
-					+ ch2int(hex[5]) * 256
-					+ ch2int(hex[6]) * 16
-					+ ch2int(hex[7]) * 1);
+						 +  ch2int(hex[3]) * 65536
+						 +  ch2int(hex[4]) * 4096
+						 +  ch2int(hex[5]) * 256
+						 +  ch2int(hex[6]) * 16
+						 +  ch2int(hex[7]) * 1);
 }
 
 void	free_arr(char **arr)
@@ -158,60 +158,101 @@ int		set_map_size(t_win *win, char ***temp)
 	return (0);
 }
 
-void	lst_mod(t_ddl *lst, char *buf)
+void	lst_mod(t_lst *lst, char *buf, int size)
 {
-	t_ddl *cur;
+	t_lst *cur;
+	t_lst *tmp;
 
+	if (!buf)
+		return ;
 	cur = lst;
-	if (!cur)
-		cur = (t_dll)malloc(sizeof(t_dll));
+	if (!cur && cur = (t_lst)malloc(sizeof(t_lst)))
+		cur->next = NULL;
 	else
-	{
-		if ((cur = (t_dll *)malloc(sizeof(t_dll))))
-		{
-			cur->next = lst;
-		}
-	}
-	cur->data = (void *)ft_strdup(buf);
+		if ((tmp = (t_lst *)malloc(sizeof(t_lst))) && tmp->next = lst)
+			cur = tmp;
+	cur->content = (void *)ft_strdup(buf);
+	cur->content_size = size;
 	free(buf); //buf = NULL;
 	lst = cur;
-//_____________________________________________
 }
+
+//int		strncpy
+
+char	*join_lst_data(t_lst *lst)
+{
+	t_lst	*cur;
+	int		cnt;
+	int		len;
+	char	*tmp_str;
+
+	cur = lst;
+	cnt = 0;
+	len = 0;
+	while (cur->next && ++cnt)
+	{
+		len += lst->content_size;
+		cur = cur->next;
+	}
+	if ((join_str = (char *)malloc(sizeof(char) * (len + 1))))
+	{
+		join_str[len] = "/0";
+		cur = lst;
+		i = 0;
+		while (cur)
+		{
+			ft_strncpy(join_str + i, (char *)lst->content, lst->content_size);
+			i += lst->content_size;
+			cur = cur->next;
+		}
+	}
+	return (join_str);
+}
+
+void	destroy_lst()
+{
+	/////-------------------------------------------
+}
+
 
 t_win	*parse_map(char *file_name, t_win *win)
 {
 	int		i;
 	int		fd;
-			char	***temp;
+	char	**temp;
 	//char	*tmp_str;
-	t_dll	lst;
-	t_dll	lst_new;
+	t_list	*lst;
 	size_t	len;
 	char	*buf;
 
-	if ((temp = (char ***)malloc(sizeof(char **) * (win->len + 1))))
-	{
-		temp[win->len] = NULL;
+	//if ((temp = (char ***)malloc(sizeof(char **) * (win->len + 1))))
+	//{
+	//	temp[win->len] = NULL;
 		win->map_cols = 0;
 		win->map_rows = 0;
 		fd = open(file_name, O_RDONLY);
-		i = -1;
-		printf("len %d \n", win->len);
-		while (get_next_line(fd, &buf) && (win->map_rows++))
-			lst_mod(lst, buf);
-		
+		get_next_line(fd, &buf);
+		win->map_rows++;
+		lst = ft_lstnew(buf, ft_strlen(buf));
+		free(buf);
+		while (get_next_line(fd, &buf) && (win->map_rows++) && ft_lstadd(lst, ft_lstnew(buf, ft_strlen(buf)));
+			free(buf);
+		buf = join_lst_data(lst);
+		temp = ft_strsplit(buf, ' ');
+		free(buf);	
+		//neeed to del lst
 
-		while (get_next_line(fd, &buf) && (temp[++i] = ft_strsplit(buf, ' ')))
-			ft_memdel((void *)&buf);
+	//	while (get_next_line(fd, &buf) && (temp[++i] = ft_strsplit(buf, ' ')))
+	//		ft_memdel((void *)&buf);
 		if (set_map_size(win, temp) == 1)
 			printf("map_invalid");
 		//printf("val width  %d \t", win->map_cols);
 		//printf("val height %d \t", win->map_rows);
-		convert_map(win, temp, 0, 0);
+		convert_map(win, temp, 0, 0);//need refactor convert_map   char *** to char **
 		//free_arr***
 		//free_arr(temp);
 		close(fd);
-	}
+//	}
 	return (win);
 }
 

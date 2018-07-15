@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/13 18:59:20 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/15 16:28:52 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int		init_px(t_px *px)
 
 void	convert_map(t_win *win, char ***map, int y, int x)
 {
-	char **temp;//need refactor this func
+	char **temp;//need refactor
 	
 	if (win == NULL || map == NULL)
 		return ;
@@ -158,62 +158,68 @@ int		set_map_size(t_win *win, char ***temp)
 	return (0);
 }
 
-void	lst_mod(t_lst *lst, char *buf, int size)
+char	*join_lst_data(t_list *lst)
 {
-	t_lst *cur;
-	t_lst *tmp;
-
-	if (!buf)
-		return ;
-	cur = lst;
-	if (!cur && cur = (t_lst)malloc(sizeof(t_lst)))
-		cur->next = NULL;
-	else
-		if ((tmp = (t_lst *)malloc(sizeof(t_lst))) && tmp->next = lst)
-			cur = tmp;
-	cur->content = (void *)ft_strdup(buf);
-	cur->content_size = size;
-	free(buf); //buf = NULL;
-	lst = cur;
-}
-
-//int		strncpy
-
-char	*join_lst_data(t_lst *lst)
-{
-	t_lst	*cur;
-	int		cnt;
+	t_list	*cur;
 	int		len;
-	char	*tmp_str;
+	int		i;
+	char	*join_str;
 
-	cur = lst;
-	cnt = 0;
-	len = 0;
-	while (cur->next && ++cnt)
+	if (!(cur = lst) && (len = 0))
+		return (NULL);
+	while (cur->next && ++len)
 	{
 		len += lst->content_size;
 		cur = cur->next;
-	}
-	if ((join_str = (char *)malloc(sizeof(char) * (len + 1))))
+	}	//printf("len=%d, cnt=%d\n", len, cnt);
+	if ((join_str = (char *)malloc(sizeof(char) * len)) && (cur = lst))
 	{
-		join_str[len] = "/0";
-		cur = lst;
 		i = 0;
 		while (cur)
 		{
-			ft_strncpy(join_str + i, (char *)lst->content, lst->content_size);
-			i += lst->content_size;
+			ft_strncpy(join_str + i, (char *)cur->content, cur->content_size);
+			i += cur->content_size;
+			join_str[i++] = '\n';
 			cur = cur->next;
 		}
+		join_str[len - 1] = '\0';//	printf("%s\n", join_str);
 	}
 	return (join_str);
 }
 
-void	destroy_lst()
+void	destroy_lst(t_list *lst)
 {
-	/////-------------------------------------------
+	t_list	*cur;
+	t_list	*tmp;
+
+	if (!lst)
+		return ;
+	cur = lst;
+	while (cur)
+	{
+		tmp = cur->next;
+		if (cur->content)
+			free(cur->content);
+		free(cur);
+		cur = tmp;
+	}
 }
 
+int		lst_append(t_list **lst, char *buf, int size)
+{
+	t_list *cur;
+
+	if (*lst == NULL)
+		*lst = ft_lstnew(buf, size);
+	else
+	{
+		cur = *lst;
+		while (cur->next)
+			cur = cur->next;
+		cur->next = ft_lstnew(buf, size);
+	}
+	return (1);
+}
 
 t_win	*parse_map(char *file_name, t_win *win)
 {
@@ -222,33 +228,35 @@ t_win	*parse_map(char *file_name, t_win *win)
 	char	**temp;
 	//char	*tmp_str;
 	t_list	*lst;
-	size_t	len;
+//	size_t	len;
 	char	*buf;
 
 	//if ((temp = (char ***)malloc(sizeof(char **) * (win->len + 1))))
 	//{
 	//	temp[win->len] = NULL;
+	//	}
 		win->map_cols = 0;
 		win->map_rows = 0;
+		lst = NULL;
 		fd = open(file_name, O_RDONLY);
-		get_next_line(fd, &buf);
-		win->map_rows++;
-		lst = ft_lstnew(buf, ft_strlen(buf));
-		free(buf);
-		while (get_next_line(fd, &buf) && (win->map_rows++) && ft_lstadd(lst, ft_lstnew(buf, ft_strlen(buf)));
+		while (get_next_line(fd, &buf) 
+			&& (lst_append(&lst, buf, ft_strlen(buf))) && (++win->map_rows))
 			free(buf);
 		buf = join_lst_data(lst);
 		temp = ft_strsplit(buf, ' ');
-		free(buf);	
-		//neeed to del lst
+		free(buf);
 
-	//	while (get_next_line(fd, &buf) && (temp[++i] = ft_strsplit(buf, ' ')))
+		i = 0;
+		//while (temp[i])
+	//		printf("%s", temp[i++]);
+
+		//	while (get_next_line(fd, &buf) && (temp[++i] = ft_strsplit(buf, ' ')))
 	//		ft_memdel((void *)&buf);
-		if (set_map_size(win, temp) == 1)
-			printf("map_invalid");
+	//	if (set_map_size(win, temp) == 1)
+	//		printf("map_invalid");
 		//printf("val width  %d \t", win->map_cols);
 		//printf("val height %d \t", win->map_rows);
-		convert_map(win, temp, 0, 0);//need refactor convert_map   char *** to char **
+	//	convert_map(win, temp, 0, 0);//need refactor convert_map   char *** to char **
 		//free_arr***
 		//free_arr(temp);
 		close(fd);
@@ -331,7 +339,7 @@ int		main(int argc, char **argv)
 			//printf("%p\n", win_ptr);
 			//printf("%d\n", ln_in_file(argv[1]));
 			parse_map(argv[1], win);
-			print_map(win);
+		//	print_map(win);
 		}
 		mlx_pixel_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF);
 		mlx_string_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF, "str");

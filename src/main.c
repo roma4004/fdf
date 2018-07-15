@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/15 16:28:52 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/15 23:21:39 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,23 @@
 #include "get_next_line.h"
 #include "main.h"
 
-int		ln_in_file(char *file_name)
+int		exit_x(void *par)
 {
-	int		fd;
-	int		cnt;
-	int		status;
-	char	*str;
+	par = NULL;
+	exit(1);
+	return (0);
+}
 
-	fd = open(file_name, O_RDONLY);
-	cnt = 0;
-	str = NULL;
-	while ((status = get_next_line(fd, &str)))
-	{
-		cnt++;
-		ft_memdel((void *)&str);
-	}
-	close(fd);
-	return (cnt);
+int		is_hex(char ch)
+{
+	if (ch == 'A' || ch == 'a'
+	|| ch == 'B' || ch == 'b'
+	|| ch == 'C' || ch == 'c'
+	|| ch == 'D' || ch == 'd'
+	|| ch == 'E' || ch == 'e'
+	|| ch == 'F' || ch == 'f')
+		return (1);
+	return (0);
 }
 
 int		ch2int(char ch)
@@ -52,17 +52,25 @@ int		ch2int(char ch)
 	return (ch - '0');
 }
 
-void	parse_color_to(char *hex, t_win *win, int y, int x)
+int		parse_color_to(char *hex, size_t *i, size_t max_i)
 {
-	printf("parse_col hex: %s\n", hex);
-	if (!hex || !win || ft_strlen(hex) > 8 || hex[0] != '0' || hex[1] != 'x')
-		return ;
-	win->map[y][x].color = (ch2int(hex[2]) * 1048576
-						 +  ch2int(hex[3]) * 65536
-						 +  ch2int(hex[4]) * 4096
-						 +  ch2int(hex[5]) * 256
-						 +  ch2int(hex[6]) * 16
-						 +  ch2int(hex[7]) * 1);
+	int		res;
+
+	res = 0;
+	if (*i >= max_i || !hex || hex[0] != ',' || hex[1] != '0' || hex[2] != 'x' 
+	|| !is_hex(hex[3]) || !is_hex(hex[4])
+	|| !is_hex(hex[5]) || !is_hex(hex[6])
+	|| !is_hex(hex[7]) || !is_hex(hex[8]))
+		return (DEF_COLOR);
+  //printf("col=%c%c%c%c%c%c%c%c", hex[1], hex[2], hex[3], hex[4], hex[5], hex[5], hex[6], hex[7]);
+	res = ch2int(hex[3]) * 1048576
+		+ ch2int(hex[4]) * 65536
+		+ ch2int(hex[5]) * 4096
+		+ ch2int(hex[6]) * 256
+		+ ch2int(hex[7]) * 16
+		+ ch2int(hex[8]) * 1;
+	*i = *i + 9;
+	return (res);
 }
 
 void	free_arr(char **arr)
@@ -78,123 +86,13 @@ void	free_arr(char **arr)
 	}
 }
 
-int		arr_len(char **arr)
-{
-	int	len;
-
-	if (arr == NULL)
-		return (0);
-	len = 0;
-	while (arr[len])
-		len++;
-	//printf("\nsizeof array:%d\n", len);
-	return (len);
-}
-
-int		init_px(t_px *px)
-{
-	if (px == NULL)
-		return (0);
-	px->x = 0;
-	px->y = 0;
-	px->z = 0;
-	px->color = DEF_COLOR;
-	return (1);
-}
-
-void	convert_map(t_win *win, char ***map, int y, int x)
-{
-	char **temp;//need refactor
-	
-	if (win == NULL || map == NULL)
-		return ;
-	while (map[y])
-	{
-		win->map[y] = (t_px *)malloc(sizeof(t_px) * (win->map_cols + 1));
-		win->map[win->map_cols] = NULL;
-		x = 0;
-		while (map[y][x])
-		{//parse_px(win, map, y, x); 
-			if((temp = ft_strsplit(map[y][x], ',')) && init_px(&win->map[y][x]))
-			{
-				win->map[y][x].y = y;
-				win->map[y][x].x = x;
-				win->map[y][x].z = ft_atoi(temp[0]);
-				//if (arr_len(temp) > 1)
-				//	parse_color_to(temp[1], win, y, x);
-				free_arr(temp);
-			}		//printf(" prsPX: x = %f, y = %f, z = %f, col=%d\n", px->x, px->y, px->z, px->color);
-		printf(" prsPX: y = %f, x = %f, z = %f, col=%d\n", win->map[y][x].y, win->map[y][x].x, win->map[y][x].z, win->map[y][x].color);
-			x++;
-		}
-		y++;
-	}
-}
-
-int		set_map_size(t_win *win, char ***temp)
-{
-	int		i;
-	int		j;
-	int		first;
-
-	i = 0;
-	first = 0;
-	while (temp[i])
-	{
-		j = 0;
-		while (temp[i][j])
-			j++;
-		if (first == 0)
-			first = j;
-		if (j != first)
-			return (1);
-		i++;
-	}
-	win->map_cols = i;
-   	win->map_rows = j;
-	//check tmp map width
-	//check allowed symbol
-	//need add validate on start func
-	return (0);
-}
-
-char	*join_lst_data(t_list *lst)
-{
-	t_list	*cur;
-	int		len;
-	int		i;
-	char	*join_str;
-
-	if (!(cur = lst) && (len = 0))
-		return (NULL);
-	while (cur->next && ++len)
-	{
-		len += lst->content_size;
-		cur = cur->next;
-	}	//printf("len=%d, cnt=%d\n", len, cnt);
-	if ((join_str = (char *)malloc(sizeof(char) * len)) && (cur = lst))
-	{
-		i = 0;
-		while (cur)
-		{
-			ft_strncpy(join_str + i, (char *)cur->content, cur->content_size);
-			i += cur->content_size;
-			join_str[i++] = '\n';
-			cur = cur->next;
-		}
-		join_str[len - 1] = '\0';//	printf("%s\n", join_str);
-	}
-	return (join_str);
-}
-
 void	destroy_lst(t_list *lst)
 {
 	t_list	*cur;
 	t_list	*tmp;
 
-	if (!lst)
+	if (!(cur = lst))
 		return ;
-	cur = lst;
 	while (cur)
 	{
 		tmp = cur->next;
@@ -221,46 +119,122 @@ int		lst_append(t_list **lst, char *buf, int size)
 	return (1);
 }
 
+int		ft_len_of_num(const char *s, size_t i, size_t max_i)
+{
+	int		len;
+
+	len = 0;
+	while (s[i] && i < max_i)
+		if (s[i] >= '0' && s[i++] <= '9')
+			len++;
+	return (len);
+}
+
+long long	i_atoi(const char *str, size_t *i, size_t max_i)
+{
+	int					sign;
+	unsigned long long	result;
+
+	sign = 1;
+	result = 0;
+	while ((str[*i] == '\t' || str[*i] == '\n' || str[*i] == '\r' ||
+			str[*i] == ' ' || str[*i] == '\v' || str[*i] == '\f') && *i < max_i)
+		*i = *i + 1;
+	if (str[*i] == '-')
+		sign = -1;
+	if (str[*i] == '-' || str[*i] == '+')
+		*i = *i + 1;
+	while (str[*i] >= '0' && str[*i] <= '9' && *i < max_i)
+		result = result * 10 + (int)str[(*i)++] - '0';
+	//if ((result > 9223372036854775807 && sign == 1)
+	//	|| (ft_len_of_num(str, *i, max_i) >= 19 && sign == 1))
+	//	return (-1);
+	//if (result > 9223372036854775807 && sign == -1)
+	//	return (0);
+	return (result * sign);
+}
+
+size_t	cnt_words(char *str, size_t max_i, char ch)
+{
+	size_t	i;
+	size_t	num;
+
+	if (str == NULL)
+		return (0);
+	i = -1;
+	num = 0;
+	while (++i < max_i && str[i])
+		if (str[i] == ch && str[i + 1] != ch)
+			num++;
+	if (str[0] != '\0')
+		num++;
+	return (num);
+}
+
+void	convert_map(t_win *win, t_list *lst)
+{
+	t_list	*cur;
+	char	*str;
+	size_t	i;
+	int		y;
+	int		x;
+
+	if (!win || !(cur = lst) || (y = -1))
+		return ;
+	if ((win->map = (t_px **)malloc(sizeof(t_px *) * win->map_rows)))
+	{
+		while (cur && cur->content && (str = (char *)cur->content))
+		{
+			x = 0;
+			i = -1;
+			win->map[++y] = (t_px *)malloc(sizeof(t_px) * win->map_cols);
+			while (++i < cur->content_size)
+			{
+				win->map[y][x].y = y;
+				win->map[y][x].x = x;
+				win->map[y][x].z = i_atoi(str, &i, cur->content_size);
+				win->map[y][x++].color = parse_color_to(str + i, &i, cur->content_size); //printf(" prsPX: y = %f, x = %f, z = %f, col=%d\n", win->map[y][x].y, win->map[y][x].x, win->map[y][x].z, win->map[y][x].color);
+			}
+			cur = cur->next;
+		}
+	}
+}
+
+void	set_map_size(t_win *win, t_list *lst)
+{
+	t_list	*cur;
+
+	if (!(cur = lst))
+		return ;
+	while (cur)
+	{
+		if (win->map_cols == 0)
+			win->map_cols = cnt_words((char *)cur->content, cur->content_size, ' ');
+		else
+			if (win->map_cols != cnt_words((char *)cur->content, cur->content_size, ' '))
+			   return ; //win->err_status = 1; set status map invalitd	
+		cur = cur->next;
+	}
+}
+
 t_win	*parse_map(char *file_name, t_win *win)
 {
-	int		i;
 	int		fd;
-	char	**temp;
-	//char	*tmp_str;
 	t_list	*lst;
-//	size_t	len;
 	char	*buf;
 
-	//if ((temp = (char ***)malloc(sizeof(char **) * (win->len + 1))))
-	//{
-	//	temp[win->len] = NULL;
-	//	}
-		win->map_cols = 0;
-		win->map_rows = 0;
-		lst = NULL;
-		fd = open(file_name, O_RDONLY);
-		while (get_next_line(fd, &buf) 
-			&& (lst_append(&lst, buf, ft_strlen(buf))) && (++win->map_rows))
-			free(buf);
-		buf = join_lst_data(lst);
-		temp = ft_strsplit(buf, ' ');
+	win->map_cols = 0;
+	win->map_rows = 0;
+	lst = NULL;
+	fd = open(file_name, O_RDONLY);
+	while (get_next_line(fd, &buf) 
+		&& (lst_append(&lst, buf, ft_strlen(buf))) && (++win->map_rows))
 		free(buf);
-
-		i = 0;
-		//while (temp[i])
-	//		printf("%s", temp[i++]);
-
-		//	while (get_next_line(fd, &buf) && (temp[++i] = ft_strsplit(buf, ' ')))
-	//		ft_memdel((void *)&buf);
-	//	if (set_map_size(win, temp) == 1)
-	//		printf("map_invalid");
-		//printf("val width  %d \t", win->map_cols);
-		//printf("val height %d \t", win->map_rows);
-	//	convert_map(win, temp, 0, 0);//need refactor convert_map   char *** to char **
-		//free_arr***
-		//free_arr(temp);
-		close(fd);
-//	}
+	set_map_size(win, lst);
+	printf("rows=%zu\n",win->map_rows);
+	printf("cols=%zu\n",win->map_cols);
+	convert_map(win, lst);//need refactor convert_map   char *** to char **
+	close(fd);
 	return (win);
 }
 
@@ -275,28 +249,28 @@ t_win	*parse_map(char *file_name, t_win *win)
 
 void 	print_map(t_win *win)
 {
-	int	col;
-	int	row;
+	size_t	col;
+	size_t	row;
 
-	printf("rows=%d, cols=%d\n", win->map_rows, win->map_cols);
+	printf("rows=%zu, cols=%zu\n", win->map_rows, win->map_cols);
 //	printf("x=%f, y=%f, z=%f", win->map[10][10].x, win->map[10][10].y, win->map[10][10].z);
 	row = -1;
 	while (win->map[++row] )
 	{
 		//ft_putnbr( win->map_rows);
 
-	printf("cur rows=%d\n", row);
+	printf("cur rows=%zu\n", row);
 		col = 0;
 
 		while (col < win->map_cols)
 		{
-	printf("cur cols=%d\n", col);
+	printf("cur cols=%zu\n", col);
 	//printf("%f\n",win->map[col][row].z);
 			mlx_pixel_put(win->mlx_ptr, win->win_ptr,
 				   	150 + (int)win->map[col][row].x * win->scale_x,
 				   	500 + (int)win->map[col][row].y * win->scale_y 
 					    -((int)win->map[col][row].z * win->scale_z),
-				   	0x009100FF);
+				   	DEF_COLOR);
 				   	//win->offset_x + (col * win->scale_x),
 				   	//win->offset_y + (row * win->scale_y)
 				  	//- (win->map[row][col].z) * win->scale_z, 
@@ -307,12 +281,7 @@ void 	print_map(t_win *win)
 	}
 }
 
-int		exit_x(void *par)
-{
-	par = NULL;
-	exit(1);
-	return (0);
-}
+
 
 int		main(int argc, char **argv)
 {
@@ -331,21 +300,17 @@ int		main(int argc, char **argv)
 			win->scale_z = WIN_SCALE;
 			win->mlx_ptr = mlx_init();
 			win->win_ptr = mlx_new_window(win->mlx_ptr, win->width, win->height, WIN_NAME);
-			win->len = ln_in_file(argv[1]);
-		}
-		if((win->map = (t_px **)malloc(sizeof(t_px *) * (win->len + 1))))
-		{
-			win->map[win->len] = NULL;
+		
 			//printf("%p\n", win_ptr);
 			//printf("%d\n", ln_in_file(argv[1]));
 			parse_map(argv[1], win);
-		//	print_map(win);
+			//	print_map(win);
+			mlx_pixel_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF);
+			mlx_string_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF, "str");
+ 	 //int mlx_hook(void *win_ptr, int x_event, int x_mask, int (*funct)(), void *param);
+			mlx_hook(win->win_ptr, 17, 1L << 17, exit_x, win);
+			mlx_loop(win->mlx_ptr);
 		}
-		mlx_pixel_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF);
-		mlx_string_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF, "str");
-  //int mlx_hook(void *win_ptr, int x_event, int x_mask, int (*funct)(), void *param);
-		mlx_hook(win->win_ptr, 17, 1L << 17, exit_x, win);
-		mlx_loop(win->mlx_ptr);
 	}
 	//system("leaks ./fdf");
 	return (0);

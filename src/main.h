@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/13 18:08:15 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/15 22:21:06 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 # define WIN_OFFSET 150
 # define WIN_SCALE 120
 # define WIN_NAME "I_am_mlx"
-# define DEF_COLOR 0xffffff
+# define DEF_COLOR 0x009100FF
+
 
 typedef struct	s_px
 {
@@ -28,12 +29,14 @@ typedef struct	s_px
 	int		color;
 }				t_px;
 
+//enum error
+//
+
 typedef struct	s_win
 {
 	t_px	**map;
-	int		len;
-	int		map_rows;
-	int		map_cols;
+	size_t	map_rows;
+	size_t	map_cols;
 	int		width;
 	int		height;
 	int		offset_x;

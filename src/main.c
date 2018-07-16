@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/15 23:21:39 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/16 21:37:04 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int		is_hex(char ch)
 	|| ch == 'C' || ch == 'c'
 	|| ch == 'D' || ch == 'd'
 	|| ch == 'E' || ch == 'e'
-	|| ch == 'F' || ch == 'f')
+	|| ch == 'F' || ch == 'f'
+	|| (ch >= '0' && ch <= '9'))
 		return (1);
 	return (0);
 }
@@ -179,25 +180,46 @@ void	convert_map(t_win *win, t_list *lst)
 	int		y;
 	int		x;
 
-	if (!win || !(cur = lst) || (y = -1))
+	if (!win || !(cur = lst) || !(y = -1))
 		return ;
 	if ((win->map = (t_px **)malloc(sizeof(t_px *) * win->map_rows)))
 	{
 		while (cur && cur->content && (str = (char *)cur->content))
 		{
-			x = 0;
+			x = -1;
 			i = -1;
 			win->map[++y] = (t_px *)malloc(sizeof(t_px) * win->map_cols);
 			while (++i < cur->content_size)
 			{
-				win->map[y][x].y = y;
+				win->map[y][++x].y = y;
 				win->map[y][x].x = x;
 				win->map[y][x].z = i_atoi(str, &i, cur->content_size);
-				win->map[y][x++].color = parse_color_to(str + i, &i, cur->content_size); //printf(" prsPX: y = %f, x = %f, z = %f, col=%d\n", win->map[y][x].y, win->map[y][x].x, win->map[y][x].z, win->map[y][x].color);
+				win->map[y][x].color = parse_color_to(str + i, &i, cur->content_size); 
+				//printf("prsPX: y = %f, x = %f, z = %f, col=%d\n", win->map[y][x].y, win->map[y][x].x, win->map[y][x].z, win->map[y][x].color);
 			}
 			cur = cur->next;
 		}
 	}
+}
+
+void	print_content_lst(t_list *lst)
+{
+	size_t	i;
+	char	*s;
+	t_list	*cur;
+
+	if (!(cur = lst))
+		return ;
+	while (cur)
+	{
+		i = 0;
+		s = (char *)cur->content;
+		while (i < cur->content_size)
+			printf("%c", s[i++]);
+		printf("\n");
+		cur = cur->next;
+	}
+
 }
 
 void	set_map_size(t_win *win, t_list *lst)
@@ -231,63 +253,109 @@ t_win	*parse_map(char *file_name, t_win *win)
 		&& (lst_append(&lst, buf, ft_strlen(buf))) && (++win->map_rows))
 		free(buf);
 	set_map_size(win, lst);
-	printf("rows=%zu\n",win->map_rows);
-	printf("cols=%zu\n",win->map_cols);
-	convert_map(win, lst);//need refactor convert_map   char *** to char **
+	//printf("rows=%zu\n",win->map_rows);
+	//printf("cols=%zu\n",win->map_cols);
+	convert_map(win, lst);
 	close(fd);
 	return (win);
 }
 
+double	ft_abs(double num)
+{
+	if (num < 0)
+		return (num * -1);
+	return (num);
+}
 
-//  учесть возможность могих вайстпейсов между координатами
-//void	draw_line_h(int start_x, int statr_y, int end_x, int end_y)
-//{
-//}
-//void	draw_px(t_map *map_data)
-//{
-//}
+double	ft_max(double first, double second)
+{
+	if (first > second)
+		return (first);
+	return (second);
+}
+
+void	draw_px_by_coord(t_win *win, double y, double x)
+{
+	mlx_pixel_put(win->mlx_ptr, win->win_ptr, x, y, DEF_COLOR);
+}
+
+void	draw_px_by_map(t_win *win, size_t y, size_t x)
+{
+	mlx_pixel_put(win->mlx_ptr, win->win_ptr,
+		   	150 + win->map[y][x].x * (win->scale_x),
+		   	400 + win->map[y][x].y * (win->scale_y) 
+			    -(win->map[y][x].z * win->scale_z),
+				  win->map[y][x].color);
+}
+
+void	draw_line(t_win *win, t_line *line)
+{
+	double	y;
+	double	x;
+
+	line->len_y = ft_abs(line->end_y - line->start_y);
+	line->len_x = ft_abs(line->end_x - line->start_y);
+	line->len   = ft_max(line->len_y,  line->len_x);
+
+	if (line->len == 0)
+		draw_px_by_coord(win, line->start_y, line->start_x);
+
+	if (line->len_y <= line->len_x)
+	{
+		y = line->start_y;
+		x = line->start_x;
+		line->step = line->len_y / line->len_x;
+		line->len++;
+		while (line->len--)
+		{
+			draw_px_by_coord(win, x, y);
+			x++;
+			y += line->step;
+		}
+	}
+	else
+	{
+		y = line->start_y;
+		x = line->start_x;
+		line->step = line->len_x / line->len_y;
+		line->len++;
+		while (line->len--)
+		{
+			draw_px_by_coord(win, x, y);
+			x += line->step;
+			y++;
+		}
+	}
+//----------------------
+}
 
 void 	print_map(t_win *win)
 {
-	size_t	col;
-	size_t	row;
+	t_line	*line;
+	size_t	y;
+	size_t	x;
 
-	printf("rows=%zu, cols=%zu\n", win->map_rows, win->map_cols);
-//	printf("x=%f, y=%f, z=%f", win->map[10][10].x, win->map[10][10].y, win->map[10][10].z);
-	row = -1;
-	while (win->map[++row] )
+	line = (t_line *)malloc(sizeof(t_line));
+	line->start_y = 100;
+	line->start_x = 100;
+	line->end_y = 500;
+	line->end_y = 500;
+	draw_line(win, line);
+	y = 0;
+	while (y < win->map_rows)
 	{
-		//ft_putnbr( win->map_rows);
-
-	printf("cur rows=%zu\n", row);
-		col = 0;
-
-		while (col < win->map_cols)
-		{
-	printf("cur cols=%zu\n", col);
-	//printf("%f\n",win->map[col][row].z);
-			mlx_pixel_put(win->mlx_ptr, win->win_ptr,
-				   	150 + (int)win->map[col][row].x * win->scale_x,
-				   	500 + (int)win->map[col][row].y * win->scale_y 
-					    -((int)win->map[col][row].z * win->scale_z),
-				   	DEF_COLOR);
-				   	//win->offset_x + (col * win->scale_x),
-				   	//win->offset_y + (row * win->scale_y)
-				  	//- (win->map[row][col].z) * win->scale_z, 
-					// win->map[row][col].color);
-			col++;
-		}
-		printf("\n");
+		x = 0;
+		while (x < win->map_cols)
+			draw_px_by_map(win, y, x++);
+		y++;
 	}
 }
-
-
 
 int		main(int argc, char **argv)
 {
 	t_win	*win;
 
-	if (argc == 2)
+	if (argc == 2) //add parsing multi map
 	{
 		if((win = (t_win *)malloc(sizeof(t_win))))
 		{
@@ -300,11 +368,7 @@ int		main(int argc, char **argv)
 			win->scale_z = WIN_SCALE;
 			win->mlx_ptr = mlx_init();
 			win->win_ptr = mlx_new_window(win->mlx_ptr, win->width, win->height, WIN_NAME);
-		
-			//printf("%p\n", win_ptr);
-			//printf("%d\n", ln_in_file(argv[1]));
-			parse_map(argv[1], win);
-			//	print_map(win);
+			print_map(parse_map(argv[1], win));
 			mlx_pixel_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF);
 			mlx_string_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF, "str");
  	 //int mlx_hook(void *win_ptr, int x_event, int x_mask, int (*funct)(), void *param);

@@ -6,7 +6,7 @@
 #    By: dromanic <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/24 18:20:17 by dromanic          #+#    #+#              #
-#    Updated: 2018/04/14 17:19:23 by dromanic         ###   ########.fr        #
+#    Updated: 2018/07/17 15:41:44 by dromanic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,8 @@ CC = gcc -Wall -Wextra -Werror
 LIBKEY = -I minilibx -L minilibx -lmlx -framework OpenGL -framework AppKit
 
 SRC_N =	main.c \
+		hooks.c \
+		parser.c \
 		get_next_line.c \
 
 SRC = $(addprefix src/, $(SRC_N))

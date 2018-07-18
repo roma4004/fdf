@@ -16,9 +16,9 @@
 # define WIN_WIDTH 1024
 # define WIN_HEIGHT 768
 # define WIN_OFFSET 150
-# define WIN_SCALE 100
+# define WIN_SCALE 12
 # define WIN_NAME "I_am_mlx"
-# define DEF_COLOR 0x809100FF
+# define DEF_COLOR 0x009100FF
 
 # include <stdio.h>
 # include "../minilibx/mlx.h"

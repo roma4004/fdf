@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/17 15:48:22 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/18 19:48:41 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,13 @@ void	draw_px_by_map(t_win *win, size_t y, size_t x)
 				  win->map[y][x].color);
 }
 
-void	draw_line(t_win *win, t_line *line)
+void	draw_line_v1(t_win *win, t_line *line)
 {
 	double	y;
 	double	x;
 
 	line->len_y = ft_abs(line->end_y - line->start_y);
-	line->len_x = ft_abs(line->end_x - line->start_y);
+	line->len_x = ft_abs(line->end_x - line->start_x);
 	line->len   = ft_max(line->len_y,  line->len_x);
 
 	if (line->len == 0)
@@ -134,6 +134,142 @@ void	draw_line(t_win *win, t_line *line)
 //----------------------
 }
 
+void	draw_line_v2(t_win *win, t_line *line)
+{
+	double	dy;
+	double	dx;
+	double	y;
+	double	x;
+
+	line->step = 1;
+	dy = (line->end_y - line->start_y >= 0 ? line->step : -line->step);
+	dx = (line->end_x - line->start_x >= 0 ? line->step : -line->step);
+
+	line->len_y = ft_abs(line->end_y - line->start_y);
+	line->len_x = ft_abs(line->end_x - line->start_x);
+	line->len   = ft_max(line->len_y,  line->len_x);
+
+	if (line->len == 0)
+		draw_px_by_coord(win, line->start_y, line->start_x);
+
+	if (line->len_y <= line->len_x)
+	{
+		y = line->start_y;
+		x = line->start_x;
+		line->len++;
+		while (line->len--)
+		{
+			draw_px_by_coord(win, x, y);
+			x += dx;
+			y += dy * (line->len_y / line->len_x);
+		}	
+	}
+	else
+	{
+		y = line->start_y;
+		x = line->start_x;
+		line->len++;
+		while (line->len--)
+		{
+			draw_px_by_coord(win, x, y);
+			x += dx * (line->len_x / line->len_y);
+			y += dy;
+		}
+	}
+//----------------------
+}
+
+void	draw_line_v3(t_win *win, t_line *line)
+{
+	double	dy;
+	double	dx;
+	double	y;
+	double	x;
+
+
+	line->step = 1;
+	dy = (line->end_y - line->start_y >= 0 ? line->step : -line->step);
+	dx = (line->end_x - line->start_x >= 0 ? line->step : -line->step);
+
+	line->len_y = ft_abs(line->end_y - line->start_y);
+	line->len_x = ft_abs(line->end_x - line->start_x);
+	line->len   = ft_max(line->len_y,  line->len_x);
+
+	if (line->len == 0)
+		draw_px_by_coord(win, line->start_y, line->start_x);
+
+	if (line->len_y <= line->len_x)
+	{		
+		y = line->start_y * line->len_x;
+		x = line->start_x;
+		line->len++;
+		while (line->len--)
+		{
+			draw_px_by_coord(win, x, y / line->len_x);
+			x += dx;
+			y += dy * line->len_y;
+		}	
+	}
+	else
+	{
+		y = line->start_y;
+		x = line->start_x * line->len_y;
+		line->len++;
+		while (line->len--)
+		{
+			draw_px_by_coord(win, x / line->len_y, y);
+			x += dx * line->len_x;
+			y += dy;
+		}
+	}
+//----------------------
+}
+
+void	draw_line_v4(t_win *win, t_line *line)
+{
+	double	dy;
+	double	dx;
+	double	y;
+	double	x;
+	double	c;
+
+	line->step = 1;
+	dy = (line->end_y - line->start_y >= 0 ? line->step : -line->step);
+	dx = (line->end_x - line->start_x >= 0 ? line->step : -line->step);
+	y = line->start_y;
+	x = line->start_x;
+	c = 0;
+
+	line->len_y = ft_abs(line->end_y - line->start_y);
+	line->len_x = ft_abs(line->end_x - line->start_x);
+	line->len   = ft_max(line->len_y,  line->len_x);
+
+	if (line->len == 0)
+		draw_px_by_coord(win, line->start_y, line->start_x);
+
+	if (line->len_y <= line->len_x)
+	{
+		draw_px_by_coord(win, x, y / line->len_x);
+		x += dx;
+		c += dy * (line->len_y / line->len_x);
+		line->len++;
+		while (line->len--)
+		{	
+			if (c > 0.5)
+			{
+				c--;
+				y++;
+			}
+			if (c < -0.5)
+			{
+				c++;
+				y--;
+			}
+		}	
+	}
+//----------------------
+}
+
 void 	print_map(t_win *win)
 {
 	t_line	*line;
@@ -144,8 +280,8 @@ void 	print_map(t_win *win)
 	line->start_y = 100;
 	line->start_x = 100;
 	line->end_y = 500;
-	line->end_y = 500;
-	draw_line(win, line);
+	line->end_x = 500;
+	draw_line_v4(win, line);
 	y = 0;
 	while (y < win->map_rows)
 	{

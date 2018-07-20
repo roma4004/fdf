@@ -130,13 +130,13 @@ void 	print_map(t_win *win)
 
 	line = (t_line *)malloc(sizeof(t_line));
 
-	line->end_y = 500;
-	line->end_x = 500;
-	draw_line(win, line, 100, 100);
+	//line->end_y = 500;
+	//line->end_x = 500;
+	//draw_line(win, line, 100, 100);
 
-	line->end_y = 600;
-	line->end_x = 150;
-	draw_line(win, line, 100, 500);
+	//line->end_y = 600;
+	//line->end_x = 150;
+	//draw_line(win, line, 100, 500);
 
 	y = 0;
 	while (y < win->map_rows)
@@ -146,11 +146,30 @@ void 	print_map(t_win *win)
 			draw_px_by_map(win, y, x++);
 		y++;
 	}
+	free(line);
 }
 
-void	draw_line_map()
+void	draw_line_map(t_win *win)
 {
-	
+
+	t_line	*line;
+	size_t	y;
+	size_t	x;
+
+	line = (t_line *)malloc(sizeof(t_line));
+	y = 1;
+	while (y < win->map_rows)
+	{
+		x = 1;
+		while (x < win->map_cols)
+		{
+			line->end_x = 150 + win->map[y][x].y * (win->scale_y) - win->map[y][x].z * (win->scale_z); 
+			line->end_y = 150 + win->map[y][x].x * (win->scale_x);
+			draw_line(win, line, 150 + (x - 1) * (win->scale_x) , 150 + (y - 1) * (win->scale_y)- win->map[y][x].z * (win->scale_z));
+			x++;
+		}
+		y++;
+	}
 }
 
 int		main(int argc, char **argv)
@@ -171,6 +190,7 @@ int		main(int argc, char **argv)
 			win->mlx_ptr = mlx_init();
 			win->win_ptr = mlx_new_window(win->mlx_ptr, win->width, win->height, WIN_NAME);
 			print_map(parse_map(argv[1], win));
+			draw_line_map(win);
 			mlx_pixel_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF);
 			mlx_string_put(win->mlx_ptr, win->win_ptr, 5, 5, 0x009100FF, "str");
  	 //int mlx_hook(void *win_ptr, int x_event, int x_mask, int (*funct)(), void *param);

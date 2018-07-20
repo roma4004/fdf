@@ -48,8 +48,6 @@ typedef struct	s_line
 	double	y;
 	double	x;
 	double	d;
-	
-	double	step;
 }				t_line;
 
 
@@ -88,7 +86,7 @@ double	ft_abs(double num);
 double	ft_max(double first, double second);
 void	draw_px_by_coord(t_win *win, double y, double x);
 void	draw_px_by_map(t_win *win, size_t y, size_t x);
-void	draw_line(t_win *win, t_line *line);
+void	draw_line(t_win *win, t_line *line, double y, double x);
 
 void 	print_map(t_win *win);
 #endif

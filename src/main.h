@@ -38,13 +38,17 @@ typedef struct	s_px
 //
 typedef struct	s_line
 {
-	double	start_y;
-	double	start_x;
 	double	end_x;
 	double	end_y;
 	double	len_y;
 	double	len_x;
 	double	len;
+	double	dy;
+	double	dx;
+	double	y;
+	double	x;
+	double	d;
+	
 	double	step;
 }				t_line;
 

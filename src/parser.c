@@ -71,27 +71,6 @@ int		parse_color(char *hex, size_t *i, size_t max_i)
 	return (res);
 }
 
-int		parse_color_old(char *hex, size_t *i, size_t max_i)
-{
-	int		res;
-
-	res = 0;
-	if (*i >= max_i || !hex || hex[0] != ',' || hex[1] != '0' || hex[2] != 'x' 
-	|| !is_hex(hex[3]) || !is_hex(hex[4])
-	|| !is_hex(hex[5]) || !is_hex(hex[6])
-	|| !is_hex(hex[7]) || !is_hex(hex[8]))
-		return (DEF_COLOR);
-  //printf("col=%c%c%c%c%c%c%c%c", hex[1], hex[2], hex[3], hex[4], hex[5], hex[5], hex[6], hex[7]);
-	res = ch2int(hex[3]) * 1048576
-		+ ch2int(hex[4]) * 65536
-		+ ch2int(hex[5]) * 4096
-		+ ch2int(hex[6]) * 256
-		+ ch2int(hex[7]) * 16
-		+ ch2int(hex[8]) * 1;
-	*i = *i + 9;
-	return (res);
-}
-
 void	destroy_lst(t_list *lst)
 {
 	t_list	*cur;
@@ -123,6 +102,29 @@ int		lst_append(t_list **lst, char *buf, int size)
 		cur->next = ft_lstnew(buf, size);
 	}
 	return (1);
+}
+
+long long	i_atoi(const char *str, size_t *i, size_t max_i)
+{
+	int					sign;
+	unsigned long long	result;
+
+	sign = 1;
+	result = 0;
+	while ((str[*i] == '\t' || str[*i] == '\n' || str[*i] == '\r' ||
+			str[*i] == ' ' || str[*i] == '\v' || str[*i] == '\f') && *i < max_i)
+		*i = *i + 1;
+	if (str[*i] == '-')
+		sign = -1;
+	if (str[*i] == '-' || str[*i] == '+')
+		*i = *i + 1;
+	while (str[*i] >= '0' && str[*i] <= '9' && *i < max_i)
+		result = result * 10 + (int)str[(*i)++] - '0';
+	if (result > 9223372036854775807U && sign == 1)
+		return (-1);
+	if (result > 9223372036854775808U && sign == -1)
+		return (0);
+	return (result * sign);
 }
 
 void	convert_map(t_win *win, t_list *lst)
@@ -175,6 +177,23 @@ void	print_content_lst(t_list *lst)
 
 }
 
+size_t	cnt_words(char *str, size_t max_i, char ch)
+{
+	size_t	i;
+	size_t	num;
+
+	if (str == NULL)
+		return (0);
+	i = -1;
+	num = 0;
+	while (++i < max_i && str[i])
+		if (str[i] == ch && str[i + 1] != ch)
+			num++;
+	if (str[0] != '\0')
+		num++;
+	return (num);
+}
+
 void	set_map_size(t_win *win, t_list *lst)
 {
 	t_list	*cur;
@@ -209,6 +228,7 @@ t_win	*parse_map(char *file_name, t_win *win)
 	//printf("rows=%zu\n",win->map_rows);
 	//printf("cols=%zu\n",win->map_cols);
 	convert_map(win, lst);
+	destroy_lst(lst);
 	close(fd);
 	return (win);
 }

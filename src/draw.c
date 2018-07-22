@@ -36,11 +36,11 @@ void	draw_px_by_map(t_win *win, size_t y, size_t x)
 	mlx_pixel_put(win->mlx_ptr, win->win_ptr,
 		   	win->offset_x + win->map[y][x].x * (win->sc_x),
 		   	win->offset_y + win->map[y][x].y * (win->sc_y) 
-			    -(win->map[y][x].z * win->sc_z),
-				  win->map[y][x].color);
+						- (win->map[y][x].z * win->sc_z),
+			win->map[y][x].col);
 }
 
-void	draw_line(t_win *win, t_line *line, double y, double x, int color)
+void	line(t_win *win, t_line *line, double y, double x, int color)
 {
 	line->dy = (line->end_y - y >= 0 ? 1 : -1);
 	line->dx = (line->end_x - x >= 0 ? 1 : -1);

@@ -17,9 +17,18 @@ CC = gcc -Wall -Wextra -Werror
 LIBKEY = -I minilibx -L minilibx -lmlx -framework OpenGL -framework AppKit
 
 SRC_N =	main.c \
+		draw.c \
+		keys.c \
+		init.c \
 		hooks.c \
+		color.c \
+		debug.c \
 		parser.c \
+		for_lib.c \
+		ram_man.c \
+		effects.c \
 		get_next_line.c \
+		experimental_code.c \
 
 SRC = $(addprefix src/, $(SRC_N))
 

@@ -30,6 +30,9 @@ void     init_win(t_win *win)
 		win->bsl_on = 0;
 		win->fdf_on = 1;
 		win->con_on = 1;
+		win->angle_y = 0;
+		win->angle_x = 0;
+		win->angle_z = 0;
 		win->mlx_ptr = mlx_init();
 		win->win_ptr = mlx_new_window(win->mlx_ptr, win->width, win->height, WIN_NAME);
         //return (1);
@@ -54,8 +57,6 @@ void	init_line(t_line *line)
 		line->x1 = 0;
 		line->y2 = 0;
 		line->x2 = 0;
-		line->y3 = 0;
-		line->x3 = 0;
 		line->d = 0;
 	}
 }

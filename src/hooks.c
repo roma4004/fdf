@@ -27,11 +27,14 @@ void    map_offset(t_win *win, int offset_y, int offset_x)
     draw_map(win);
 }
 
-void    zoom_offset(t_win *win, int zoom_offset)
+void    zoom_offset(t_win *win, int zoom_offset, int only_z)
 {
     mlx_clear_window(win->mlx_ptr, win->win_ptr);
-    win->sc_y += zoom_offset; printf("sc_y: %d\n", win->sc_y);
-    win->sc_x += zoom_offset; printf("sc_x: %d\n", win->sc_x);
+    if (only_z == 0)
+    {
+        win->sc_y += zoom_offset; printf("sc_y: %d\n", win->sc_y);
+        win->sc_x += zoom_offset; printf("sc_x: %d\n", win->sc_x);
+    }
     win->sc_z += zoom_offset; printf("sc_z: %d\n", win->sc_z);
     draw_map(win);
 }
@@ -62,9 +65,9 @@ void    animate(t_win *win)
     if (win->frame_cnt == 0)
          draw_map_vertical(win, win->offset_y, win->offset_x, win->con_on);
 	else if (win->frame_cnt == 1)
-    draw_map_slash(win, win->offset_y, win->offset_x, win->con_on);					
+        draw_map_slash(win, win->offset_y, win->offset_x, win->con_on);
 	else if (win->frame_cnt == 2)
-    draw_map_horizontal(win, win->offset_y, win->offset_x, win->con_on);
+        draw_map_horizontal(win, win->offset_y, win->offset_x, win->con_on);
 	else if (win->frame_cnt == 3)
-    draw_map_backslash(win, win->offset_y, win->offset_x, win->con_on);
+        draw_map_backslash(win, win->offset_y, win->offset_x, win->con_on);
 }

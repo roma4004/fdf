@@ -112,8 +112,8 @@ print_map(win);
 		}
 		y++;
 	}
-	line(win, frame_top_line, frame_top_line->start_y, frame_top_line->start_x, DEF_COLOR);
-	line(win, frame_left_line, frame_left_line->start_y, frame_left_line->start_x, DEF_COLOR);
-	line(win, frame_right_line, frame_right_line->start_y, frame_right_line->start_x, DEF_COLOR);
-	line(win, frame_bottom_line, frame_bottom_line->start_y, frame_bottom_line->start_x, DEF_COLOR);
+	draw_line(win, frame_top_line, frame_top_line->start_y, frame_top_line->start_x, DEF_COLOR);
+	draw_line(win, frame_left_line, frame_left_line->start_y, frame_left_line->start_x, DEF_COLOR);
+	draw_line(win, frame_right_line, frame_right_line->start_y, frame_right_line->start_x, DEF_COLOR);
+	draw_line(win, frame_bottom_line, frame_bottom_line->start_y, frame_bottom_line->start_x, DEF_COLOR);
 }

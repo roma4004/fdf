@@ -24,9 +24,11 @@ SRC_N =	main.c \
 		color.c \
 		debug.c \
 		parser.c \
+		rotate.c \
 		for_lib.c \
 		ram_man.c \
 		effects.c \
+		service_func.c \
 		get_next_line.c \
 		experimental_code.c \
 

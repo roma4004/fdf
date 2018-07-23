@@ -42,7 +42,7 @@ int		ch2int(char ch)
 	return (ch - '0');
 }
 
-int		parse_color(char *hex, size_t *i, size_t max_i)
+int		get_col(char *hex, size_t *i, size_t max_i)
 {
 	int		res;
 

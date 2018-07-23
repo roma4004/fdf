@@ -12,7 +12,7 @@
 
 #include "main.h"
 
-void	destroy_lst(t_list *lst)
+void	ft_destroy_lst(t_list *lst)
 {
 	t_list	*cur;
 	t_list	*tmp;
@@ -29,7 +29,7 @@ void	destroy_lst(t_list *lst)
 	}
 }
 
-int		lst_append(t_list **lst, char *buf, int size)
+int		ft_lst_append(t_list **lst, char *buf, int size)
 {
 	t_list *cur;
 
@@ -45,7 +45,7 @@ int		lst_append(t_list **lst, char *buf, int size)
 	return (1);
 }
 
-long long	i_atoi(const char *str, size_t *i, size_t max_i)
+long long	ft_i_atoi(const char *str, size_t *i, size_t max_i)
 {
 	int					sign;
 	unsigned long long	result;
@@ -68,7 +68,7 @@ long long	i_atoi(const char *str, size_t *i, size_t max_i)
 	return (result * sign);
 }
 
-size_t	cnt_words(char *str, size_t max_i, char ch)
+size_t	ft_cnt_words(char *str, size_t max_i, char ch)
 {
 	size_t	i;
 	size_t	num;

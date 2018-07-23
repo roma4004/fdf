@@ -32,8 +32,9 @@ typedef struct	s_px
 	double	x;
 	double	y;
 	double	z;
-	int		col;
-	int		alp;
+	double	z_orig;
+	int		color;
+	int		alpha;
 }				t_px;
 
 //enum error
@@ -50,11 +51,14 @@ typedef struct	s_line
 	double	dy;
 	double	dx;
 	double	y1;
-	double	x1;
+	double	x1;	
+	double	z1;	
 	double	y2;
 	double	x2;
+	double	z2;	
 	double	y3;
 	double	x3;
+	double	z3;
 	double	d;
 }				t_line;
 
@@ -79,6 +83,9 @@ typedef struct	s_win
 	int		hor_on;
 	int		bsl_on;
 	int		fdf_on;
+	double		angle_y;
+	double		angle_x;
+	double		angle_z;
 }				t_win;
 
 void	draw_map(t_win *win);
@@ -89,31 +96,41 @@ void	init_line(t_line *line);
 
 int		exit_x(void *par);
 void    map_offset(t_win *win, int offset_y, int offset_x);
-void    zoom_offset(t_win *win, int zoom_offset);
+void    zoom_offset(t_win *win, int zoom_offset, int only_z);
 void    numpads(t_win *win, int key);
 void    animate(t_win *win);
 
 int     toggle_param(int *param);
-int		deal_key(int key, t_win *win);
+void	set_map_vec(t_win *win, long long y, long long x, long long z);
+
+t_win   *rotate_map(t_win *win, char axis);
+void    rotate_map_px(t_win *win, size_t y, size_t x, long z);
+void    angle_reset(t_win *win);
+void	angle_change(t_win *win, char axis, int offset_angle);
+
+int		deal_keyboard(int key, t_win *win);
+int		deal_keyboard2(int key, t_win *win);
+int		deal_keyboard3(int key, t_win *win);
+int     deal_mouse(int key, int x, int y, t_win *win);
 
 int		is_hex(char ch);
 int		ch2int(char ch);
-int		parse_color(char *hex, size_t *i, size_t max_i);
+int		get_col(char *hex, size_t *i, size_t max_i);
 
-void	convert_map(t_win *win, t_list *lst);
+int		convert_map(t_win *win, t_list *lst);
 void	set_map_size(t_win *win, t_list *lst);
 t_win	*parse_map(char *file_name, t_win *win);
 
-void	destroy_lst(t_list *lst);
-int		lst_append(t_list **lst, char *buf, int size);
-long long	i_atoi(const char *str, size_t *i, size_t max_i);
-size_t	cnt_words(char *str, size_t max_i, char ch);
+void	ft_destroy_lst(t_list *lst);
+int		ft_lst_append(t_list **lst, char *buf, int size);
+long long	ft_i_atoi(const char *str, size_t *i, size_t max_i);
+size_t	ft_cnt_words(char *str, size_t max_i, char ch);
 
 double	ft_abs(double num);
 double	ft_max(double first, double second);
 void	draw_px_by_coord(t_win *win, double y, double x, int color);
 void	draw_px_by_map(t_win *win, size_t y, size_t x);
-void	line(t_win *win, t_line *line, double y, double x, int color);
+void	draw_line(t_win *win, t_line *line, double y, double x, int color);
 
 void	draw_map_vertical(t_win *win, int offset_y, int offset_x, int con);
 void	draw_map_backslash(t_win *win, int offset_y, int offset_x, int con);

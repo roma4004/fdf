@@ -37,11 +37,13 @@ void	draw_px_by_map(t_win *win, size_t y, size_t x)
 		   	win->offset_x + win->map[y][x].x * (win->sc_x),
 		   	win->offset_y + win->map[y][x].y * (win->sc_y) 
 						- (win->map[y][x].z * win->sc_z),
-			win->map[y][x].col);
+			win->map[y][x].color);
 }
 
-void	line(t_win *win, t_line *line, double y, double x, int color)
+void	draw_line(t_win *win, t_line *line, double y, double x, int color)
 {
+	//draw_px_by_coord(win, x, y, color);
+	//line->d = 0;
 	line->dy = (line->end_y - y >= 0 ? 1 : -1);
 	line->dx = (line->end_x - x >= 0 ? 1 : -1);
 	line->len_y = ft_abs(line->end_y - y);

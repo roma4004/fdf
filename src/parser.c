@@ -21,7 +21,7 @@ int		convert_map(t_win *win, t_list *lst)
 	int		x;
 
 	if (!win || !(cur = lst) || !(y = -1))
-		return (0);
+		return (1);
 	if ((win->map = (t_px **)malloc(sizeof(t_px *) * win->map_rows)))
 		while (cur && cur->content && (str = (char *)cur->content))
 		{
@@ -29,7 +29,7 @@ int		convert_map(t_win *win, t_list *lst)
 				|| !(x = - 1) || !(i = - 1))
 			{
 				free_map(win);
-				return (0);
+				return (1);
 			}
 			while (++i < cur->content_size)
 			{
@@ -38,24 +38,27 @@ int		convert_map(t_win *win, t_list *lst)
 			}
 			cur = cur->next;
 		}
-	return (1);
+	return (0);
 }
 
-void	set_map_size(t_win *win, t_list *lst)
+int		set_map_size(t_win *win, t_list *lst)
 {
 	t_list	*cur;
 
 	if (!(cur = lst))
-		return ;
+		return (1);
 	while (cur)
 	{
 		if (win->map_cols == 0)
 			win->map_cols = ft_cnt_words((char *)cur->content, cur->content_size, ' ');
 		else
 			if (win->map_cols != ft_cnt_words((char *)cur->content, cur->content_size, ' '))
-			   return ; //win->err_status = 1; set status map invalitd	
+			   return (1); //win->err_status = 1; set status map invalitd	
 		cur = cur->next;
-	}
+	}		
+	win->centr_y = win->map_rows / 2;
+	win->centr_x = win->map_cols / 2;
+	return (0);
 }
 
 t_win	*parse_map(char *file_name, t_win *win)
@@ -71,8 +74,7 @@ t_win	*parse_map(char *file_name, t_win *win)
 	while (get_next_line(fd, &buf) 
 		&& (ft_lst_append(&lst, buf, ft_strlen(buf))) && (++win->map_rows))
 		free(buf);
-	set_map_size(win, lst);
-	if (convert_map(win, lst))
+	if (set_map_size(win, lst) || convert_map(win, lst))
 	{	//set error status
 		return (NULL);
 	}

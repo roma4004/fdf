@@ -25,15 +25,15 @@ int     deal_keyboard(int key, t_win *win)
     else if (key == 124)
         map_offset(win, 0, 10);
     else if (key == 78)
-        zoom_offset(win, -10, 1);
+        zoom_offset(win, -1, 1);
     else if (key == 69)
-        zoom_offset(win, +10, 1);
+        zoom_offset(win, +1, 1);
     else if (key == 36)
         animate(win);
     else if (key == 27)
-        zoom_offset(win, -10, 0);
+        zoom_offset(win, -1, 0);
     else if (key == 24)
-        zoom_offset(win, 10, 0);
+        zoom_offset(win, 1, 0);
     else
         deal_keyboard2(key, win);
     return (0);
@@ -55,6 +55,8 @@ int     deal_keyboard2(int key, t_win *win)
         numpads(win, 5);
     else if (key == 88)
         numpads(win, 6);
+    else if (key == 89)
+        numpads(win, 7);
     else
         deal_keyboard3(key, win);
     return (0);
@@ -65,19 +67,20 @@ int     deal_keyboard3(int key, t_win *win)
     if (!win)
         return (1);
     if (key == 12)
-        angle_change(win, 'y', 1);
+        rotate_map(win, 'y', 2);
     else if (key == 13)
-        angle_change(win, 'x', 1);
+        rotate_map(win, 'x', 2);
     else if (key == 14)
-        angle_change(win, 'z', 1);
+        rotate_map(win, 'z', 2);
     else if (key == 0)
-        angle_change(win, 'y', -1);
+        rotate_map(win, 'y', -2);
     else if (key == 1)
-        angle_change(win, 'x', -1);
+        rotate_map(win, 'x', -2);
     else if (key == 2)
-        angle_change(win, 'z', -1);
+        rotate_map(win, 'z', -2);
     else if (key == 15)
         angle_reset(win);
+
     return (0);
 }
 

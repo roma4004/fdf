@@ -38,9 +38,9 @@ void	set_start_if_max_x	(t_line *l, double new){ if (l->start_x < new)	l->start_
 void	set_end_if_max_y	(t_line *l, double new){ if (l->end_y   < new)	l->end_y   = new;}
 void	set_end_if_max_x	(t_line *l, double new){ if (l->end_x   < new)	l->end_x   = new;}
 void	set_start_if_min_y 	(t_line *l, double new){ if (l->start_y > new)	l->start_y = new;
-														if (l->start_y == 0) 	l->start_y = new;}
+													 if (l->start_y == 0) 	l->start_y = new;}
 void	set_start_if_min_x	(t_line *l, double new){ if (l->start_x > new)	l->start_x = new;
-														if (l->start_x == 0) 	l->start_x = new;}
+													 if (l->start_x == 0) 	l->start_x = new;}
 void	set_end_if_min_y	(t_line *l, double new){ if (l->end_y   > new)	l->end_y   = new;}
 void	set_end_if_min_x	(t_line *l, double new){ if (l->end_x   > new)	l->end_x   = new;}
 

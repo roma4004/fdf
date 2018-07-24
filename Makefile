@@ -28,9 +28,10 @@ SRC_N =	main.c \
 		for_lib.c \
 		ram_man.c \
 		effects.c \
+		interface.c \
 		service_func.c \
 		get_next_line.c \
-		experimental_code.c \
+		experimental_code.c
 
 SRC = $(addprefix src/, $(SRC_N))
 

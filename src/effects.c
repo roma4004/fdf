@@ -20,6 +20,7 @@ void	draw_map_vertical(t_win *win, int offset_y, int offset_x, int con)
 
 	if (!win || !(line = (t_line *)malloc(sizeof(t_line))) || !(y = -1))
 		return ;
+	init_line(line);
 	while (++y < win->map_rows - 1 && (x = -1))
 		while (++x < win->map_cols - 1)
 		{

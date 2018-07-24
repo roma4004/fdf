@@ -26,11 +26,6 @@ double	ft_max(double first, double second)
 	return (second);
 }
 
-void	draw_px_by_coord(t_win *win, double y, double x, int color)
-{
-	mlx_pixel_put(win->mlx_ptr, win->win_ptr, y, x, color);
-}
-
 void	draw_px_by_map(t_win *win, size_t y, size_t x)
 {
 	mlx_pixel_put(win->mlx_ptr, win->win_ptr,
@@ -40,7 +35,7 @@ void	draw_px_by_map(t_win *win, size_t y, size_t x)
 			win->map[y][x].color);
 }
 
-void	draw_line(t_win *win, t_line *line, double y, double x, int color)
+void	draw_line(t_win *win, t_line *line, int y, int x, int color)
 {
 	//draw_px_by_coord(win, x, y, color);
 	//line->d = 0;
@@ -50,11 +45,11 @@ void	draw_line(t_win *win, t_line *line, double y, double x, int color)
 	line->len_x = ft_abs(line->end_x - x);
 	line->len = ft_max(line->len_y, line->len_x);
 	if (line->len++ == 0)
-		draw_px_by_coord(win, y, x, color);
+		mlx_pixel_put(win->mlx_ptr, win->win_ptr, x, y, color);
 	line->d = ((line->len_y <= line->len_x) ? -line->len_x : -line->len_y);		
 	while (line->len--)
 	{
-		draw_px_by_coord(win, x, y, color);
+		mlx_pixel_put(win->mlx_ptr, win->win_ptr, x, y, color);
 		line->d += 2 * ((line->len_y <= line->len_x) ? line->len_y : line->len_x);
 		if (line->len_y <= line->len_x)
 			x += line->dx;			
@@ -69,4 +64,21 @@ void	draw_line(t_win *win, t_line *line, double y, double x, int color)
 				x += line->dx;
 		}
 	}
+}
+
+void	draw_map(t_win *win)
+{
+	mlx_clear_window(win->mlx_ptr, win->win_ptr);
+	if (win->interface_on)
+		dislpay_interface(win);
+	if (win->fdf_on)
+		draw_map_fdf(win, win->offset_y, win->offset_x, win->con_on);
+	if (win->ver_on)	
+		draw_map_vertical(win, win->offset_y, win->offset_x, win->con_on);
+	if (win->sla_on)	
+		draw_map_slash(win, win->offset_y, win->offset_x, win->con_on);					
+	if (win->hor_on)
+		draw_map_horizontal(win, win->offset_y, win->offset_x, win->con_on);
+	if (win->bsl_on)
+		draw_map_backslash(win, win->offset_y, win->offset_x, win->con_on);
 }

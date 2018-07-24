@@ -21,7 +21,6 @@ int		exit_x(void *par)
 
 void    map_offset(t_win *win, int offset_y, int offset_x)
 {
-    mlx_clear_window(win->mlx_ptr, win->win_ptr);
     win->offset_y += offset_y;
     win->offset_x += offset_x;
     draw_map(win);
@@ -29,19 +28,17 @@ void    map_offset(t_win *win, int offset_y, int offset_x)
 
 void    zoom_offset(t_win *win, int zoom_offset, int only_z)
 {
-    mlx_clear_window(win->mlx_ptr, win->win_ptr);
     if (only_z == 0)
     {
-        win->sc_y += zoom_offset; printf("sc_y: %d\n", win->sc_y);
-        win->sc_x += zoom_offset; printf("sc_x: %d\n", win->sc_x);
+        win->sc_y += zoom_offset;
+        win->sc_x += zoom_offset;
     }
-    win->sc_z += zoom_offset; printf("sc_z: %d\n", win->sc_z);
+    win->sc_z += zoom_offset;
     draw_map(win);
 }
 
 void    numpads(t_win *win, int key)
 {
-    mlx_clear_window(win->mlx_ptr, win->win_ptr);
     if (key == 1)
         toggle_param(&win->ver_on);
     if (key == 2)
@@ -54,6 +51,8 @@ void    numpads(t_win *win, int key)
         toggle_param(&win->fdf_on);
     if (key == 6)
         toggle_param(&win->con_on);
+    if (key == 7)
+        toggle_param(&win->interface_on);
     draw_map(win);
 }
 

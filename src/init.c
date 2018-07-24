@@ -30,20 +30,36 @@ void     init_win(t_win *win)
 		win->bsl_on = 0;
 		win->fdf_on = 1;
 		win->con_on = 1;
-		win->angle_y = 0;
-		win->angle_x = 0;
-		win->angle_z = 0;
+		win->interface_on = 1;		
 		win->mlx_ptr = mlx_init();
 		win->win_ptr = mlx_new_window(win->mlx_ptr, win->width, win->height, WIN_NAME);
         //return (1);
 	}
     //return (0);
 }
+t_px	*init_px(void)
+{
+	t_px *new_px;
+
+	if ((new_px = (t_px *)malloc(sizeof(t_px))))
+	{
+		new_px->x = 0;
+		new_px->y = 0;
+		new_px->z = 0;
+		new_px->z_orig = 0;
+		new_px->color = 0;
+		new_px->alpha = 0;
+		return (new_px);
+	}
+	return (NULL);
+}
 
 void	init_line(t_line *line)
 {
 	if (line != NULL)
 	{
+		line->start_x = 0;
+		line->start_y = 0;
 		line->start_x = 0;
 		line->start_y = 0;
 		line->end_x = 0;

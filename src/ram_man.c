@@ -20,15 +20,28 @@ void	free_map(t_win *win)
 	if (win)
 	{
 		i = 0;
-		while (i < win->map_rows)
+		while (i < win->param->rows)
 		{
 			j = 0;
-			while (j < win->map_cols)
+			while (j < win->param->cols)
 			{
 				ft_memdel((void *)&win->map[i][j++]);
 			}
-		ft_memdel((void *)&win->map[i++]);
+			ft_memdel((void *)&win->map[i++]);
 		}
-		ft_memdel((void*)&win->map);
+		ft_memdel((void *)&win->map);
 	}
+}
+
+int		free_win(t_win *win)
+{
+	if (win)
+	{
+		free_map(win);
+		ft_memdel((void *)&win->param);
+		ft_memdel((void *)&win->flags);
+		ft_memdel((void *)&win);
+		return (1);
+	}
+	return (0);
 }

@@ -12,124 +12,123 @@
 
 #include "main.h"
 
-void	draw_map_vertical(t_win *win, int offset_y, int offset_x, int con)
+void	draw_map_vertical(t_win *win, int c)
 {
 	t_line	*line;
 	size_t	y;
 	size_t	x;
 
-	if (!win || !(line = (t_line *)malloc(sizeof(t_line))) || !(y = -1))
+	if (!win || !(line = init_line())
+	|| !(y = -1))
 		return ;
-	init_line(line);
-	while (++y < win->map_rows - 1 && (x = -1))
-		while (++x < win->map_cols - 1)
+	while (++y < win->param->rows - 1 && (x = -1))
+		while (++x < win->param->cols - 1)
 		{
-			line->y1 = win->map[y + 1][x].y * win->sc_y
-			    	- win->map[y + con][x].z * win->sc_z + offset_y;
-			line->x1 = win->map[y + 1][x].x * win->sc_x + offset_x;
-			line->y2 = win->map[y][x].y * win->sc_y
-					- win->map[y][x].z * win->sc_z;
-			line->x2 = win->map[y][x].x * win->sc_x;
-			line->end_y = line->y2 + offset_y;
-			line->end_x = line->x2 + offset_x;
-			draw_line(win, line, line->y1, line->x1, win->map[y][x].color);
-		}	
-}
-
-void	draw_map_backslash(t_win *win, int offset_y, int offset_x, int con)
-{
-	t_line	*line;
-	size_t	y;
-	size_t	x;
-
-	if (!win || !(line = (t_line *)malloc(sizeof(t_line))) || !(y = -1))
-		return ;
-	while (++y < win->map_rows - 1 && (x = -1))
-		while (++x < win->map_cols - 1)
-		{
-			line->y1 = win->map[y + 1][x + 1].y * win->sc_y
-					- win->map[y + con][x + con].z * win->sc_z + offset_y;
-			line->x1 = win->map[y + 1][x + 1].x * win->sc_x + offset_x;
-			line->y2 = win->map[y][x].y * win->sc_y
-					- win->map[y][x].z * win->sc_z;
-			line->x2 = win->map[y][x].x * win->sc_x;
-			line->end_y = line->y2 + offset_y;
-			line->end_x = line->x2 + offset_x;
-			draw_line(win, line, line->y1, line->x1, win->map[y][x].color);
+			line->color = win->map[y][x].color;
+			line->end_x = win->map[y][x].x * win->param->sc_x;
+			line->end_y = win->map[y][x].y * win->param->sc_y
+						- win->map[y][x].z * win->param->sc_z;
+			draw_line(win, line,
+				win->map[y + 1][x].x * win->param->sc_x,
+				win->map[y + 1][x].y * win->param->sc_y -
+				win->map[y + c][x].z * win->param->sc_z);
 		}
 }
 
-void	draw_map_horizontal(t_win *win, int offset_y, int offset_x, int con)
+void	draw_map_backslash(t_win *win, int c)
 {
 	t_line	*line;
 	size_t	y;
 	size_t	x;
 
-	if (!win || !(line = (t_line *)malloc(sizeof(t_line))) || !(y = -1))
+	if (!win || !(line = init_line())
+	|| !(y = -1))
 		return ;
-	while (++y < win->map_rows - 1 && (x = -1))
-		while (++x < win->map_cols - 1)
+	while (++y < win->param->rows - 1 && (x = -1))
+		while (++x < win->param->cols - 1)
 		{
-			line->y1 = win->map[y][x + 1].y * win->sc_y
-					- win->map[y][x + con].z * win->sc_z + offset_y;
-			line->x1 = win->map[y][x + 1].x * win->sc_x + offset_x;
-			line->y2 = win->map[y][x].y * win->sc_y
-					- win->map[y][x].z * win->sc_z;
-			line->x2 = win->map[y][x].x * win->sc_x;
-			line->end_y = line->y2 + offset_y;
-			line->end_x = line->x2 + offset_x;
-			draw_line(win, line,  line->y1, line->x1, win->map[y][x].color);
+			line->color = win->map[y][x].color;
+			line->end_x = win->map[y][x].x * win->param->sc_x;
+			line->end_y = win->map[y][x].y * win->param->sc_y
+						- win->map[y][x].z * win->param->sc_z;
+			draw_line(win, line,
+				win->map[y + 1][x + 1].x * win->param->sc_x,
+				win->map[y + 1][x + 1].y * win->param->sc_y -
+				win->map[y + c][x + c].z * win->param->sc_z);
 		}
 }
 
-void	draw_map_slash(t_win *win, int offset_y, int offset_x, int con)
+void	draw_map_horizontal(t_win *win, int c)
 {
 	t_line	*line;
 	size_t	y;
 	size_t	x;
-	
-	if (!win || !(line = (t_line *)malloc(sizeof(t_line))) || !(y = -1))
+
+	if (!win || !(line = init_line())
+	|| !(y = -1))
 		return ;
-	while (++y < win->map_rows - 1 && (x = -1))
-		while (++x < win->map_cols - 1)
+	while (++y < win->param->rows - 1 && (x = -1))
+		while (++x < win->param->cols - 1)
 		{
-			line->y1 = win->map[y + 1][x].y * win->sc_y
-					- win->map[y + con][x].z * win->sc_z + offset_y;
-			line->x1 = win->map[y + 1][x].x * win->sc_x + offset_x;
-			line->y2 = win->map[y][x + 1].y * win->sc_y
-					- win->map[y][x + con].z * win->sc_z;
-			line->x2 = win->map[y][x + 1].x * win->sc_x;
-			line->end_y = line->y2 + offset_y;
-			line->end_x = line->x2 + offset_x;
-			draw_line(win, line,  line->y1, line->x1, win->map[y][x].color);
+			line->color = win->map[y][x].color;
+			line->end_x = win->map[y][x].x * win->param->sc_x;
+			line->end_y = win->map[y][x].y * win->param->sc_y
+						- win->map[y][x].z * win->param->sc_z;
+			draw_line(win, line,
+				win->map[y][x + 1].x * win->param->sc_x,
+				win->map[y][x + 1].y * win->param->sc_y -
+				win->map[y][x + c].z * win->param->sc_z);
 		}
 }
 
-void	draw_map_fdf(t_win *win, int offset_y, int offset_x, int con)
+void	draw_map_slash(t_win *win, int c)
 {
 	t_line	*line;
-	size_t	y;
 	size_t	x;
+	size_t	y;
 
-	if (!win || !(line = (t_line *)malloc(sizeof(t_line))) || !(y = -1))
+	if (!win || !(line = init_line())
+	|| !(y = -1))
 		return ;
-	while (++y < win->map_rows && (x = -1))
-		while (++x < win->map_cols)
+	while (++y < win->param->rows - 1 && (x = -1))
+		while (++x < win->param->cols - 1)
 		{
-			line->y1 = win->map[y][x + 1].y * win->sc_y
-					- win->map[y][x + con].z * win->sc_z + offset_y;
-			line->x1 = win->map[y][x + 1].x * win->sc_x + offset_x;
-			line->y2 = win->map[y][x].y * win->sc_y
-					- win->map[y][x].z * win->sc_z;
-			line->x2 = win->map[y][x].x * win->sc_x;
-			line->end_y = line->y2 + offset_y;
-			line->end_x = line->x2 + offset_x;
-			if (x < win->map_cols - 1)
-				draw_line(win, line, line->y1, line->x1, win->map[y][x].color);
-			if (y < win->map_rows - 1)
+			line->color = win->map[y][x].color;
+			line->end_x = win->map[y][x + 1].x * win->param->sc_x;
+			line->end_y = win->map[y][x + 1].y * win->param->sc_y
+						- win->map[y][x + c].z * win->param->sc_z;
+			draw_line(win, line,
+				win->map[y + 1][x].x * win->param->sc_x,
+				win->map[y + 1][x].y * win->param->sc_y -
+				win->map[y + c][x].z * win->param->sc_z);
+		}
+}
+
+void	draw_map_fdf(t_win *win, int c)
+{
+	t_line	*line;
+	size_t	x;
+	size_t	y;
+
+	if (!win || !(line = init_line())
+	|| !(y = -1))
+		return ;
+	while (++y < win->param->rows && (x = -1))
+		while (++x < win->param->cols)
+		{
+			line->color = win->map[y][x].color;
+			line->end_x = win->map[y][x].x * win->param->sc_x;
+			line->end_y = win->map[y][x].y * win->param->sc_y
+						- win->map[y][x].z * win->param->sc_z;
+			if (x < win->param->cols - 1)
 				draw_line(win, line,
-				 win->map[y + 1][x].y * win->sc_y
-					- win->map[y + con][x].z * win->sc_z + offset_y,
-					 win->map[y + 1][x].x * win->sc_x + offset_x, win->map[y][x].color);
+					win->map[y][x + 1].x * win->param->sc_x,
+					win->map[y][x + 1].y * win->param->sc_y -
+					win->map[y][x + c].z * win->param->sc_z);
+			if (y < win->param->rows - 1)
+				draw_line(win, line,
+					win->map[y + 1][x].x * win->param->sc_x,
+					win->map[y + 1][x].y * win->param->sc_y -
+					win->map[y + c][x].z * win->param->sc_z);
 		}
 }

@@ -15,11 +15,10 @@
 
 # define WIN_WIDTH 1024
 # define WIN_HEIGHT 768
-# define WIN_OFFSET 150
-# define WIN_OFFSET_Y 150
-# define WIN_OFFSET_X 400
-# define WIN_SCALE 12
-# define WIN_NAME "I_am_mlx"
+# define DEF_OFFSET_Y 300
+# define DEF_OFFSET_X 400
+# define DEF_SCALE 14
+# define WIN_NAME "FDF by dromanic (@Dentair)"
 # define DEF_COLOR 0x009100FF
 # define PI 3.14159265359
 
@@ -38,12 +37,9 @@ typedef struct	s_px
 	int		alpha;
 }				t_px;
 
-//enum error
-//
 typedef struct	s_line
 {
-	int	start_x;
-	int	start_y;
+	int	color;
 	int	end_x;
 	int	end_y;
 	int	len_y;
@@ -51,118 +47,119 @@ typedef struct	s_line
 	int	len;
 	int	dy;
 	int	dx;
-	double	y1;
-	double	x1;
-	double	z1;	
-	double	y2;
-	double	x2;
-	double	z2;	
-	double	y3;
-	double	x3;
-	double	z3;
-	double	d;
+	int	d;
 }				t_line;
 
-typedef struct	s_win
+typedef struct	s_param
 {
-	t_px	**map;
-	size_t	map_rows;
-	size_t	map_cols;
-	double	centr_y;
-	double	centr_x;
-	double	centr_z;
+	size_t	rows;
+	size_t	cols;
 	int		width;
 	int		height;
-	int		offset_x;
+	int		frame_cnt;
 	int		offset_y;
+	int		offset_x;
 	int		sc_x;
 	int		sc_y;
 	int		sc_z;
-	void	*mlx_ptr;
-	void	*win_ptr;
-	int		frame_cnt;
+	double	centr_x;
+	double	centr_y;
+}				t_param;
+
+typedef struct	s_flags
+{
 	int		con_on;
 	int		ver_on;
 	int		sla_on;
 	int		hor_on;
 	int		bsl_on;
 	int		fdf_on;
+	int		dot_on;
 	int		interface_on;
+	int		error_code;
+}				t_flags;
+
+typedef struct	s_win
+{
+	t_px	**map;
+	t_param	*param;
+	t_flags	*flags;
+	void	*mlx_ptr;
+	void	*win_ptr;
 }				t_win;
 
-void	draw_map(t_win *win);
-void    dislpay_interface(t_win *win);
-void	draw_line_map(t_win *win);
-void	init_win(t_win *win);
-void	init_line(t_line *line);
+enum			e_keys
+{
+	NUM_1 = 83, ONE = 18,
+	NUM_2 = 84, TWO = 19,
+	NUM_3 = 85, THREE = 20,
+	NUM_4 = 86, FOUR = 21,
+	NUM_5 = 87, FIVE = 23,
+	NUM_6 = 88, SIX = 22,
+	NUM_7 = 89, SEVEN = 26,
+	NUM_8 = 91, EIGHT = 28,
+	NUM_MINUS = 78, NINE = 25,
+	NUM_PLUS = 69, ZERO = 29,
+	Q = 12, W = 13, E = 14,
+	A = 0, S = 1, D = 2,
+	R = 15, ENTER = 36,
+	ARROW_UP = 126, ARROW_DOWN = 125,
+	ARROW_LEFT = 123, ARROW_RIGHT = 124,
+	MOUSE_SCROLL_UP = 4, MINUS = 27,
+	MOUSE_SCROLL_DOWN = 5, PLUS = 24,
+};
 
-int		exit_x(void *par);
-void    map_offset(t_win *win, int offset_y, int offset_x);
-void    zoom_offset(t_win *win, int zoom_offset, int only_z);
-void    numpads(t_win *win, int key);
-void    animate(t_win *win);
+enum			e_errors
+{
+	MAP_INVALID = 404,
+	WIDTH_ERR = 405,
+	PARSE_ERR = 406,
+	FILE_ERR = 406,
+};
 
-int     toggle_param(int *param);
-void	set_map_vec(t_win *win, long long y, long long x, long long z);
+t_px			*init_px(void);
+t_line			*init_line(void);
+t_param			*init_param(void);
+t_flags			*init_flags(void);
+t_win			*init_win(void);
 
-void	rotate_map(t_win *win, char axis, int new_angle);
-void    rotate_map_px(t_win *win, size_t y, size_t x, long z);
-void    angle_reset(t_win *win);
-void	angle_change(t_win *win, char axis, int offset_angle);
+t_win			*parse_map(char *file_name, t_win *win);
+int				get_col(char *hex, size_t *i, size_t max_i);
 
-int		deal_keyboard(int key, t_win *win);
-int		deal_keyboard2(int key, t_win *win);
-int		deal_keyboard3(int key, t_win *win);
-int     deal_mouse(int key, int x, int y, t_win *win);
+void			draw_line(t_win *win, t_line *line, int x, int y);
+void			draw_map(t_win *win);
+void			draw_map_dots(t_win *win);
+void			draw_map_vertical(t_win *win, int con);
+void			draw_map_backslash(t_win *win, int con);
+void			draw_map_horizontal(t_win *win, int con);
+void			draw_map_slash(t_win *win, int con);
+void			draw_map_fdf(t_win *win, int con);
 
-int		is_hex(char ch);
-int		ch2int(char ch);
-int		get_col(char *hex, size_t *i, size_t max_i);
+void			ft_destroy_lst(t_list *lst);
+int				ft_lst_append(t_list **lst, char *buf, int size);
+long long		ft_i_atoi(const char *str, size_t *i, size_t max_i);
+long long		ft_atol_base(const char *str, int base);
 
-int		convert_map(t_win *win, t_list *lst);
-int		set_map_size(t_win *win, t_list *lst);
-t_win	*parse_map(char *file_name, t_win *win);
+int				deal_keyboard(int key, t_win *win);
+int				deal_mouse(int key, int x, int y, t_win *win);
+int				exit_x(void *par);
+void			map_offset(t_win *win, int offset_x, int offset_y);
+void			zoom_offset(t_win *win, int zoom_offset, int only_z);
+void			toggles(t_win *win, int key);
+void			animate(t_win *win);
 
-void	ft_destroy_lst(t_list *lst);
-int		ft_lst_append(t_list **lst, char *buf, int size);
-long long	ft_i_atoi(const char *str, size_t *i, size_t max_i);
-size_t	ft_cnt_words(char *str, size_t max_i, char ch);
-long long	ft_atol_base(const char *str, int base);
-long long	ft_i_atol_base(const char *str, size_t *i, size_t max_i, int base);
+void			dislpay_interface(t_win *win);
 
-double	ft_abs(double num);
-double	ft_max(double first, double second);
-void	draw_px_by_coord(t_win *win, double y, double x, int color);
-void	draw_px_by_map(t_win *win, size_t y, size_t x);
-void	draw_line(t_win *win, t_line *line, int y, int x, int color);
+int				toggle_param(int *param);
+int				set_vec(t_win *win, long long x, long long y, long long z);
+double			ft_abs(double num);
+double			ft_max(double first, double second);
+size_t			ft_cnt_words(char *str, size_t max_i, char ch);
 
-void	draw_map_vertical(t_win *win, int offset_y, int offset_x, int con);
-void	draw_map_backslash(t_win *win, int offset_y, int offset_x, int con);
-void	draw_map_horizontal(t_win *win, int offset_y, int offset_x, int con);
-void	draw_map_slash(t_win *win, int offset_y, int offset_x, int con);
-void	draw_map_fdf(t_win *win, int offset_y, int offset_x, int con);
+void			rotate_map(t_win *win, char axis, int new_angle);
+void			reset(t_win *win);
 
-void	free_map(t_win *win);
-void 	print_map(t_win *win);
-void	print_content_lst(t_list *lst);
-
-void	multi_init_line(t_line *l1, t_line *l2, t_line *l3, t_line *l4);
-void	set_start_if_max(t_line *line, double new_y, double new_x);
-void	set_end_if_max  (t_line *line, double new_y, double new_x);
-void	set_start_if_min(t_line *line, double new_y, double new_x);
-void	set_end_if_min  (t_line *line, double new_y, double new_x);
-void	set_start_if_max_y	(t_line *line, double new);
-void	set_start_if_max_x	(t_line *line, double new);
-void	set_end_if_max_y	(t_line *line, double new);
-void	set_end_if_max_x	(t_line *line, double new);
-void	set_start_if_min_y 	(t_line *line, double new);
-void	set_start_if_min_x	(t_line *line, double new);
-void	set_end_if_min_y	(t_line *line, double new);
-void	set_end_if_min_x	(t_line *line, double new);
-void	get_top_line(t_line *line, double new_y, double new_x);
-void	get_bottom_line(t_line *line, double new_y, double new_x);
-void	get_left_line(t_line *line, double new_y, double new_x);
-void	get_right_line(t_line *line, double new_y, double new_x);
-void	print_map_frame(t_win *win);
+void			free_map(t_win *win);
+int				free_win(t_win *win);
 
 #endif

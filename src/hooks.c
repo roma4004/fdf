@@ -19,54 +19,58 @@ int		exit_x(void *par)
 	return (0);
 }
 
-void    map_offset(t_win *win, int offset_y, int offset_x)
+void	map_offset(t_win *win, int offset_x, int offset_y)
 {
-    win->offset_y += offset_y;
-    win->offset_x += offset_x;
-    draw_map(win);
+	win->param->offset_x += offset_x;
+	win->param->offset_y += offset_y;
+	draw_map(win);
 }
 
-void    zoom_offset(t_win *win, int zoom_offset, int only_z)
+void	zoom_offset(t_win *win, int zoom_offset, int only_z)
 {
-    if (only_z == 0)
-    {
-        win->sc_y += zoom_offset;
-        win->sc_x += zoom_offset;
-    }
-    win->sc_z += zoom_offset;
-    draw_map(win);
+	if (only_z == 0)
+	{
+		win->param->sc_x += zoom_offset;
+		win->param->sc_y += zoom_offset;
+	}
+	win->param->sc_z += zoom_offset;
+	draw_map(win);
 }
 
-void    numpads(t_win *win, int key)
+void	toggles(t_win *win, int key)
 {
-    if (key == 1)
-        toggle_param(&win->ver_on);
-    if (key == 2)
-        toggle_param(&win->sla_on);
-    if (key == 3)
-        toggle_param(&win->hor_on);
-    if (key == 4)
-        toggle_param(&win->bsl_on);
-    if (key == 5)
-        toggle_param(&win->fdf_on);
-    if (key == 6)
-        toggle_param(&win->con_on);
-    if (key == 7)
-        toggle_param(&win->interface_on);
-    draw_map(win);
+	if (key == 1)
+		toggle_param(&win->flags->ver_on);
+	if (key == 2)
+		toggle_param(&win->flags->sla_on);
+	if (key == 3)
+		toggle_param(&win->flags->hor_on);
+	if (key == 4)
+		toggle_param(&win->flags->bsl_on);
+	if (key == 5)
+		toggle_param(&win->flags->fdf_on);
+	if (key == 6)
+		toggle_param(&win->flags->con_on);
+	if (key == 7)
+		toggle_param(&win->flags->dot_on);
+	if (key == 8)
+		toggle_param(&win->flags->interface_on);
+	draw_map(win);
 }
 
-void    animate(t_win *win)
+void	animate(t_win *win)
 {
-    mlx_clear_window(win->mlx_ptr, win->win_ptr);
-    if (++win->frame_cnt == 4)
-        win->frame_cnt = 0;
-    if (win->frame_cnt == 0)
-         draw_map_vertical(win, win->offset_y, win->offset_x, win->con_on);
-	else if (win->frame_cnt == 1)
-        draw_map_slash(win, win->offset_y, win->offset_x, win->con_on);
-	else if (win->frame_cnt == 2)
-        draw_map_horizontal(win, win->offset_y, win->offset_x, win->con_on);
-	else if (win->frame_cnt == 3)
-        draw_map_backslash(win, win->offset_y, win->offset_x, win->con_on);
+	mlx_clear_window(win->mlx_ptr, win->win_ptr);
+	if (win->flags->interface_on)
+		dislpay_interface(win);
+	if (++win->param->frame_cnt == 4)
+		win->param->frame_cnt = 0;
+	if (win->param->frame_cnt == 0)
+		draw_map_vertical(win, win->flags->con_on);
+	else if (win->param->frame_cnt == 1)
+		draw_map_slash(win, win->flags->con_on);
+	else if (win->param->frame_cnt == 2)
+		draw_map_horizontal(win, win->flags->con_on);
+	else if (win->param->frame_cnt == 3)
+		draw_map_backslash(win, win->flags->con_on);
 }

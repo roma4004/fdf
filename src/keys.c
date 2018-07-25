@@ -12,87 +12,88 @@
 
 #include "main.h"
 
-int     deal_keyboard(int key, t_win *win)
+static int	deal_keyboard3(int key, t_win *win)
 {
-    if (!win)
-        return (1);
-    if (key == 123)    
-        map_offset(win, 0, -10);
-    else if (key == 126)
-        map_offset(win, -10, 0);
-    else if (key == 125)
-        map_offset(win, 10, 0);
-    else if (key == 124)
-        map_offset(win, 0, 10);
-    else if (key == 78)
-        zoom_offset(win, -1, 1);
-    else if (key == 69)
-        zoom_offset(win, +1, 1);
-    else if (key == 36)
-        animate(win);
-    else if (key == 27)
-        zoom_offset(win, -1, 0);
-    else if (key == 24)
-        zoom_offset(win, 1, 0);
-    else
-        deal_keyboard2(key, win);
-    return (0);
+	if (!win)
+		return (1);
+	if (key == Q)
+		rotate_map(win, 'y', 2);
+	else if (key == W)
+		rotate_map(win, 'x', 2);
+	else if (key == E)
+		rotate_map(win, 'z', 2);
+	else if (key == A)
+		rotate_map(win, 'y', -2);
+	else if (key == S)
+		rotate_map(win, 'x', -2);
+	else if (key == D)
+		rotate_map(win, 'z', -2);
+	else if (key == R)
+		reset(win);
+	return (0);
 }
 
-int     deal_keyboard2(int key, t_win *win)
+static int	deal_keyboard2(int key, t_win *win)
 {
-    if (!win)
-        return (1);
-    if (key == 83)
-        numpads(win, 1);
-    else if (key == 84)
-        numpads(win, 2);
-    else if (key == 85)
-        numpads(win, 3);
-    else if (key == 86)
-        numpads(win, 4);
-    else if (key == 87)
-        numpads(win, 5);
-    else if (key == 88)
-        numpads(win, 6);
-    else if (key == 89)
-        numpads(win, 7);
-    else
-        deal_keyboard3(key, win);
-    return (0);
+	if (!win)
+		return (1);
+	if (key == NUM_1 || key == ONE)
+		toggles(win, 1);
+	else if (key == NUM_2 || key == TWO)
+		toggles(win, 2);
+	else if (key == NUM_3 || key == THREE)
+		toggles(win, 3);
+	else if (key == NUM_4 || key == FOUR)
+		toggles(win, 4);
+	else if (key == NUM_5 || key == FIVE)
+		toggles(win, 5);
+	else if (key == NUM_6 || key == SIX)
+		toggles(win, 6);
+	else if (key == NUM_7 || key == SEVEN)
+		toggles(win, 7);
+	else if (key == NUM_8 || key == EIGHT)
+		toggles(win, 8);
+	else
+		deal_keyboard3(key, win);
+	return (0);
 }
 
-int     deal_keyboard3(int key, t_win *win)
+int			deal_keyboard(int key, t_win *win)
 {
-    if (!win)
-        return (1);
-    if (key == 12)
-        rotate_map(win, 'y', 2);
-    else if (key == 13)
-        rotate_map(win, 'x', 2);
-    else if (key == 14)
-        rotate_map(win, 'z', 2);
-    else if (key == 0)
-        rotate_map(win, 'y', -2);
-    else if (key == 1)
-        rotate_map(win, 'x', -2);
-    else if (key == 2)
-        rotate_map(win, 'z', -2);
-    else if (key == 15)
-        angle_reset(win);
-
-    return (0);
+	if (!win)
+		return (1);
+	if (key == ARROW_LEFT)
+		map_offset(win, -10, 0);
+	else if (key == ARROW_UP)
+		map_offset(win, 0, -10);
+	else if (key == ARROW_DOWN)
+		map_offset(win, 0, 10);
+	else if (key == ARROW_RIGHT)
+		map_offset(win, 10, 0);
+	else if (key == NUM_MINUS || key == NINE)
+		zoom_offset(win, -1, 1);
+	else if (key == NUM_PLUS || key == ZERO)
+		zoom_offset(win, +1, 1);
+	else if (key == ENTER)
+		animate(win);
+	else if (key == MINUS)
+		zoom_offset(win, -1, 0);
+	else if (key == PLUS)
+		zoom_offset(win, 1, 0);
+	else
+		deal_keyboard2(key, win);
+	return (0);
 }
 
-int     deal_mouse(int key, int x, int y, t_win *win)
+int			deal_mouse(int key, int x, int y, t_win *win)
 {
-    if (!win)
-        return (1);
-    y++;
-    x++;
-    if (key == 4)
-        zoom_offset(win, -1, 0);
-    else if (key == 5)
-        zoom_offset(win, 1, 0);
-    return (0);
+	if (!win)
+		return (1);
+	y++;
+	x++;
+	if (key == MOUSE_SCROLL_UP)
+		zoom_offset(win, -1, 0);
+	else if (key == MOUSE_SCROLL_DOWN)
+		zoom_offset(win, 1, 0);
+	return (0);
 }

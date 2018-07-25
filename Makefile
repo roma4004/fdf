@@ -22,7 +22,6 @@ SRC_N =	main.c \
 		init.c \
 		hooks.c \
 		color.c \
-		debug.c \
 		parser.c \
 		rotate.c \
 		for_lib.c \
@@ -30,8 +29,7 @@ SRC_N =	main.c \
 		effects.c \
 		interface.c \
 		service_func.c \
-		get_next_line.c \
-		experimental_code.c
+		get_next_line.c
 
 SRC = $(addprefix src/, $(SRC_N))
 

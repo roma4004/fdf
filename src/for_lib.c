@@ -12,7 +12,7 @@
 
 #include "main.h"
 
-void	ft_destroy_lst(t_list *lst)
+void		ft_destroy_lst(t_list *lst)
 {
 	t_list	*cur;
 	t_list	*tmp;
@@ -24,12 +24,12 @@ void	ft_destroy_lst(t_list *lst)
 		tmp = cur->next;
 		if (cur->content)
 			free(cur->content);
-		free(cur);	
+		free(cur);
 		cur = tmp;
 	}
 }
 
-int		ft_lst_append(t_list **lst, char *buf, int size)
+int			ft_lst_append(t_list **lst, char *buf, int size)
 {
 	t_list *cur;
 
@@ -52,8 +52,9 @@ long long	ft_i_atoi(const char *str, size_t *i, size_t max_i)
 
 	sign = 1;
 	result = 0;
-	while (*i < max_i && (str[*i] == '\t' || str[*i] == '\n' || str[*i] == '\r' ||
-			str[*i] == ' ' || str[*i] == '\v' || str[*i] == '\f'))
+	while (*i < max_i
+		&& (str[*i] == '\t' || str[*i] == '\n' || str[*i] == '\r'
+			|| str[*i] == ' ' || str[*i] == '\v' || str[*i] == '\f'))
 		*i = *i + 1;
 	if (str[*i] == '-')
 		sign = -1;
@@ -66,23 +67,6 @@ long long	ft_i_atoi(const char *str, size_t *i, size_t max_i)
 	if (result > 9223372036854775808U && sign == -1)
 		return (0);
 	return (result * sign);
-}
-
-size_t	ft_cnt_words(char *str, size_t max_i, char ch)
-{
-	size_t	i;
-	size_t	num;
-
-	if (str == NULL)
-		return (0);
-	i = -1;
-	num = 0;
-	while (++i < max_i && str[i])
-		if (str[i] == ch && str[i + 1] != ch)
-			num++;
-	if (str[0] != '\0')
-		num++;
-	return (num);
 }
 
 static long	ft_atol_base2(const char *str, int base)
@@ -123,42 +107,5 @@ long long	ft_atol_base(const char *str, int base)
 		result = ft_atol_base2(str + 2, base);
 	else
 		result = ft_atol_base2(str, base);
-	return (result * sign);
-}
-
-static long	ft_i_atol_base2(const char *str, size_t *i, size_t max_i, int base)
-{
-	long		res;
-	char		*dig;
-	char		*tmp;
-
-	dig = "0123456789abcdefghijklmnopqrstuvwxyz";
-	res = 0;
-	while (*i < max_i && (str[*i] && (tmp = (char *)ft_memchr(dig, ft_tolower(str[*i]), base))))
-	{
-		res = (res * base) + (tmp - dig);
-		(*i)++;
-	}
-	return (res);
-}
-
-long long	ft_i_atol_base(const char *str, size_t *i, size_t max_i, int base)
-{
-	long long	result;
-	int			sign;
-
-	sign = 1;
-	result = 0;
-	if (!str || base < 2 || base > 36)
-		return (result);
-	while (*i < max_i && (str[*i] == ' ' || (str[*i] >= '\t' && str[*i] <= '\r')))
-		*i = *i + 1;
-	sign = (base == 10 && str[*i] == '-') ? -1 : 1;
-	if (*i < max_i && (base == 10 && (*str == '-' || *str == '+')))
-		*i = *i + 1;
-	if (*i < max_i && (base == 16 && str[*i] == '0' && ft_tolower(str[*i + 1]) == 'x'))
-		result = ft_i_atol_base2(str + 2, i, max_i, base);
-	else
-		result = ft_i_atol_base2(str, i, max_i, base);
 	return (result * sign);
 }

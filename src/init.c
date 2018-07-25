@@ -12,31 +12,6 @@
 
 #include "main.h"
 
-void     init_win(t_win *win)
-{
-	if (win != NULL)
-	{
-        win->width = WIN_WIDTH;
-		win->height = WIN_HEIGHT;
-		win->offset_x = WIN_OFFSET_X;
-		win->offset_y = WIN_OFFSET_Y;
-		win->sc_x = WIN_SCALE;
-		win->sc_y = WIN_SCALE;
-		win->sc_z = WIN_SCALE;
-		win->frame_cnt = 0;
-		win->ver_on = 0;
-		win->sla_on = 0;
-		win->hor_on = 0;
-		win->bsl_on = 0;
-		win->fdf_on = 1;
-		win->con_on = 1;
-		win->interface_on = 1;		
-		win->mlx_ptr = mlx_init();
-		win->win_ptr = mlx_new_window(win->mlx_ptr, win->width, win->height, WIN_NAME);
-        //return (1);
-	}
-    //return (0);
-}
 t_px	*init_px(void)
 {
 	t_px *new_px;
@@ -54,25 +29,82 @@ t_px	*init_px(void)
 	return (NULL);
 }
 
-void	init_line(t_line *line)
+t_line	*init_line(void)
 {
-	if (line != NULL)
+	t_line *new_line;
+
+	if ((new_line = (t_line *)malloc(sizeof(t_line))))
 	{
-		line->start_x = 0;
-		line->start_y = 0;
-		line->start_x = 0;
-		line->start_y = 0;
-		line->end_x = 0;
-		line->end_y = 0;
-		line->len_y = 0;
-		line->len_x = 0;
-		line->len = 0;
-		line->dy = 0;
-		line->dx = 0;
-		line->y1 = 0;
-		line->x1 = 0;
-		line->y2 = 0;
-		line->x2 = 0;
-		line->d = 0;
+		new_line->end_x = 0;
+		new_line->end_y = 0;
+		new_line->len_y = 0;
+		new_line->len_x = 0;
+		new_line->len = 0;
+		new_line->dy = 0;
+		new_line->dx = 0;
+		new_line->d = 0;
+		return (new_line);
 	}
+	return (NULL);
+}
+
+t_param	*init_param(void)
+{
+	t_param *new_param;
+
+	if ((new_param = (t_param *)malloc(sizeof(t_param))))
+	{
+		new_param->rows = 0;
+		new_param->cols = 0;
+		new_param->width = WIN_WIDTH;
+		new_param->height = WIN_HEIGHT;
+		new_param->frame_cnt = 0;
+		new_param->offset_x = DEF_OFFSET_X;
+		new_param->offset_y = DEF_OFFSET_Y;
+		new_param->sc_x = DEF_SCALE;
+		new_param->sc_y = DEF_SCALE;
+		new_param->sc_z = DEF_SCALE;
+		new_param->centr_x = 0;
+		new_param->centr_y = 0;
+		return (new_param);
+	}
+	return (NULL);
+}
+
+t_flags	*init_flags(void)
+{
+	t_flags	*new_flags;
+
+	if ((new_flags = (t_flags *)malloc(sizeof(t_flags))))
+	{
+		new_flags->ver_on = 0;
+		new_flags->sla_on = 0;
+		new_flags->hor_on = 0;
+		new_flags->bsl_on = 0;
+		new_flags->fdf_on = 1;
+		new_flags->con_on = 1;
+		new_flags->dot_on = 1;
+		new_flags->interface_on = 1;
+		new_flags->error_code = 0;
+		return (new_flags);
+	}
+	return (NULL);
+}
+
+t_win	*init_win(void)
+{
+	t_win	*new_win;
+
+	new_win = NULL;
+	if (!(new_win = (t_win *)malloc(sizeof(t_win)))
+	|| !(new_win->param = init_param())
+	|| !(new_win->flags = init_flags())
+	|| !(new_win->mlx_ptr = mlx_init())
+	|| !(new_win->win_ptr = mlx_new_window(new_win->mlx_ptr,
+			new_win->param->width, new_win->param->height, WIN_NAME)))
+	{
+		free_win(new_win);
+		return (NULL);
+	}
+	return (new_win);
 }

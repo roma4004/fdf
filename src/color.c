@@ -12,7 +12,7 @@
 
 #include "main.h"
 
-int		is_hex(char ch)
+static int	is_hex(char ch)
 {
 	if (ch == 'A' || ch == 'a'
 	|| ch == 'B' || ch == 'b'
@@ -25,7 +25,7 @@ int		is_hex(char ch)
 	return (0);
 }
 
-int		ch2int(char ch)
+static int	ch2int(char ch)
 {
 	if (ch == 'A' || ch == 'a')
 		return (10);
@@ -44,28 +44,28 @@ int		ch2int(char ch)
 
 int		get_col(char *hex, size_t *i, size_t max_i)
 {
-	int		res;
+	int	res;
 
 	res = 0;
-	if (*i >= max_i || *i + 9 >= max_i || !hex || hex[0] != ',' 
+	if (*i >= max_i || *i + 9 >= max_i || !hex || hex[0] != ','
 	|| hex[1] != '0' || hex[2] != 'x'
-	|| !is_hex(hex[3]) || !is_hex(hex[4]) 
+	|| !is_hex(hex[3]) || !is_hex(hex[4])
 	|| !is_hex(hex[5]) || !is_hex(hex[6])
 	|| !is_hex(hex[7]) || !is_hex(hex[8]))
-		return (DEF_COLOR);  //printf("col=%c%c%c%c%c%c%c%c", hex[1], hex[2], hex[3], hex[4], hex[5], hex[5], hex[6], hex[7]);
+		return (DEF_COLOR);
 	if (*i + 11 < max_i && is_hex(hex[9]) && is_hex(hex[10]))
-	{		
-		res = ch2int(hex[3]) * 268435456	+ ch2int(hex[4])  * 16777216
-			+ ch2int(hex[5]) * 1048576		+ ch2int(hex[6])  * 65536
-			+ ch2int(hex[7]) * 4096			+ ch2int(hex[8])  * 256
-			+ ch2int(hex[9]) * 16			+ ch2int(hex[10]) * 1;
+	{
+		res = ch2int(hex[3]) * 268435456 + ch2int(hex[4]) * 16777216
+			+ ch2int(hex[5]) * 1048576 + ch2int(hex[6]) * 65536
+			+ ch2int(hex[7]) * 4096 + ch2int(hex[8]) * 256
+			+ ch2int(hex[9]) * 16 + ch2int(hex[10]) * 1;
 		*i = *i + 11;
 	}
 	else
 	{
-		res = ch2int(hex[3]) * 1048576		+ ch2int(hex[4]) * 65536
-			+ ch2int(hex[5]) * 4096			+ ch2int(hex[6]) * 256
-			+ ch2int(hex[7]) * 16			+ ch2int(hex[8]) * 1;
+		res = ch2int(hex[3]) * 1048576 + ch2int(hex[4]) * 65536
+			+ ch2int(hex[5]) * 4096 + ch2int(hex[6]) * 256
+			+ ch2int(hex[7]) * 16 + ch2int(hex[8]) * 1;
 		*i = *i + 9;
 	}
 	return (res);

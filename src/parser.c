@@ -82,10 +82,10 @@ t_win		*parse_map(char *file_name, t_win *win)
 		&& (ft_lst_append(&lst, buf, ft_strlen(buf))) && (++win->param->rows))
 		free(buf);
 	if (get_map_param(win, lst) || convert_map(win, lst))
-	{
+	{		
 		win->flags->error_code = MAP_INVALID;
 		return (NULL);
-	}
+	}	
 	ft_destroy_lst(lst);
 	if (fd != -1)
 		close(fd);

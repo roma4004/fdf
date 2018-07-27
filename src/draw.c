@@ -49,7 +49,7 @@ void		draw_line(t_win *win, t_line *l, int x, int y)
 }
 
 void		draw_map(t_win *win)
-{
+{	
 	mlx_clear_window(win->mlx_ptr, win->win_ptr);
 	if (win->flags->ver_on)
 		draw_map_vertical(win, win->flags->con_on);

@@ -18,8 +18,8 @@ int		main(int argc, char **argv)
 
 	if (argc == 2)
 	{
-		if ((win = init_win())
-		&& !parse_map(argv[1], win) && win->flags->error_code == 0)
+		if ((win = init_win()) 
+		&& parse_map(argv[1], win) && win->flags->error_code == 0)
 		{
 			draw_map(win);
 			mlx_hook(win->win_ptr, 17, 1L << 17, exit_x, win);

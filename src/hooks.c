@@ -6,17 +6,17 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/17 15:18:37 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/17 15:26:15 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/28 18:16:14 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-int		exit_x(void *par)
+int		exit_x(t_win *win)
 {
-	par = NULL;
+	mlx_destroy_window(win->mlx_ptr, win->win_ptr);
+	free_win(win);
 	exit(1);
-	return (0);
 }
 
 void	map_offset(t_win *win, int offset_x, int offset_y)
@@ -30,10 +30,15 @@ void	zoom_offset(t_win *win, int zoom_offset, int only_z)
 {
 	if (only_z == 0)
 	{
-		win->param->sc_x += zoom_offset;
-		win->param->sc_y += zoom_offset;
+		if (win->param->sc_x + zoom_offset >= 0)
+			win->param->sc_x += zoom_offset;
+		if (win->param->sc_y + zoom_offset >= 0)
+			win->param->sc_y += zoom_offset;
+		if (win->param->sc_z + zoom_offset >= 0)
+			win->param->sc_z += zoom_offset;
 	}
-	win->param->sc_z += zoom_offset;
+	else
+		win->param->sc_z += zoom_offset;
 	draw_map(win);
 }
 
@@ -62,7 +67,7 @@ void	animate(t_win *win)
 {
 	mlx_clear_window(win->mlx_ptr, win->win_ptr);
 	if (win->flags->interface_on)
-		dislpay_interface(win);
+		show_interface(win);
 	if (++win->param->frame_cnt == 4)
 		win->param->frame_cnt = 0;
 	if (win->param->frame_cnt == 0)

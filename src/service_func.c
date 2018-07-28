@@ -39,7 +39,7 @@ double	ft_max(double first, double second)
 	return ((first > second) ? first : second);
 }
 
-size_t	ft_cnt_words(char *str, size_t max_i, char ch)
+size_t	ft_cnt_words(char *str, size_t max_i, char separator)
 {
 	size_t	i;
 	size_t	num;
@@ -49,7 +49,7 @@ size_t	ft_cnt_words(char *str, size_t max_i, char ch)
 	i = -1;
 	num = 0;
 	while (++i < max_i && str[i])
-		if (str[i] == ch && str[i + 1] != ch)
+		if (str[i] == separator && str[i + 1] != separator)
 			num++;
 	if (str[0] != '\0')
 		num++;

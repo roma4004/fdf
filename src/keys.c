@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 15:22:29 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/22 15:22:31 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/28 17:36:19 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ static int	deal_keyboard3(int key, t_win *win)
 {
 	if (!win)
 		return (1);
-	if (key == Q)
+	if (key == ESC)
+		exit_x(win);
+	else if (key == Q)
 		rotate_map(win, 'y', 2);
 	else if (key == W)
 		rotate_map(win, 'x', 2);

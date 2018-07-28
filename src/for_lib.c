@@ -6,30 +6,31 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 14:31:37 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/22 14:31:43 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/28 18:27:44 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void		ft_destroy_lst(t_list *lst)
+int		ft_destroy_lst(t_list *lst)
 {
 	t_list	*cur;
 	t_list	*tmp;
 
 	if (!(cur = lst))
-		return ;
+		return (1);
 	while (cur)
 	{
 		tmp = cur->next;
 		if (cur->content)
-			free(cur->content);
-		free(cur);
+			ft_memdel(&cur->content);
+		ft_memdel((void *)&cur);
 		cur = tmp;
 	}
+	return (0);
 }
 
-int			ft_lst_append(t_list **lst, char *buf, int size)
+int			ft_lst_append(t_list **lst, char *buf, size_t size)
 {
 	t_list *cur;
 

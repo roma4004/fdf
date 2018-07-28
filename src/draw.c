@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:43:55 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/21 20:44:00 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/28 18:27:44 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void		draw_line(t_win *win, t_line *l, int x, int y)
 }
 
 void		draw_map(t_win *win)
-{	
+{
 	mlx_clear_window(win->mlx_ptr, win->win_ptr);
 	if (win->flags->ver_on)
 		draw_map_vertical(win, win->flags->con_on);
@@ -64,17 +64,15 @@ void		draw_map(t_win *win)
 	if (win->flags->dot_on)
 		draw_map_dots(win);
 	if (win->flags->interface_on)
-		dislpay_interface(win);
+		show_interface(win);
 }
 
 void		draw_map_dots(t_win *win)
 {
-	t_line	*line;
 	size_t	x;
 	size_t	y;
 
-	if (!(line = init_line()) || !win
-		|| !(y = -1))
+	if (!win || !(y = -1))
 		return ;
 	while (++y < win->param->rows && (x = -1))
 		while (++x < win->param->cols)

@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:44:39 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/21 20:44:42 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/28 17:36:19 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	draw_map_vertical(t_win *win, int c)
 				win->map[y + 1][x].y * win->param->sc_y -
 				win->map[y + c][x].z * win->param->sc_z);
 		}
+	ft_memdel((void *)&line);
 }
 
 void	draw_map_backslash(t_win *win, int c)
@@ -51,11 +52,11 @@ void	draw_map_backslash(t_win *win, int c)
 			line->end_x = win->map[y][x].x * win->param->sc_x;
 			line->end_y = win->map[y][x].y * win->param->sc_y
 						- win->map[y][x].z * win->param->sc_z;
-			draw_line(win, line,
-				win->map[y + 1][x + 1].x * win->param->sc_x,
-				win->map[y + 1][x + 1].y * win->param->sc_y -
-				win->map[y + c][x + c].z * win->param->sc_z);
+			draw_line(win, line, win->map[y + 1][x + 1].x * win->param->sc_x,
+								win->map[y + 1][x + 1].y * win->param->sc_y -
+								win->map[y + c][x + c].z * win->param->sc_z);
 		}
+	ft_memdel((void *)&line);
 }
 
 void	draw_map_horizontal(t_win *win, int c)
@@ -74,11 +75,11 @@ void	draw_map_horizontal(t_win *win, int c)
 			line->end_x = win->map[y][x].x * win->param->sc_x;
 			line->end_y = win->map[y][x].y * win->param->sc_y
 						- win->map[y][x].z * win->param->sc_z;
-			draw_line(win, line,
-				win->map[y][x + 1].x * win->param->sc_x,
-				win->map[y][x + 1].y * win->param->sc_y -
-				win->map[y][x + c].z * win->param->sc_z);
+			draw_line(win, line, win->map[y][x + 1].x * win->param->sc_x,
+								win->map[y][x + 1].y * win->param->sc_y -
+								win->map[y][x + c].z * win->param->sc_z);
 		}
+	ft_memdel((void *)&line);
 }
 
 void	draw_map_slash(t_win *win, int c)
@@ -97,11 +98,11 @@ void	draw_map_slash(t_win *win, int c)
 			line->end_x = win->map[y][x + 1].x * win->param->sc_x;
 			line->end_y = win->map[y][x + 1].y * win->param->sc_y
 						- win->map[y][x + c].z * win->param->sc_z;
-			draw_line(win, line,
-				win->map[y + 1][x].x * win->param->sc_x,
-				win->map[y + 1][x].y * win->param->sc_y -
-				win->map[y + c][x].z * win->param->sc_z);
+			draw_line(win, line, win->map[y + 1][x].x * win->param->sc_x,
+								win->map[y + 1][x].y * win->param->sc_y -
+								win->map[y + c][x].z * win->param->sc_z);
 		}
+	ft_memdel((void *)&line);
 }
 
 void	draw_map_fdf(t_win *win, int c)
@@ -121,14 +122,13 @@ void	draw_map_fdf(t_win *win, int c)
 			line->end_y = win->map[y][x].y * win->param->sc_y
 						- win->map[y][x].z * win->param->sc_z;
 			if (x < win->param->cols - 1)
-				draw_line(win, line,
-					win->map[y][x + 1].x * win->param->sc_x,
-					win->map[y][x + 1].y * win->param->sc_y -
-					win->map[y][x + c].z * win->param->sc_z);
+				draw_line(win, line, win->map[y][x + 1].x * win->param->sc_x,
+									win->map[y][x + 1].y * win->param->sc_y -
+									win->map[y][x + c].z * win->param->sc_z);
 			if (y < win->param->rows - 1)
-				draw_line(win, line,
-					win->map[y + 1][x].x * win->param->sc_x,
-					win->map[y + 1][x].y * win->param->sc_y -
-					win->map[y + c][x].z * win->param->sc_z);
+				draw_line(win, line, win->map[y + 1][x].x * win->param->sc_x,
+									win->map[y + 1][x].y * win->param->sc_y -
+									win->map[y + c][x].z * win->param->sc_z);
 		}
+	ft_memdel((void *)&line);
 }

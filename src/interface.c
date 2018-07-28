@@ -12,7 +12,7 @@
 
 #include "main.h"
 
-void	dislpay_interface(t_win *win)
+void	show_interface(t_win *win)
 {
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 20, 10, DEF_COLOR,
 		"move            : arrows left, up, down, right");

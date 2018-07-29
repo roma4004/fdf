@@ -48,8 +48,8 @@ t_param	*init_param(void)
 		new_param->sc_x = DEF_SCALE;
 		new_param->sc_y = DEF_SCALE;
 		new_param->sc_z = DEF_SCALE;
-		new_param->centr_x = 0;
-		new_param->centr_y = 0;
+		new_param->centr_x = 0.0;
+		new_param->centr_y = 0.0;
 	}
 	return (new_param);
 }

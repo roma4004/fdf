@@ -20,7 +20,7 @@ static void	show_errors(t_win *win)
 		"\tMAP_INVALID = 404,\n"
 		"\tWIDTH_ERR = 405,\n"
 		"\tPARSE_ERR = 406,\n"
-		"\tFILE_ERR = 406\n"
+		"\tFILE_ERR = 407\n"
 		"\tCOLOR_ERR = 408");
 }
 
@@ -30,7 +30,7 @@ int			main(int argc, char **argv)
 
 	if (argc == 2 && (win = init_win()))
 	{
-		if (parse_map(argv[1], win) && !win->flags->error_code)
+		if (parse_map(argv[1], win))
 		{
 			draw_map(win);
 			mlx_hook(win->win_ptr, 17, 1L << 17, exit_x, win);

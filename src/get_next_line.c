@@ -6,13 +6,13 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 17:59:40 by dromanic          #+#    #+#             */
-/*   Updated: 2018/03/10 21:42:12 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/29 16:52:29 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int		ln_len(char *str)
+static int		ln_len(char *str)
 {
 	int i;
 	int	len;
@@ -26,7 +26,7 @@ int		ln_len(char *str)
 	return (len);
 }
 
-int		data_mod(char **data, int fd, char *buf, unsigned int line_len)
+static int		data_mod(char **data, int fd, char *buf, unsigned int line_len)
 {
 	char	*temp;
 
@@ -48,7 +48,7 @@ int		data_mod(char **data, int fd, char *buf, unsigned int line_len)
 	return (1);
 }
 
-int		del_line(char **data, int fd)
+static int		del_line(char **data, int fd)
 {
 	unsigned int	i;
 	unsigned int	j;
@@ -77,16 +77,30 @@ int		del_line(char **data, int fd)
 	return (1);
 }
 
-int		get_next_line(const int fd, char **line)
+static char	**init_data(void)
 {
-	static char		**data;
+	int i;
+	char **new_data;
+
+	if ((new_data = (char **)malloc(sizeof(char *) * MAX_FD)))
+	{
+		i = 0;
+		while (i < MAX_FD)
+			new_data[i++] = NULL;
+	}
+	return (new_data);
+}
+
+int			get_next_line(const int fd, char **line)
+{
+	static char		**data = NULL;
 	int				len;
 	char			*buf;
 
 	if (fd < 0 || fd > MAX_FD)
 		return (-1);
 	if (data == NULL)
-		data = (char **)malloc(sizeof(char *) * MAX_FD);
+		data = init_data();
 	buf = ft_strnew(BUFF_SIZE);
 	while ((len = read(fd, buf, BUFF_SIZE)) > 0 && data_mod(data, fd, buf, len))
 	{

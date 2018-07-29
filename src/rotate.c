@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/23 14:59:52 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/23 14:59:53 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/29 19:39:00 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ static void	rotate_y(t_win *win, size_t x, size_t y, int new_angle)
 
 	if (!win)
 		return ;
-	win->map[y][x].x = win->map[y][x].x - win->param->centr_x;
-	win->map[y][x].y = win->map[y][x].y - win->param->centr_y;
+	win->map[y][x].x -= win->param->centr_x;
+	win->map[y][x].y -= win->param->centr_y;
 	angle = new_angle * PI / 180;
 	tmp_x = win->map[y][x].x;
 	tmp_y = win->map[y][x].y * cos(angle) + win->map[y][x].z * sin(angle);
 	tmp_z = -win->map[y][x].y * sin(angle) + win->map[y][x].z * cos(angle);
-	tmp_x = tmp_x + win->param->centr_x;
-	tmp_y = tmp_y + win->param->centr_y;
+	tmp_x += win->param->centr_x;
+	tmp_y += win->param->centr_y;
 	win->map[y][x].x = tmp_x;
 	win->map[y][x].y = tmp_y;
 	win->map[y][x].z = tmp_z;
@@ -44,14 +44,14 @@ static void	rotate_x(t_win *win, size_t x, size_t y, int new_angle)
 
 	if (!win)
 		return ;
-	win->map[y][x].x = win->map[y][x].x - win->param->centr_x;
-	win->map[y][x].y = win->map[y][x].y - win->param->centr_y;
+	win->map[y][x].x -= win->param->centr_x;
+	win->map[y][x].y -= win->param->centr_y;
 	angle = new_angle * PI / 180;
 	tmp_x = win->map[y][x].x * cos(angle) + win->map[y][x].z * sin(angle);
 	tmp_y = win->map[y][x].y;
 	tmp_z = -win->map[y][x].x * sin(angle) + win->map[y][x].z * cos(angle);
-	tmp_x = tmp_x + win->param->centr_x;
-	tmp_y = tmp_y + win->param->centr_y;
+	tmp_x += win->param->centr_x;
+	tmp_y += win->param->centr_y;
 	win->map[y][x].x = tmp_x;
 	win->map[y][x].y = tmp_y;
 	win->map[y][x].z = tmp_z;
@@ -66,14 +66,14 @@ static void	rotate_z(t_win *win, size_t x, size_t y, int new_angle)
 
 	if (!win)
 		return ;
-	win->map[y][x].x = win->map[y][x].x - win->param->centr_x;
-	win->map[y][x].y = win->map[y][x].y - win->param->centr_y;
+	win->map[y][x].x -= win->param->centr_x;
+	win->map[y][x].y -= win->param->centr_y;
 	angle = new_angle * PI / 180;
 	tmp_x = win->map[y][x].x * cos(angle) - win->map[y][x].y * sin(angle);
 	tmp_y = win->map[y][x].x * sin(angle) + win->map[y][x].y * cos(angle);
 	tmp_z = win->map[y][x].z;
-	tmp_x = tmp_x + win->param->centr_x;
-	tmp_y = tmp_y + win->param->centr_y;
+	tmp_x += win->param->centr_x;
+	tmp_y += win->param->centr_y;
 	win->map[y][x].x = tmp_x;
 	win->map[y][x].y = tmp_y;
 	win->map[y][x].z = tmp_z;

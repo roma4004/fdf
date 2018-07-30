@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:43:55 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/28 18:27:44 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/30 15:37:21 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void		draw_line(t_win *win, t_line *l, int x, int y)
 {
 	l->dx = (l->end_x - x >= 0 ? 1 : -1);
 	l->dy = (l->end_y - y >= 0 ? 1 : -1);
-	l->len_x = ft_abs(l->end_x - x);
-	l->len_y = ft_abs(l->end_y - y);
-	l->len = ft_max(l->len_y, l->len_x);
+	l->len_x = ((l->end_x - x) < 0) ? (l->end_x - x) * -1 : l->end_x - x;
+	l->len_y = ((l->end_y - y) < 0) ? (l->end_y - y) * -1 : l->end_y - y;
+	l->len = (l->len_y > l->len_x) ? l->len_y : l->len_x;
 	if (l->len++ == 0)
 		px_put(win, x, y, l->color);
 	l->d = ((l->len_y <= l->len_x) ? -l->len_x : -l->len_y);

@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/17 15:21:59 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/29 17:04:30 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/30 15:46:29 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,15 @@ static int	get_map_param(t_win *win, t_list *lst)
 		return (1);
 	while (cur)
 	{
-		if (!is_valid_row(win, cur->content, cur->content_size))
-			break ;
+		//if (!is_valid_row(win, cur->content, cur->content_size))
+		//	break ;
 		if (win->param->cols == 0)
 			win->param->cols =
 					ft_cnt_words((char *)cur->content, cur->content_size, ' ');
 		else if (win->param->cols !=
 					ft_cnt_words((char *)cur->content, cur->content_size, ' '))
-			win->flags->error_code = WIDTH_ERR;
+		{}
+		//win->flags->error_code = WIDTH_ERR;
 		cur = cur->next;
 	}
 	if (!win->flags->error_code)

@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 14:33:57 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/29 19:30:12 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/30 21:02:04 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,9 @@
 
 static int	is_hex(char ch)
 {
-	if (ch == 'A' || ch == 'a'
-		|| ch == 'B' || ch == 'b'
-		|| ch == 'C' || ch == 'c'
-		|| ch == 'D' || ch == 'd'
-		|| ch == 'E' || ch == 'e'
-		|| ch == 'F' || ch == 'f'
-		|| (ch >= '0' && ch <= '9'))
+	if ((ch >= '0' && ch <= '9')
+		|| (ch >= 'A' && ch <= 'F')
+		|| (ch >= 'a' && ch <= 'f'))
 		return (1);
 	return (0);
 }
@@ -42,31 +38,52 @@ static int	ch2int(char ch)
 	return (ch - '0');
 }
 
-int			get_col(t_win *win, char *s, size_t *i, size_t max_i)
+int			pow_of(char ch, int pow)
 {
 	int res;
 
-	res = DEF_COLOR;
-	if (*i < max_i && *i + 9 < max_i && s && s[0] == ',')
+	res = 0;
+	if (pow == 0)
+		res += ch2int(ch) * 1;
+	else if (pow == 1)
+		res += ch2int(ch) * 16;
+	else if (pow == 2)
+		res += ch2int(ch) * 256;
+	else if (pow == 3)
+		res += ch2int(ch) * 4096;
+	else if (pow == 4)
+		res += ch2int(ch) * 65536;
+	else if (pow == 5)
+		res += ch2int(ch) * 1048576;
+	else if (pow == 6)
+		res += ch2int(ch) * 16777216;
+	else if (pow == 7)
+		res += ch2int(ch) * 268435456;
+	return (res);
+}
+
+int			get_col(t_win *win, char *s, size_t *i, size_t max_i)
+{
+	int res;
+	int j;
+	int pow;
+
+	res = 0;
+	j = -1;
+	pow = 0;
+	if (*i + 3 < max_i && s && s[++j] == ',' && s[++j] == '0' && s[++j] == 'x')
 	{
-		if (s[1] != '0' || s[2] != 'x' || !is_hex(s[3]) || !is_hex(s[4])
-			|| !is_hex(s[5]) || !is_hex(s[6]) || !is_hex(s[7]) || !is_hex(s[8]))
-			win->flags->error_code = COLOR_ERR;
-		if (*i + 11 < max_i && is_hex(s[9]) && is_hex(s[10]))
-		{
-			res = ch2int(s[3]) * 268435456 + ch2int(s[4]) * 16777216
-				+ ch2int(s[5]) * 1048576 + ch2int(s[6]) * 65536
-				+ ch2int(s[7]) * 4096 + ch2int(s[8]) * 256
-				+ ch2int(s[9]) * 16 + ch2int(s[10]) * 1;
-			*i = *i + 11;
-		}
-		else
-		{
-			res = ch2int(s[3]) * 1048576 + ch2int(s[4]) * 65536
-				+ ch2int(s[5]) * 4096 + ch2int(s[6]) * 256
-				+ ch2int(s[7]) * 16 + ch2int(s[8]) * 1;
-			*i = *i + 9;
-		}
+		while (*i + ++j < max_i && is_hex(s[j]))
+			if (j > 10)
+			{
+				win->flags->error_code = COLOR_ERR;
+				return (DEF_COLOR);
+			}
+		*i = *i + j;
+		while (--j > 2)
+			res += pow_of(s[j], pow++);
 	}
+	else
+		res = DEF_COLOR;
 	return (res);
 }

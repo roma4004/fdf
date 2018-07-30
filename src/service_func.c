@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 19:23:35 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/22 19:23:36 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/30 15:37:21 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,6 @@ int		set_vec(t_win *win, long long x, long long y, long long z)
 	win->map[y][x].z = z;
 	win->map[y][x].z_orig = z;
 	return (1);
-}
-
-double	ft_abs(double num)
-{
-	return ((num < 0) ? num * -1 : num);
-}
-
-double	ft_max(double first, double second)
-{
-	return ((first > second) ? first : second);
 }
 
 size_t	ft_cnt_words(char *str, size_t max_i, char separator)

@@ -15,19 +15,19 @@
 void	free_map(t_win *win)
 {
 	size_t	i;
-	size_t	j;
+	//size_t	j;
 
 	if (win)
 	{
 		i = 0;
 		while (i < win->param->rows)
 		{
-			j = 0;
-			while (j < win->param->cols)
-			{
-				ft_memdel((void *)&win->map[i][j]);
-				j++;
-			}
+			//j = 0;
+			//while (j < win->param->cols)
+			//{
+				//ft_memdel((void *)&win->map[i][j]);
+				//j++;
+			//}
 			ft_memdel((void *)&win->map[i]);
 			i++;
 		}

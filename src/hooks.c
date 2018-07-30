@@ -16,7 +16,7 @@ int		exit_x(t_win *win)
 {
 	mlx_destroy_window(win->mlx_ptr, win->win_ptr);
 	free_win(win);
-	exit(1);
+	exit(0);
 }
 
 void	map_offset(t_win *win, int offset_x, int offset_y)

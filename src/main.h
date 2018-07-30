@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/17 20:20:23 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/30 21:13:39 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define DEF_OFFSET_X 400
 # define DEF_SCALE 14
 # define WIN_NAME "FDF by dromanic (@Dentair)"
-# define DEF_COLOR 0x009100FF
+# define DEF_COLOR 0x0fffffFF
 # define PI 3.14159265359
 
 # include <stdio.h>
@@ -34,7 +34,6 @@ typedef struct	s_px
 	double	z;
 	double	z_orig;
 	int		color;
-	int		alpha;
 }				t_px;
 
 typedef struct	s_line
@@ -102,7 +101,7 @@ enum			e_keys
 	NUM_PLUS = 69, ZERO = 29,
 	Q = 12, W = 13, E = 14,
 	A = 0, S = 1, D = 2,
-	R = 15, ENTER = 36,
+	R = 15, ENTER = 36, ESC = 53,
 	ARROW_UP = 126, ARROW_DOWN = 125,
 	ARROW_LEFT = 123, ARROW_RIGHT = 124,
 	MOUSE_SCROLL_UP = 4, MINUS = 27,
@@ -114,17 +113,18 @@ enum			e_errors
 	MAP_INVALID = 404,
 	WIDTH_ERR = 405,
 	PARSE_ERR = 406,
-	FILE_ERR = 406,
+	FILE_ERR = 407,
+	COLOR_ERR = 408,
 };
 
-t_px			*init_px(void);
 t_line			*init_line(void);
 t_param			*init_param(void);
 t_flags			*init_flags(void);
 t_win			*init_win(void);
 
+int				is_valid_row(t_win *win, void *cont, size_t max_i);
 t_win			*parse_map(char *file_name, t_win *win);
-int				get_col(char *hex, size_t *i, size_t max_i);
+int				get_col(t_win *win, char *hex, size_t *i, size_t max_i);
 
 void			draw_line(t_win *win, t_line *line, int x, int y);
 void			draw_map(t_win *win);
@@ -135,25 +135,23 @@ void			draw_map_horizontal(t_win *win, int con);
 void			draw_map_slash(t_win *win, int con);
 void			draw_map_fdf(t_win *win, int con);
 
-void			ft_destroy_lst(t_list *lst);
-int				ft_lst_append(t_list **lst, char *buf, int size);
+int				ft_destroy_lst(t_list *lst);
+int				ft_lst_append(t_list **lst, char *buf, size_t size);
 long long		ft_i_atoi(const char *str, size_t *i, size_t max_i);
 long long		ft_atol_base(const char *str, int base);
 
 int				deal_keyboard(int key, t_win *win);
 int				deal_mouse(int key, int x, int y, t_win *win);
-int				exit_x(void *par);
+int				exit_x(t_win *par);
 void			map_offset(t_win *win, int offset_x, int offset_y);
 void			zoom_offset(t_win *win, int zoom_offset, int only_z);
 void			toggles(t_win *win, int key);
 void			animate(t_win *win);
 
-void			dislpay_interface(t_win *win);
+void			show_interface(t_win *win);
 
 int				toggle_param(int *param);
 int				set_vec(t_win *win, long long x, long long y, long long z);
-double			ft_abs(double num);
-double			ft_max(double first, double second);
 size_t			ft_cnt_words(char *str, size_t max_i, char ch);
 
 void			rotate_map(t_win *win, char axis, int new_angle);

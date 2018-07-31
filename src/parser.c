@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/17 15:21:59 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/30 15:46:29 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/31 19:21:06 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static int	convert_map(t_win *win, t_list *lst)
 {
-	t_list *cur;
-	char   *str;
-	size_t i;
-	int    y;
-	int    x;
+	t_list	*cur;
+	char	*str;
+	size_t	i;
+	int		y;
+	int		x;
 
 	if (!win || !(cur = lst))
 		return (1);
@@ -45,20 +45,19 @@ static int	convert_map(t_win *win, t_list *lst)
 static int	get_map_param(t_win *win, t_list *lst)
 {
 	t_list *cur;
+	size_t width;
 
 	if (!(cur = lst) || !win)
 		return (1);
 	while (cur)
 	{
-		//if (!is_valid_row(win, cur->content, cur->content_size))
-		//	break ;
+		if (!is_valid_row(win, cur->content, cur->content_size))
+			break ;
+		width = ft_cnt_words((char *)cur->content, cur->content_size, ' ');
 		if (win->param->cols == 0)
-			win->param->cols =
-					ft_cnt_words((char *)cur->content, cur->content_size, ' ');
-		else if (win->param->cols !=
-					ft_cnt_words((char *)cur->content, cur->content_size, ' '))
-		{}
-		//win->flags->error_code = WIDTH_ERR;
+			win->param->cols = width;
+		else if (win->param->cols != width)
+			win->flags->error_code = WIDTH_ERR;
 		cur = cur->next;
 	}
 	if (!win->flags->error_code)
@@ -106,12 +105,10 @@ t_win		*parse_map(char *file_name, t_win *win)
 	while (get_next_line(fd, &buf) && (ft_lst_append(&lst, buf, ft_strlen(buf)))
 	&& (++win->param->rows))
 		ft_memdel((void *) &buf);
-	if (get_map_param(win, lst) || win->flags->error_code
-	|| convert_map(win, lst) || ft_destroy_lst(lst))
-		free_win(win);
 	if (fd != -1)
 		close(fd);
-	if (win->flags->error_code)
+	if (get_map_param(win, lst) || win->flags->error_code
+	|| convert_map(win, lst) || ft_destroy_lst(lst))
 		return (NULL);
 	return (win);
 }

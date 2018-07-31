@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/30 21:13:39 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/31 19:25:08 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 # define WIN_WIDTH 1024
 # define WIN_HEIGHT 768
-# define DEF_OFFSET_Y 300
-# define DEF_OFFSET_X 400
-# define DEF_SCALE 14
+# define DEF_OFFSET_Y 200
+# define DEF_OFFSET_X 100
+# define DEF_SCALE 1
 # define WIN_NAME "FDF by dromanic (@Dentair)"
-# define DEF_COLOR 0x0fffffFF
+# define DEF_COLOR 0x0f9100FF
 # define PI 3.14159265359
 
 # include <stdio.h>
@@ -112,9 +112,8 @@ enum			e_errors
 {
 	MAP_INVALID = 404,
 	WIDTH_ERR = 405,
-	PARSE_ERR = 406,
-	FILE_ERR = 407,
-	COLOR_ERR = 408,
+	FILE_ERR = 406,
+	COLOR_ERR = 407,
 };
 
 t_line			*init_line(void);

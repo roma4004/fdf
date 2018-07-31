@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 14:31:37 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/28 18:27:44 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/31 19:15:54 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ long long	ft_i_atoi(const char *str, size_t *i, size_t max_i)
 		&& (str[*i] == '\t' || str[*i] == '\n' || str[*i] == '\r'
 			|| str[*i] == ' ' || str[*i] == '\v' || str[*i] == '\f'))
 		*i = *i + 1;
-	if (str[*i] == '-')
+	if (*i < max_i && (str[*i] == '-'))
 		sign = -1;
-	if (str[*i] == '-' || str[*i] == '+')
+	if (*i < max_i && (str[*i] == '-' || str[*i] == '+'))
 		*i = *i + 1;
 	while (*i < max_i && str[*i] >= '0' && str[*i] <= '9')
 		result = result * 10 + (int)str[(*i)++] - '0';
@@ -70,7 +70,7 @@ long long	ft_i_atoi(const char *str, size_t *i, size_t max_i)
 	return (result * sign);
 }
 
-static long	ft_atol_base2(const char *str, int base)
+static int ft_atol_base2(const char *str, int base)
 {
 	long		res;
 	char		*dig;
@@ -90,7 +90,7 @@ static long	ft_atol_base2(const char *str, int base)
 
 long long	ft_atol_base(const char *str, int base)
 {
-	long		result;
+	long long	result;
 	char		sign;
 	int			i;
 

@@ -66,7 +66,7 @@ t_flags	*init_flags(void)
 		new_flags->bsl_on = 0;
 		new_flags->fdf_on = 1;
 		new_flags->con_on = 1;
-		new_flags->dot_on = 1;
+		new_flags->dot_on = 0;
 		new_flags->interface_on = 1;
 		new_flags->error_code = 0;
 		return (new_flags);

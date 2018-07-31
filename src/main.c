@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/28 20:04:02 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/31 18:12:53 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 
 static void	show_errors(t_win *win)
 {
-	ft_putstr("error_code: ");
-	ft_putstr(ft_itoa(win->flags->error_code));
-	ft_putstr("\nlegend:\n"
+	ft_putstr_to("error_code: ", 2);
+	ft_putstr_to(ft_itoa(win->flags->error_code), 2);
+	ft_putstr_to("\nlegend:\n"
 		"\tMAP_INVALID = 404,\n"
 		"\tWIDTH_ERR = 405,\n"
-		"\tPARSE_ERR = 406,\n"
-		"\tFILE_ERR = 407\n"
-		"\tCOLOR_ERR = 408");
+		"\tFILE_ERR = 406\n"
+		"\tCOLOR_ERR = 407", 2);
 }
 
 int			main(int argc, char **argv)

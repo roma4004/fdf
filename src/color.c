@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 14:33:57 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/30 21:02:04 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/07/31 17:20:11 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,27 +38,29 @@ static int	ch2int(char ch)
 	return (ch - '0');
 }
 
-int			pow_of(char ch, int pow)
+static int	pow_of(char ch, int pow)
 {
 	int res;
+	int num;
 
+	num = ch2int(ch);
 	res = 0;
 	if (pow == 0)
-		res += ch2int(ch) * 1;
+		res += num * 1;
 	else if (pow == 1)
-		res += ch2int(ch) * 16;
+		res += num * 16;
 	else if (pow == 2)
-		res += ch2int(ch) * 256;
+		res += num * 256;
 	else if (pow == 3)
-		res += ch2int(ch) * 4096;
+		res += num * 4096;
 	else if (pow == 4)
-		res += ch2int(ch) * 65536;
+		res += num * 65536;
 	else if (pow == 5)
-		res += ch2int(ch) * 1048576;
+		res += num * 1048576;
 	else if (pow == 6)
-		res += ch2int(ch) * 16777216;
+		res += num * 16777216;
 	else if (pow == 7)
-		res += ch2int(ch) * 268435456;
+		res += num * 268435456;
 	return (res);
 }
 
@@ -80,6 +82,7 @@ int			get_col(t_win *win, char *s, size_t *i, size_t max_i)
 				return (DEF_COLOR);
 			}
 		*i = *i + j;
+		//res = ft_atol_base(s + 1, 16);
 		while (--j > 2)
 			res += pow_of(s[j], pow++);
 	}

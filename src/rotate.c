@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/23 14:59:52 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/31 19:23:43 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/01 15:49:25 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 static void	rotate_y(t_win *win, size_t x, size_t y, int new_angle)
 {
-	double tmp_y;
-	double tmp_x;
-	double tmp_z;
-	double angle;
+	float tmp_y;
+	float tmp_x;
+	float tmp_z;
+	float angle;
 
 	if (!win)
 		return ;
@@ -37,10 +37,10 @@ static void	rotate_y(t_win *win, size_t x, size_t y, int new_angle)
 
 static void	rotate_x(t_win *win, size_t x, size_t y, int new_angle)
 {
-	double tmp_y;
-	double tmp_x;
-	double tmp_z;
-	double angle;
+	float tmp_y;
+	float tmp_x;
+	float tmp_z;
+	float angle;
 
 	if (!win)
 		return ;
@@ -59,10 +59,10 @@ static void	rotate_x(t_win *win, size_t x, size_t y, int new_angle)
 
 static void	rotate_z(t_win *win, size_t x, size_t y, int new_angle)
 {
-	double tmp_y;
-	double tmp_x;
-	double tmp_z;
-	double angle;
+	float tmp_y;
+	float tmp_x;
+	float tmp_z;
+	float angle;
 
 	if (!win)
 		return ;

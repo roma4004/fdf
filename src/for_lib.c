@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 14:31:37 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/31 19:15:54 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/01 15:56:53 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ long long	ft_i_atoi(const char *str, size_t *i, size_t max_i)
 	return (result * sign);
 }
 
-static int ft_atol_base2(const char *str, int base)
+static long long ft_atol_base2(const char *str, int base)
 {
-	long		res;
+	long long		res;
 	char		*dig;
 	char		*tmp;
 	int			i;

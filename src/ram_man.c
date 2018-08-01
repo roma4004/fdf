@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 14:23:50 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/29 19:59:56 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/01 16:24:26 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,14 @@ int		free_win(t_win *win)
 {
 	if (win)
 	{
-		if (win->flags->error_code != WIDTH_ERR
+		if (win->flags && win->map
+			&& win->flags->error_code != WIDTH_ERR
 			&& win->flags->error_code != MAP_INVALID)
 			free_map(win);
 		else
 			win->map = NULL;
-		ft_memdel((void *)&win->param);
+		if (win->param)
+			ft_memdel((void *)&win->param);
 		ft_memdel((void *)&win->flags);
 		ft_memdel((void *)&win);
 		return (1);

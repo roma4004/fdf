@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 17:23:17 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/28 18:17:42 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/01 16:27:52 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ t_flags	*init_flags(void)
 {
 	t_flags	*new_flags;
 
+	new_flags = NULL;
 	if ((new_flags = (t_flags *)malloc(sizeof(t_flags))))
 	{
 		new_flags->ver_on = 0;
@@ -69,9 +70,8 @@ t_flags	*init_flags(void)
 		new_flags->dot_on = 0;
 		new_flags->interface_on = 1;
 		new_flags->error_code = 0;
-		return (new_flags);
 	}
-	return (NULL);
+	return (new_flags);
 }
 
 t_win	*init_win(void)
@@ -79,7 +79,7 @@ t_win	*init_win(void)
 	t_win	*new_win;
 
 	new_win = NULL;
-	if (!(new_win = (t_win *)malloc(sizeof(t_win)))
+	if (!(new_win = (t_win *)malloc(sizeof(t_win)))	|| (new_win->map = NULL)
 	|| !(new_win->param = init_param())
 	|| !(new_win->flags = init_flags())
 	|| !(new_win->mlx_ptr = mlx_init())

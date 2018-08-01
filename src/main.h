@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/31 19:25:08 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/01 20:01:34 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,21 @@
 # define WIN_NAME "FDF by dromanic (@Dentair)"
 # define DEF_COLOR 0x0f9100FF
 # define PI 3.14159265359
+# define WIDTH_ERR_SKIP 0
 
 # include <stdio.h>
 # include "../minilibx/mlx.h"
 # include "../libft/libft.h"
 # include "get_next_line.h"
+# include <string.h>
+# include <errno.h>
 
 typedef struct	s_px
 {
-	double	x;
-	double	y;
-	double	z;
-	double	z_orig;
+	float	x;
+	float	y;
+	float	z;
+	float	z_orig;
 	int		color;
 }				t_px;
 
@@ -61,8 +64,8 @@ typedef struct	s_param
 	int		sc_x;
 	int		sc_y;
 	int		sc_z;
-	double	centr_x;
-	double	centr_y;
+	float	centr_x;
+	float	centr_y;
 }				t_param;
 
 typedef struct	s_flags
@@ -112,7 +115,7 @@ enum			e_errors
 {
 	MAP_INVALID = 404,
 	WIDTH_ERR = 405,
-	FILE_ERR = 406,
+	READ_ERR = 406,
 	COLOR_ERR = 407,
 };
 
@@ -128,6 +131,7 @@ int				get_col(t_win *win, char *hex, size_t *i, size_t max_i);
 void			draw_line(t_win *win, t_line *line, int x, int y);
 void			draw_map(t_win *win);
 void			draw_map_dots(t_win *win);
+
 void			draw_map_vertical(t_win *win, int con);
 void			draw_map_backslash(t_win *win, int con);
 void			draw_map_horizontal(t_win *win, int con);
@@ -142,6 +146,7 @@ long long		ft_atol_base(const char *str, int base);
 int				deal_keyboard(int key, t_win *win);
 int				deal_mouse(int key, int x, int y, t_win *win);
 int				exit_x(t_win *par);
+
 void			map_offset(t_win *win, int offset_x, int offset_y);
 void			zoom_offset(t_win *win, int zoom_offset, int only_z);
 void			toggles(t_win *win, int key);

@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/17 15:21:59 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/31 19:21:06 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/01 20:51:27 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,12 @@ static int	get_map_param(t_win *win, t_list *lst)
 		width = ft_cnt_words((char *)cur->content, cur->content_size, ' ');
 		if (win->param->cols == 0)
 			win->param->cols = width;
-		else if (win->param->cols != width)
+		else if (win->param->cols != width && !WIDTH_ERR_SKIP)
 			win->flags->error_code = WIDTH_ERR;
 		cur = cur->next;
 	}
+	if (win->param->cols == 0 && !WIDTH_ERR_SKIP)
+		win->flags->error_code = WIDTH_ERR;
 	if (!win->flags->error_code)
 	{
 		win->param->centr_y = win->param->rows / 2;
@@ -90,25 +92,28 @@ int			is_valid_row(t_win *win, void *cont, size_t max_i)
 
 t_win		*parse_map(char *file_name, t_win *win)
 {
-	int    fd;
-	t_list *lst;
-	char   *buf;
+	int		fd;
+	t_list	*lst;
+	char	*buf;
 
 	if (!win || !file_name)
 		return (NULL);
 	lst     = NULL;
-	if ((fd = open(file_name, O_RDONLY)) == -1)
+	if ((fd = open(file_name, O_RDONLY)) == -1 || errno == 21)
 	{
-		win->flags->error_code = FILE_ERR;
+		win->flags->error_code = READ_ERR;
 		return (NULL);
 	}
-	while (get_next_line(fd, &buf) && (ft_lst_append(&lst, buf, ft_strlen(buf)))
-	&& (++win->param->rows))
+	while (get_next_line(fd, &buf) > 0
+		&& (ft_lst_append(&lst, buf, ft_strlen(buf)))
+		&& (++win->param->rows))
 		ft_memdel((void *) &buf);
 	if (fd != -1)
 		close(fd);
+	if (lst == NULL && !(errno) && !WIDTH_ERR_SKIP)
+		win->flags->error_code = WIDTH_ERR;
 	if (get_map_param(win, lst) || win->flags->error_code
-	|| convert_map(win, lst) || ft_destroy_lst(lst))
+		|| convert_map(win, lst) || ft_destroy_lst(lst))
 		return (NULL);
 	return (win);
 }

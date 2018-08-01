@@ -6,21 +6,23 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/18 21:45:36 by dromanic          #+#    #+#             */
-/*   Updated: 2017/11/19 19:32:41 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/01 13:50:24 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
+#include "libft.h"
 
 void	ft_putstr(char const *s)
 {
-	unsigned int i;
-
 	if (!s)
 		return ;
-	i = -1;
-	while (s[++i])
-	{
-		write(1, &s[i], 1);
-	}
+	write(1, s, ft_strlen(s));
+}
+
+void	ft_putstr_to(char const *s, int stream_num)
+{
+	if (!s)
+		return ;
+	write(stream_num, s, ft_strlen(s));
 }

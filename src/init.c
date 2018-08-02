@@ -79,7 +79,8 @@ t_win	*init_win(void)
 	t_win	*new_win;
 
 	new_win = NULL;
-	if (!(new_win = (t_win *)malloc(sizeof(t_win)))	|| (new_win->map = NULL)
+	if (!(new_win = (t_win *)malloc(sizeof(t_win)))
+	|| (new_win->map = NULL)
 	|| !(new_win->param = init_param())
 	|| !(new_win->flags = init_flags())
 	|| !(new_win->mlx_ptr = mlx_init())

@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/17 15:21:59 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/01 20:51:27 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/02 21:46:40 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,9 @@ static int	convert_map(t_win *win, t_list *lst)
 	if ((win->map = (t_px **)malloc(sizeof(t_px *) * win->param->rows)))
 		while (cur && cur->content && (str = (char *)cur->content))
 		{
-			if (!(win->map[++y] =
-						(t_px *)malloc(sizeof(t_px) * win->param->cols)))
+			if ((x = -1) &&
+			!(win->map[++y] = (t_px *)malloc(sizeof(t_px) * win->param->cols)))
 				return (1);
-			x = -1;
 			i = -1;
 			while (++i < cur->content_size)
 			{
@@ -61,14 +60,12 @@ static int	get_map_param(t_win *win, t_list *lst)
 		cur = cur->next;
 	}
 	if (win->param->cols == 0 && !WIDTH_ERR_SKIP)
-		win->flags->error_code = WIDTH_ERR;
-	if (!win->flags->error_code)
 	{
-		win->param->centr_y = win->param->rows / 2;
-		win->param->centr_x = win->param->cols / 2;
-	}
-	else
+		win->flags->error_code = WIDTH_ERR;
 		return (1);
+	}
+	win->param->centr_y = win->param->rows / 2;
+	win->param->centr_x = win->param->cols / 2;
 	return (0);
 }
 
@@ -98,7 +95,7 @@ t_win		*parse_map(char *file_name, t_win *win)
 
 	if (!win || !file_name)
 		return (NULL);
-	lst     = NULL;
+	lst = NULL;
 	if ((fd = open(file_name, O_RDONLY)) == -1 || errno == 21)
 	{
 		win->flags->error_code = READ_ERR;
@@ -107,7 +104,7 @@ t_win		*parse_map(char *file_name, t_win *win)
 	while (get_next_line(fd, &buf) > 0
 		&& (ft_lst_append(&lst, buf, ft_strlen(buf)))
 		&& (++win->param->rows))
-		ft_memdel((void *) &buf);
+		ft_memdel((void *)&buf);
 	if (fd != -1)
 		close(fd);
 	if (lst == NULL && !(errno) && !WIDTH_ERR_SKIP)

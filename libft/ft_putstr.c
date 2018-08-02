@@ -19,10 +19,3 @@ void	ft_putstr(char const *s)
 		return ;
 	write(1, s, ft_strlen(s));
 }
-
-void	ft_putstr_to(char const *s, int stream_num)
-{
-	if (!s)
-		return ;
-	write(stream_num, s, ft_strlen(s));
-}

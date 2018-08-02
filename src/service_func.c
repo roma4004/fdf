@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 19:23:35 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/01 18:59:02 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/02 19:07:46 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ size_t	ft_cnt_words(char *str, size_t max_i, char separator)
 	if (str[0] != separator)
 		num++;
 	while (++i < max_i && str[i])
-
 		if (str[i] != separator && str[i - 1] == separator)
 			num++;
 	return (num);

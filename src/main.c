@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/01 20:45:47 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/02 19:30:49 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,18 @@
 
 static void	show_errors(t_win *win)
 {
+	if (win->flags->error_code == 404)
+		ft_putstr_fd("MAP_INVALID", 2);
+	if (win->flags->error_code == 405)
+		ft_putstr_fd("WIDTH_ERR", 2);
+	if (win->flags->error_code == 406)
+		ft_putstr_fd("FILE_ERR", 2);
+	if (win->flags->error_code == 407)
+		ft_putstr_fd("COLOR_ERR", 2);
+	if (win->flags->error_code && errno)
+		ft_putstr_fd(" - ", 2);
 	if (errno)
-		ft_putstr_to(strerror(errno),2);
-	ft_putstr_to("\nerror_code: ", 2);
-	ft_putstr_to(ft_itoa(win->flags->error_code), 2);
-	ft_putstr_to("\nlegend:\n"
-		"\tMAP_INVALID = 404,\n"
-		"\tWIDTH_ERR = 405,\n"
-		"\tFILE_ERR = 406\n"
-		"\tCOLOR_ERR = 407\n", 2);
-
+		ft_putstr_fd(strerror(errno), 2);
 }
 
 int			main(int argc, char **argv)

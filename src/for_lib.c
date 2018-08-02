@@ -6,13 +6,13 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 14:31:37 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/01 15:56:53 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/02 21:44:00 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-int		ft_destroy_lst(t_list *lst)
+int					ft_destroy_lst(t_list *lst)
 {
 	t_list	*cur;
 	t_list	*tmp;
@@ -30,7 +30,7 @@ int		ft_destroy_lst(t_list *lst)
 	return (0);
 }
 
-int			ft_lst_append(t_list **lst, char *buf, size_t size)
+int					ft_lst_append(t_list **lst, char *buf, size_t size)
 {
 	t_list *cur;
 
@@ -46,7 +46,7 @@ int			ft_lst_append(t_list **lst, char *buf, size_t size)
 	return (1);
 }
 
-long long	ft_i_atoi(const char *str, size_t *i, size_t max_i)
+long long			ft_i_atoi(const char *str, size_t *i, size_t max_i)
 {
 	int					sign;
 	unsigned long long	result;
@@ -70,9 +70,9 @@ long long	ft_i_atoi(const char *str, size_t *i, size_t max_i)
 	return (result * sign);
 }
 
-static long long ft_atol_base2(const char *str, int base)
+static long long	ft_atol_base2(const char *str, int base)
 {
-	long long		res;
+	long long	res;
 	char		*dig;
 	char		*tmp;
 	int			i;
@@ -88,7 +88,7 @@ static long long ft_atol_base2(const char *str, int base)
 	return (res);
 }
 
-long long	ft_atol_base(const char *str, int base)
+long long			ft_atol_base(const char *str, int base)
 {
 	long long	result;
 	char		sign;

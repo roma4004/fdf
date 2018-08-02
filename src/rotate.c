@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/23 14:59:52 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/01 15:49:25 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/02 21:34:49 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static void	rotate_z(t_win *win, size_t x, size_t y, int new_angle)
 	win->map[y][x].z = tmp_z;
 }
 
-void	rotate_map(t_win *win, char axis, int new_angle)
+void		rotate_map(t_win *win, char axis, int new_angle)
 {
 	size_t	y;
 	size_t	x;
@@ -103,7 +103,7 @@ void	rotate_map(t_win *win, char axis, int new_angle)
 	draw_map(win);
 }
 
-void	reset(t_win *win)
+void		reset(t_win *win)
 {
 	size_t	y;
 	size_t	x;

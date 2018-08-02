@@ -80,7 +80,6 @@ void			ft_putendl_fd(char const *s, int fd);
 void			ft_putnbr(int n);
 void			ft_putnbr_fd(int n, int fd);
 void			ft_putstr(char const *s);
-void			ft_putstr_to(char const *s, int stream_num);
 void			ft_putstr_fd(char const *s, int fd);
 void			ft_skip_white_spases(const char *str, int *i);
 void			ft_strclr(char *s);

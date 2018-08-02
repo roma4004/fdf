@@ -6,13 +6,13 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 17:59:40 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/29 16:52:29 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/02 21:42:48 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int		ln_len(char *str)
+static int	ln_len(char *str)
 {
 	int i;
 	int	len;
@@ -26,7 +26,7 @@ static int		ln_len(char *str)
 	return (len);
 }
 
-static int		data_mod(char **data, int fd, char *buf, unsigned int line_len)
+static int	data_mod(char **data, int fd, char *buf, unsigned int line_len)
 {
 	char	*temp;
 
@@ -48,7 +48,7 @@ static int		data_mod(char **data, int fd, char *buf, unsigned int line_len)
 	return (1);
 }
 
-static int		del_line(char **data, int fd)
+static int	del_line(char **data, int fd)
 {
 	unsigned int	i;
 	unsigned int	j;
@@ -79,8 +79,8 @@ static int		del_line(char **data, int fd)
 
 static char	**init_data(void)
 {
-	int i;
-	char **new_data;
+	int		i;
+	char	**new_data;
 
 	if ((new_data = (char **)malloc(sizeof(char *) * MAX_FD)))
 	{

@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/02 19:30:49 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/04 16:33:00 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ static void	show_errors(t_win *win)
 		ft_putstr_fd(" - ", 2);
 	if (errno)
 		ft_putstr_fd(strerror(errno), 2);
+	if (win->flags->error_code || errno)
+		ft_putstr_fd("\n", 2);
 }
 
 int			main(int argc, char **argv)

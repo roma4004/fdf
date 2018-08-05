@@ -7,28 +7,28 @@ The coordinates of this landscape are stored in a file passed as a parameter to 
 
 Each number corresponds to a point in space:
 
-• The horizontal position corresponds to its axis.
+	• The horizontal position corresponds to its axis.
 
-• The vertical position corresponds to its ordinate.
+	• The vertical position corresponds to its ordinate.
 
-• The value corresponds to its altitude
+	• The value corresponds to its altitude
 
 
 Mandatory part:
 
-We cannot use global variables, must follow the Norm
-  (see Norm.pdf, this explains many unobvious decisions solutions that I applied).
+	We cannot use global variables, must follow the Norm
+	(see Norm.pdf, this explains many unobvious decisions solutions that I applied).
   
-We have to handle errors carefully. In no way can quit my program in an unexpected
-  manner (Segmentation fault, bus error, double free, etc).
+	We have to handle errors carefully. In no way can quit my program in an unexpected
+  	manner (Segmentation fault, bus error, double free, etc).
   
-We are alowed to use the following functions:
+	We are alowed to use the following functions:
 
-    - open, read, write, close, malloc, free, perror, strerror, exit
+	- open, read, write, close, malloc, free, perror, strerror, exit
 	
-    - All the functions defined in the math library
+	- All the functions defined in the math library
 	
-    - All the functions defined in the miniLibX library
+	- All the functions defined in the miniLibX library
 	
 
 Bonus part: (plus = already implemented, minus = decided not to implement)

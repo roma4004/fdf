@@ -6,7 +6,7 @@
 #    By: dromanic <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/24 18:20:17 by dromanic          #+#    #+#              #
-#    Updated: 2018/07/17 15:41:44 by dromanic         ###   ########.fr        #
+#    Updated: 2018/08/05 14:20:27 by dromanic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,9 +36,6 @@ SRC = $(addprefix src/, $(SRC_N))
 OBJ = $(SRC:.c=.o)
 
 LIBS = libft/libft.a
-
-build: 
-	gcc -Wall -Wextra -Werror -I minilibx -L minilibx -lmlx -framework OpenGL -framework AppKit src/main.c src/get_next_line.c
 
 all: $(NAME)
 

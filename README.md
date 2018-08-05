@@ -1,4 +1,4 @@
-# fdf its a stydy project, is about creating a simplified graphic representation
+# fdf its a study project, is about creating a simplified graphic representation
 of a relief landscape linking various points (x, y, z) via segments. 
 The coordinates of this landscape are stored in a file passed as a parameter to your program.
 

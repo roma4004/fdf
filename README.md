@@ -24,11 +24,11 @@ Mandatory part:
   
 	We are alowed to use the following functions:
 
-	- open, read, write, close, malloc, free, perror, strerror, exit
+	• open, read, write, close, malloc, free, perror, strerror, exit
 	
-	- All the functions defined in the math library
+	• All the functions defined in the math library
 	
-	- All the functions defined in the miniLibX library
+	• All the functions defined in the miniLibX library
 	
 
 Bonus part: (plus = already implemented, minus = decided not to implement)

@@ -1,3 +1,4 @@
+![title](https://github.com/roma4004/fdf/raw/master/img/title.png)
 # fdf its a study project,
 and is about creating a simplified graphic representation of a relief landscape,
 linking various points (x, y, z) via segments. 
@@ -43,11 +44,13 @@ Bonus part: (plus = already implemented, minus = decided not to implement)
 	+ Change types of projection.
 
 My own bonus:
-
+	
 	Choiceing the different style of the connecting dots(pixels) on the map:
 		+ new visual effects, eg "|", "/", "-", "\" 
 		  (You can also animate the switching of these styles by holding the Enter key).
 		  
+![raw map-file example](https://github.com/roma4004/fdf/raw/master/img/4%20basic%20styles.png)
+
 		+ Standard way of connecting, that named "fdf".
 		
 		+ Ability to disconnect the connection between layers, that named "layer".

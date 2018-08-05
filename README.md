@@ -1,6 +1,9 @@
-# fdf its a study project, is about creating a simplified graphic representation
-of a relief landscape linking various points (x, y, z) via segments. 
+# fdf its a study project,
+and is about creating a simplified graphic representation of a relief landscape,
+linking various points (x, y, z) via segments. 
 The coordinates of this landscape are stored in a file passed as a parameter to your program.
+
+![raw map-file example](https://github.com/roma4004/fdf/raw/master/img/map_example.png)
 
 Each number corresponds to a point in space:
 

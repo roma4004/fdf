@@ -1,7 +1,20 @@
 ![title](https://github.com/roma4004/fdf/raw/master/img/title.png)
-# fdf is about creating a simplified graphic representation of a relief landscape, linking various points (x, y, z) via segments with algorithm Bresenham. 
-The coordinates of this landscape are stored in a file passed as a parameter to your program. Map-file example:
-![raw map-file example](https://github.com/roma4004/fdf/raw/master/img/map_example.png)
+# fdf is about creating a simplified graphic representation of a relief landscape, linking various points (x, y, z) via segments with algorithm of [Bresenham](https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm). 
+The coordinates of this landscape are stored in a file passed as a parameter to your program.
+raw map example 42.fdf:
+```
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0 10 10  0  0 10 10  0  0  0 10 10 10 10 10  0  0  0
+0  0 10 10  0  0 10 10  0  0  0  0  0  0  0 10 10  0  0
+0  0 10 10  0  0 10 10  0  0  0  0  0  0  0 10 10  0  0
+0  0 10 10 10 10 10 10  0  0  0  0 10 10 10 10  0  0  0
+0  0  0 10 10 10 10 10  0  0  0 10 10  0  0  0  0  0  0
+0  0  0  0  0  0 10 10  0  0  0 10 10  0  0  0  0  0  0
+0  0  0  0  0  0 10 10  0  0  0 10 10 10 10 10 10  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+```
 Each number corresponds to a point in space:
 
 	• The horizontal position corresponds to its axis.
@@ -49,5 +62,16 @@ manner (Segmentation fault, bus error, double free, etc).
 	Ability to disable or enable the interface.
 	Ability to quickly to reset the scaling, moving and rotating the current map's angel.
 	
+	
+Examples:
+
+Classical implementation of fdf works like this:
+![classic_fdf](https://github.com/roma4004/fdf/raw/master/img/classic_fdf.jpg)
+
+My implementation of classic fdf:
+![my_classic_fdf](https://github.com/roma4004/fdf/raw/master/img/my_classic_fdf.png)
+
+Effect with disconnected layers fdf:
+![my_fdf_with_disconnected_layers](https://github.com/roma4004/fdf/raw/master/img/my_fdf_with_disconnected_layers.png)
 	
 	

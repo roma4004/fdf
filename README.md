@@ -1,5 +1,5 @@
 ![title](https://github.com/roma4004/fdf/raw/master/img/title.png)
-# fdf is about creating a simplified graphic representation of a relief landscape, linking various points (x, y, z) via segments. 
+# fdf is about creating a simplified graphic representation of a relief landscape, linking various points (x, y, z) via segments with algorithm Bresenham. 
 The coordinates of this landscape are stored in a file passed as a parameter to your program. Map-file example:
 ![raw map-file example](https://github.com/roma4004/fdf/raw/master/img/map_example.png)
 Each number corresponds to a point in space:
@@ -9,26 +9,28 @@ Each number corresponds to a point in space:
 	• The value corresponds to its altitude
 
 
-Mandatory part:
+**Mandatory part:**
 
-	We cannot use global variables, must follow the Norm
-	(see "./norme.en.pdf", this explains many unobvious decisions solutions that I applied).
-  	We have to handle errors carefully. In no way can quit my program in an unexpected
-  	manner (Segmentation fault, bus error, double free, etc).
-  	We are alowed to use the following functions:
-	• open, read, write, close, malloc, free, perror, strerror, exit	
-	• All the functions defined in the math library	
-	• All the functions defined in the miniLibX library
+We cannot use global variables, must follow the [Norm](https://github.com/roma4004/fdf/blob/master/norme.en.pdf), **this explains many unobvious decisions solutions that I applied**).
+
+We have to handle errors carefully. In no way can quit my program in an unexpected
+manner (Segmentation fault, bus error, double free, etc).
 	
+   We are alowed to use the following functions:
+	
+   	• open, read, write, close, malloc, free, perror, strerror, exit	
+	• All the functions defined in the math library
+	• All the functions defined in the miniLibX library
 
-Bonus part: (plus = already implemented, minus = decided not to implement)  
-	- Fill the boxes with a color according to altitude (green at the bottom, then brown,
-	  then white on top for ex.)
+**Bonus part:** (plus = already implemented, minus = decided not to implement)
+	
+	- Fill the boxes with a color according to altitude
+	  (green at the bottom, then brown, then white on top for ex.).
 	+ Specify the color spectrum in parameter.
 	+ Manage correctly the hidden surfaces.
 	+ Change types of projection.
-
-My own bonus:
+	
+**My own bonus:**
 	
 	Choiceing the different style of the connecting dots(pixels) on the map:
 		+ new visual effects, eg "|", "/", "-", "\" 

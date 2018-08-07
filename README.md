@@ -24,7 +24,7 @@ Each number corresponds to a point in space:
 
 **Mandatory part:**
 
-We cannot use global variables, must follow the [Norm](https://github.com/roma4004/fdf/blob/master/norme.en.pdf), **this explains many unobvious decisions solutions that I applied**).
+We cannot use global variables, must follow the [Norm](https://github.com/roma4004/fdf/blob/master/norme.en.pdf), **this explains many unobvious decisions solutions that I applied, like function in 25 row, or only 4 argument in function**).
 
 We have to handle errors carefully. In no way can quit my program in an unexpected
 manner (Segmentation fault, bus error, double free, etc).
@@ -48,8 +48,10 @@ manner (Segmentation fault, bus error, double free, etc).
 	Choiceing the different style of the connecting dots(pixels) on the map:
 		+ new visual effects, eg "|", "/", "-", "\" 
 		  (You can also animate the switching of these styles by holding the Enter key).
-		  
+		  *separated visual example of vertical, horizontal, backslash and slash connecting of dots: 
 ![raw map-file example](https://github.com/roma4004/fdf/raw/master/img/4%20basic%20styles.png)
+		  *for example, which gives a combination of vertical + horizontal + slash, and a separate backslash: 
+![raw map-file example](https://github.com/roma4004/fdf/raw/master/img/effect_combination.png)
 
 		+ Standard way of connecting, that named "fdf".		
 		+ Ability to disconnect the connection between layers, that named "layer".		
@@ -65,7 +67,9 @@ manner (Segmentation fault, bus error, double free, etc).
 	
 Examples:
 
-Classical implementation of fdf works like this:
+Classical simple implementation of fdf looks like this:
+![classic_fdf](https://github.com/roma4004/fdf/raw/master/img/fdf_demo_classic.png)
+or basic valid variant:
 ![classic_fdf](https://github.com/roma4004/fdf/raw/master/img/classic_fdf.jpg)
 
 My implementation of classic fdf:

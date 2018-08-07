@@ -79,3 +79,4 @@ Effect with disconnected layers fdf:
 ![my_fdf_with_disconnected_layers](https://github.com/roma4004/fdf/raw/master/img/my_fdf_with_disconnected_layers.png)
 	
 	
+many other cool img of my fdd can be found in [./img](https://github.com/roma4004/fdf/blob/master/img/)

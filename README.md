@@ -78,5 +78,8 @@ My implementation of classic fdf:
 Effect with disconnected layers fdf:
 ![my_fdf_with_disconnected_layers](https://github.com/roma4004/fdf/raw/master/img/my_fdf_with_disconnected_layers.png)
 	
-	
+Maps can be more interesting with fractal or terrain (if the color on the card is set it will be read and displayed):
+![julia](https://github.com/roma4004/fdf/raw/master/img/julia.png)
+![mandelbrot](https://github.com/roma4004/fdf/raw/master/img/mandelbrot.png)
+![landscape1](https://github.com/roma4004/fdf/raw/master/img/landscape1.png)
 many other cool img of my fdd can be found in [./img](https://github.com/roma4004/fdf/blob/master/img/)

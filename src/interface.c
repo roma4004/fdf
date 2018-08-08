@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/24 14:48:59 by dromanic          #+#    #+#             */
-/*   Updated: 2018/07/24 14:49:03 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/08 20:46:44 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,12 @@ void	show_interface(t_win *win)
 		"interface       : 8 or numpad 8");
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 20, 90, DEF_COLOR,
 		"rotate X,Y,Z(+-): QA, WS, ED");
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 20, 110, DEF_COLOR,
+		"next style      : enter (hold to animate)");
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 20, 130, DEF_COLOR,
 		"reset           : R");
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 20, 150, DEF_COLOR,
 		"add visual style: 1..7 or numpad 1..7 (|, /, -, \\, fdf, layer, dot)");
-	mlx_string_put(win->mlx_ptr, win->win_ptr, 20, 110, DEF_COLOR,
-		"next style      : enter (hold to animate)");
+	mlx_string_put(win->mlx_ptr, win->win_ptr, 20, 170, DEF_COLOR,
+				   "exit the program: esc or hit the (x) at the corner window");
 }

@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:43:55 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/01 15:48:56 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/08 13:52:19 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 static void	px_put(t_win *win, int x, int y, int color)
 {
+	if (x < 0 - win->param->offset_x || y < 0 - win->param->offset_y
+		|| x > WIN_WIDTH || y > WIN_HEIGHT)
+		return ;
 	mlx_pixel_put(win->mlx_ptr, win->win_ptr,
 		x + win->param->offset_x,
 		y + win->param->offset_y, color);

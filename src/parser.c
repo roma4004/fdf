@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/17 15:21:59 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/03 13:58:58 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/15 16:02:36 by jdoeanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ t_win		*parse_map(char *file_name, t_win *win)
 		return (NULL);
 	}
 	while (get_next_line(fd, &buf) > 0
-		&& (ft_lst_append(&lst, buf, ft_strlen(buf)))
+		&& (ft_append_or_new_lst(&lst, buf, ft_strlen(buf)))
 		&& (++win->param->rows))
 		ft_memdel((void *)&buf);
 	if (fd != -1)

@@ -6,7 +6,7 @@
 #    By: dromanic <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/08/07 12:17:01 by dromanic          #+#    #+#              #
-#    Updated: 2017/11/29 16:43:46 by dromanic         ###   ########.fr        #
+#    Updated: 2018/08/15 16:08:26 by jdoeanic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,10 +14,13 @@ NAME = libft.a
 
 SRC = ft_append_list.c \
 	ft_atoi.c \
+	ft_atol_base.c \
 	ft_begin_trim.c \
 	ft_bzero.c \
+	ft_destroy_lst.c \
 	ft_end_trim.c \
 	ft_get_word.c \
+	ft_i_atoi.c \
 	ft_isalnum.c \
 	ft_isalpha.c \
 	ft_isascii.c \
@@ -125,10 +128,5 @@ complib:
 makelib:
 	@ar rc $(NAME) $(OBJ)
 	@ranlib $(NAME)
-
-so:
-	@gcc $(COMPFLAGS) $(SRC) -I./
-	@ar rc libft.so $(OBJ)
-	@ranlib libft.so
 
 re: fclean all

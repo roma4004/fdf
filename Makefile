@@ -24,7 +24,6 @@ SRC_N =	main.c \
 		color.c \
 		parser.c \
 		rotate.c \
-		for_lib.c \
 		ram_man.c \
 		effects.c \
 		interface.c \

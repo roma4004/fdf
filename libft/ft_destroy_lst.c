@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_append_list.c                                   :+:      :+:    :+:   */
+/*   ft_destroy_lst.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dromanic <dromanic@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/19 16:00:41 by dromanic          #+#    #+#             */
+/*   Created: 2018/08/15 16:00:00 by dromanic          #+#    #+#             */
 /*   Updated: 2018/08/15 16:01:23 by jdoeanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
-int		ft_append_or_new_lst(t_list **lst, char *buf, size_t size)
+int		ft_destroy_lst(t_list *lst)
 {
-	t_list *cur;
+	t_list	*cur;
+	t_list	*tmp;
 
-	if (!(*lst))
-		*lst = ft_lstnew(buf, size);
-	else
+	if (!(cur = lst))
+		return (1);
+	while (cur)
 	{
-		cur = *lst;
-		while (cur->next)
-			cur = cur->next;
-		cur->next = ft_lstnew(buf, size);
+		tmp = cur->next;
+		if (cur->content)
+			ft_memdel(&cur->content);
+		ft_memdel((void *)&cur);
+		cur = tmp;
 	}
-	return (1);
+	return (0);
 }

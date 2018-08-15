@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/01 20:01:34 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/15 16:06:26 by jdoeanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,11 +137,6 @@ void			draw_map_backslash(t_win *win, int con);
 void			draw_map_horizontal(t_win *win, int con);
 void			draw_map_slash(t_win *win, int con);
 void			draw_map_fdf(t_win *win, int con);
-
-int				ft_destroy_lst(t_list *lst);
-int				ft_lst_append(t_list **lst, char *buf, size_t size);
-long long		ft_i_atoi(const char *str, size_t *i, size_t max_i);
-long long		ft_atol_base(const char *str, int base);
 
 int				deal_keyboard(int key, t_win *win);
 int				deal_mouse(int key, int x, int y, t_win *win);

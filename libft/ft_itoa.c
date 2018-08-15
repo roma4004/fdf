@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/18 20:01:54 by dromanic          #+#    #+#             */
-/*   Updated: 2017/11/29 16:37:27 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/15 16:35:36 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*ft_itoa(int n)
 	temp = n;
 	while (temp /= 10)
 		len_n++;
-	result = (char *)malloc(sizeof(char) * len_n + sizeof(char));
+	result = (char *)malloc(sizeof(char) * (len_n + 1));
 	if (result)
 	{
 		if (n == 0)

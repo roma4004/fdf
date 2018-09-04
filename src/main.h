@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/15 16:34:23 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/22 20:42:53 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,22 @@ typedef struct	s_flags
 	int		error_code;
 }				t_flags;
 
+typedef struct	s_img
+{
+	void	*img_ptr;
+	int		*data;
+	int		bits_per_pixel;
+	int		size_line;
+	int		endian;
+	//float	ratio;
+}				t_img;
+
 typedef struct	s_win
 {
 	t_px	**map;
 	t_param	*param;
 	t_flags	*flags;
+	t_img	*img;
 	void	*mlx_ptr;
 	void	*win_ptr;
 }				t_win;
@@ -117,12 +128,12 @@ enum			e_errors
 	WIDTH_ERR = 405,
 	READ_ERR = 406,
 	COLOR_ERR = 407,
+	ITS_A_DIRECTORY = 21
 };
 
 t_line			*init_line(void);
-t_param			*init_param(void);
-t_flags			*init_flags(void);
 t_win			*init_win(void);
+t_img			*init_img(void *mlx_ptr, int width, int height);
 
 int				is_valid_row(t_win *win, void *cont, size_t max_i);
 t_win			*parse_map(char *file_name, t_win *win);
@@ -152,11 +163,13 @@ void			show_interface(t_win *win);
 int				toggle_param(int *param);
 int				set_vec(t_win *win, long long x, long long y, long long z);
 size_t			ft_cnt_words(char *str, size_t max_i, char ch);
+void			redraw_img(t_win *win);
 
 void			rotate_map(t_win *win, char axis, int new_angle);
 void			reset(t_win *win);
 
 void			free_map(t_win *win);
 int				free_win(t_win *win);
+t_win			*clear_img(t_win *win);
 
 #endif

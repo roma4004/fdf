@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 17:23:17 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/03 13:58:58 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/09/04 16:48:50 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_line	*init_line(void)
 	return (new_line);
 }
 
-t_param	*init_param(void)
+static t_param	*init_param(void)
 {
 	t_param *new_param;
 
@@ -54,7 +54,7 @@ t_param	*init_param(void)
 	return (new_param);
 }
 
-t_flags	*init_flags(void)
+static t_flags	*init_flags(void)
 {
 	t_flags	*new_flags;
 
@@ -85,8 +85,11 @@ t_win	*init_win(void)
 	|| !(new_win->flags = init_flags())
 	|| !(new_win->mlx_ptr = mlx_init())
 	|| !(new_win->win_ptr = mlx_new_window(new_win->mlx_ptr,
-											new_win->param->width,
-											new_win->param->height, WIN_NAME)))
+										WIN_WIDTH, WIN_HEIGHT, WIN_NAME))
+	|| !(new_win->img = init_img(new_win->mlx_ptr,
+								new_win->param->width,
+								new_win->param->height)))
 		free_win(new_win);
+	///need to create img for each effect
 	return (new_win);
 }

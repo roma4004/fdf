@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:44:39 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/01 15:48:56 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/22 20:40:36 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	draw_map_vertical(t_win *win, int c)
 				win->map[y + c][x].z * win->param->sc_z);
 		}
 	ft_memdel((void *)&line);
+	redraw_img(win);
 }
 
 void	draw_map_backslash(t_win *win, int c)
@@ -57,6 +58,7 @@ void	draw_map_backslash(t_win *win, int c)
 								win->map[y + c][x + c].z * win->param->sc_z);
 		}
 	ft_memdel((void *)&line);
+	redraw_img(win);
 }
 
 void	draw_map_horizontal(t_win *win, int c)
@@ -80,6 +82,7 @@ void	draw_map_horizontal(t_win *win, int c)
 								win->map[y][x + c].z * win->param->sc_z);
 		}
 	ft_memdel((void *)&line);
+	redraw_img(win);
 }
 
 void	draw_map_slash(t_win *win, int c)
@@ -103,6 +106,7 @@ void	draw_map_slash(t_win *win, int c)
 								win->map[y + c][x].z * win->param->sc_z);
 		}
 	ft_memdel((void *)&line);
+	redraw_img(win);
 }
 
 void	draw_map_fdf(t_win *win, int c)
@@ -131,4 +135,5 @@ void	draw_map_fdf(t_win *win, int c)
 									win->map[y + c][x].z * win->param->sc_z);
 		}
 	ft_memdel((void *)&line);
+	redraw_img(win);
 }

@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/17 15:21:59 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/15 16:34:43 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/08/22 20:01:13 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,21 +96,20 @@ t_win		*parse_map(char *file_name, t_win *win)
 	if (!win || !file_name)
 		return (NULL);
 	lst = NULL;
-	if ((fd = open(file_name, O_RDONLY)) == -1 || errno == 21)
+	if ((fd = open(file_name, O_RDONLY)) == -1 || errno == ITS_A_DIRECTORY)
 	{
 		win->flags->error_code = READ_ERR;
 		return (NULL);
 	}
 	while (get_next_line(fd, &buf) > 0
-		&& (ft_append_or_new_lst(&lst, buf, ft_strlen(buf)))
-		&& (++win->param->rows))
+	&& (ft_append_or_new_lst(&lst, buf, ft_strlen(buf)))
+	&& (++win->param->rows))
 		ft_memdel((void *)&buf);
-	if (fd != -1)
-		close(fd);
+	close(fd);
 	if (lst == NULL && !(errno) && !WIDTH_ERR_SKIP)
 		win->flags->error_code = WIDTH_ERR;
 	if (get_map_param(win, lst) || win->flags->error_code
-		|| convert_map(win, lst) || ft_destroy_lst(lst))
+	|| convert_map(win, lst) || ft_destroy_lst(lst))
 		return (NULL);
 	return (win);
 }

@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 19:23:35 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/03 13:58:58 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/09/04 16:59:20 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,13 @@ size_t	ft_cnt_words(char *str, size_t max_i, char separator)
 		if (str[i] != separator && str[i - 1] == separator)
 			num++;
 	return (num);
+}
+
+void	redraw_img(t_win *win)
+{
+	mlx_clear_window(win->mlx_ptr, win->win_ptr);
+	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr,
+							win->img->img_ptr,
+							0,
+							0);
 }

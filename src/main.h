@@ -6,15 +6,15 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/22 20:42:53 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/09/08 20:25:26 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAIN_H
 # define MAIN_H
 
-# define WIN_WIDTH 1024
-# define WIN_HEIGHT 768
+# define WIN_WIDTH 1920
+# define WIN_HEIGHT 1080
 # define DEF_OFFSET_Y 200
 # define DEF_OFFSET_X 100
 # define DEF_SCALE 1
@@ -88,7 +88,6 @@ typedef struct	s_img
 	int		bits_per_pixel;
 	int		size_line;
 	int		endian;
-	//float	ratio;
 }				t_img;
 
 typedef struct	s_win

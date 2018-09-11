@@ -66,6 +66,7 @@ void	toggles(t_win *win, int key)
 void	animate(t_win *win)
 {
 	mlx_clear_window(win->mlx_ptr, win->win_ptr);
+	clear_img(win);
 	if (win->flags->interface_on)
 		show_interface(win);
 	if (++win->param->frame_cnt == 4)

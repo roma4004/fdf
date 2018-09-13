@@ -6,13 +6,13 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:44:39 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/22 20:40:36 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/09/13 20:30:06 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	draw_map_vertical(t_win *win, int c)
+void draw_map_vertical(t_win *win, t_param *p, int c)
 {
 	t_line	*line;
 	size_t	y;
@@ -21,23 +21,22 @@ void	draw_map_vertical(t_win *win, int c)
 	if (!win || !(line = init_line())
 	|| !(y = -1))
 		return ;
-	while (++y < win->param->rows - 1 && (x = -1))
-		while (++x < win->param->cols - 1)
+	while (++y < p->rows - 1 && (x = -1))
+		while (++x < p->cols - 1)
 		{
 			line->color = win->map[y][x].color;
-			line->end_x = win->map[y][x].x * win->param->sc_x;
-			line->end_y = win->map[y][x].y * win->param->sc_y
-						- win->map[y][x].z * win->param->sc_z;
-			draw_line(win, line,
-				win->map[y + 1][x].x * win->param->sc_x,
-				win->map[y + 1][x].y * win->param->sc_y -
-				win->map[y + c][x].z * win->param->sc_z);
+			line->end_x = (int)win->map[y][x].x * p->sc_x;
+			line->end_y = (int)win->map[y][x].y * p->sc_y
+						- (int)win->map[y][x].z * p->sc_z;
+			draw_line(win, line, (int)win->map[y + 1][x].x * p->sc_x,
+								(int)win->map[y + 1][x].y * p->sc_y -
+								(int)win->map[y + c][x].z * p->sc_z);
 		}
 	ft_memdel((void *)&line);
 	redraw_img(win);
 }
 
-void	draw_map_backslash(t_win *win, int c)
+void draw_map_backslash(t_win *win, t_param *p, int c)
 {
 	t_line	*line;
 	size_t	y;
@@ -46,22 +45,22 @@ void	draw_map_backslash(t_win *win, int c)
 	if (!win || !(line = init_line())
 	|| !(y = -1))
 		return ;
-	while (++y < win->param->rows - 1 && (x = -1))
-		while (++x < win->param->cols - 1)
+	while (++y < p->rows - 1 && (x = -1))
+		while (++x < p->cols - 1)
 		{
 			line->color = win->map[y][x].color;
-			line->end_x = win->map[y][x].x * win->param->sc_x;
-			line->end_y = win->map[y][x].y * win->param->sc_y
-						- win->map[y][x].z * win->param->sc_z;
-			draw_line(win, line, win->map[y + 1][x + 1].x * win->param->sc_x,
-								win->map[y + 1][x + 1].y * win->param->sc_y -
-								win->map[y + c][x + c].z * win->param->sc_z);
+			line->end_x = (int)win->map[y][x].x * p->sc_x;
+			line->end_y = (int)win->map[y][x].y * p->sc_y
+						- (int)win->map[y][x].z * p->sc_z;
+			draw_line(win, line, (int)win->map[y + 1][x + 1].x * p->sc_x,
+								(int)win->map[y + 1][x + 1].y * p->sc_y -
+								(int)win->map[y + c][x + c].z * p->sc_z);
 		}
 	ft_memdel((void *)&line);
 	redraw_img(win);
 }
 
-void	draw_map_horizontal(t_win *win, int c)
+void draw_map_horizontal(t_win *win, t_param *p, int c)
 {
 	t_line	*line;
 	size_t	y;
@@ -70,22 +69,22 @@ void	draw_map_horizontal(t_win *win, int c)
 	if (!win || !(line = init_line())
 	|| !(y = -1))
 		return ;
-	while (++y < win->param->rows - 1 && (x = -1))
-		while (++x < win->param->cols - 1)
+	while (++y < p->rows - 1 && (x = -1))
+		while (++x < p->cols - 1)
 		{
 			line->color = win->map[y][x].color;
-			line->end_x = win->map[y][x].x * win->param->sc_x;
-			line->end_y = win->map[y][x].y * win->param->sc_y
-						- win->map[y][x].z * win->param->sc_z;
-			draw_line(win, line, win->map[y][x + 1].x * win->param->sc_x,
-								win->map[y][x + 1].y * win->param->sc_y -
-								win->map[y][x + c].z * win->param->sc_z);
+			line->end_x = (int)win->map[y][x].x * p->sc_x;
+			line->end_y = (int)win->map[y][x].y * p->sc_y
+						- (int)win->map[y][x].z * p->sc_z;
+			draw_line(win, line, (int)win->map[y][x + 1].x * p->sc_x,
+								(int)win->map[y][x + 1].y * p->sc_y -
+								(int)win->map[y][x + c].z * p->sc_z);
 		}
 	ft_memdel((void *)&line);
 	redraw_img(win);
 }
 
-void	draw_map_slash(t_win *win, int c)
+void draw_map_slash(t_win *win, t_param *p, int c)
 {
 	t_line	*line;
 	size_t	x;
@@ -94,22 +93,22 @@ void	draw_map_slash(t_win *win, int c)
 	if (!win || !(line = init_line())
 	|| !(y = -1))
 		return ;
-	while (++y < win->param->rows - 1 && (x = -1))
-		while (++x < win->param->cols - 1)
+	while (++y < p->rows - 1 && (x = -1))
+		while (++x < p->cols - 1)
 		{
 			line->color = win->map[y][x].color;
-			line->end_x = win->map[y][x + 1].x * win->param->sc_x;
-			line->end_y = win->map[y][x + 1].y * win->param->sc_y
-						- win->map[y][x + c].z * win->param->sc_z;
-			draw_line(win, line, win->map[y + 1][x].x * win->param->sc_x,
-								win->map[y + 1][x].y * win->param->sc_y -
-								win->map[y + c][x].z * win->param->sc_z);
+			line->end_x = (int)win->map[y][x + 1].x * p->sc_x;
+			line->end_y = (int)win->map[y][x + 1].y * p->sc_y
+						- (int)win->map[y][x + c].z * p->sc_z;
+			draw_line(win, line, (int)win->map[y + 1][x].x * p->sc_x,
+								(int)win->map[y + 1][x].y * p->sc_y -
+								(int)win->map[y + c][x].z * p->sc_z);
 		}
 	ft_memdel((void *)&line);
 	redraw_img(win);
 }
 
-void	draw_map_fdf(t_win *win, int c)
+void	draw_map_fdf(t_win *win, t_param *p, int c)
 {
 	t_line	*line;
 	size_t	x;
@@ -118,21 +117,21 @@ void	draw_map_fdf(t_win *win, int c)
 	if (!win || !(line = init_line())
 	|| !(y = -1))
 		return ;
-	while (++y < win->param->rows && (x = -1))
-		while (++x < win->param->cols)
+	while (++y < p->rows && (x = -1))
+		while (++x < p->cols)
 		{
 			line->color = win->map[y][x].color;
-			line->end_x = win->map[y][x].x * win->param->sc_x;
-			line->end_y = win->map[y][x].y * win->param->sc_y
-						- win->map[y][x].z * win->param->sc_z;
-			if (x < win->param->cols - 1)
-				draw_line(win, line, win->map[y][x + 1].x * win->param->sc_x,
-									win->map[y][x + 1].y * win->param->sc_y -
-									win->map[y][x + c].z * win->param->sc_z);
-			if (y < win->param->rows - 1)
-				draw_line(win, line, win->map[y + 1][x].x * win->param->sc_x,
-									win->map[y + 1][x].y * win->param->sc_y -
-									win->map[y + c][x].z * win->param->sc_z);
+			line->end_x = (int)win->map[y][x].x * p->sc_x;
+			line->end_y = (int)win->map[y][x].y * p->sc_y
+						- (int)win->map[y][x].z * p->sc_z;
+			if (x < p->cols - 1)
+				draw_line(win, line, (int)win->map[y][x + 1].x * p->sc_x,
+									(int)win->map[y][x + 1].y * p->sc_y -
+									(int)win->map[y][x + c].z * p->sc_z);
+			if (y < p->rows - 1)
+				draw_line(win, line, (int)win->map[y + 1][x].x * p->sc_x,
+									(int)win->map[y + 1][x].y * p->sc_y -
+									(int)win->map[y + c][x].z * p->sc_z);
 		}
 	ft_memdel((void *)&line);
 	redraw_img(win);

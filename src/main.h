@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2018/09/08 20:25:26 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/09/13 20:31:53 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,11 +142,11 @@ void			draw_line(t_win *win, t_line *line, int x, int y);
 void			draw_map(t_win *win);
 void			draw_map_dots(t_win *win);
 
-void			draw_map_vertical(t_win *win, int con);
-void			draw_map_backslash(t_win *win, int con);
-void			draw_map_horizontal(t_win *win, int con);
-void			draw_map_slash(t_win *win, int con);
-void			draw_map_fdf(t_win *win, int con);
+void			draw_map_vertical(t_win *win, t_param *p, int con);
+void			draw_map_backslash(t_win *win, t_param *p, int con);
+void			draw_map_horizontal(t_win *win, t_param *p, int con);
+void			draw_map_slash(t_win *win, t_param *p, int con);
+void			draw_map_fdf(t_win *win, t_param *p, int con);
 
 int				deal_keyboard(int key, t_win *win);
 int				deal_mouse(int key, int x, int y, t_win *win);

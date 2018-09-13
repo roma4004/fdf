@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:43:55 by dromanic          #+#    #+#             */
-/*   Updated: 2018/09/04 16:57:22 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/09/13 20:34:14 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,6 @@ void	px_to_img(t_win *win, int x, int y, int color)
 	if (x >= 0 && x < WIN_WIDTH && y >= 0 && y < WIN_HEIGHT)
 		win->img->data[y * WIN_WIDTH + x] = color;
 }
-
-//static void	px_put(t_win *win, int x, int y, int color)
-//{
-//	if (x < 0 - win->param->offset_x || y < 0 - win->param->offset_y
-//		|| x > WIN_WIDTH || y > WIN_HEIGHT)
-//		return ;
-//	mlx_pixel_put(win->mlx_ptr, win->win_ptr,
-//		x + win->param->offset_x,
-//		y + win->param->offset_y, color);
-//}
 
 void		draw_line(t_win *win, t_line *l, int x, int y)
 {
@@ -64,15 +54,15 @@ void		draw_map(t_win *win)
 	mlx_clear_window(win->mlx_ptr, win->win_ptr);
 	clear_img(win);
 	if (win->flags->ver_on)
-		draw_map_vertical(win, win->flags->con_on);
+		draw_map_vertical(win, win->param, win->flags->con_on);
 	if (win->flags->sla_on)
-		draw_map_slash(win, win->flags->con_on);
+		draw_map_slash(win, win->param, win->flags->con_on);
 	if (win->flags->hor_on)
-		draw_map_horizontal(win, win->flags->con_on);
+		draw_map_horizontal(win, win->param, win->flags->con_on);
 	if (win->flags->bsl_on)
-		draw_map_backslash(win, win->flags->con_on);
+		draw_map_backslash(win, win->param, win->flags->con_on);
 	if (win->flags->fdf_on)
-		draw_map_fdf(win, win->flags->con_on);
+		draw_map_fdf(win, win->param, win->flags->con_on);
 	if (win->flags->dot_on)
 		draw_map_dots(win);
 	if (win->flags->interface_on )
@@ -88,9 +78,9 @@ void		draw_map_dots(t_win *win)
 		return ;
 	while (++y < win->param->rows && (x = -1))
 		while (++x < win->param->cols)
-			px_to_img(win, win->map[y][x].x * win->param->sc_x,
-					win->map[y][x].y * win->param->sc_y -
-					win->map[y][x].z * win->param->sc_z,
-					win->map[y][x].color);
+			px_to_img(win, (int)win->map[y][x].x * win->param->sc_x,
+							(int)win->map[y][x].y * win->param->sc_y -
+							(int)win->map[y][x].z * win->param->sc_z,
+								win->map[y][x].color);
 	redraw_img(win);
 }

@@ -12,7 +12,7 @@
 
 NAME = fdf
 
-CC = gcc -Wall -Wextra -Werror
+CC = gcc -O3 -Wall -Wextra -Werror
 
 LIBKEY = -I minilibx -L minilibx -lmlx -framework OpenGL -framework AppKit
 

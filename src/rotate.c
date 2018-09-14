@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/23 14:59:52 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/03 13:58:58 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/09/14 06:05:26 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 static void	rotate_y(t_win *win, size_t x, size_t y, int new_angle)
 {
-	float tmp_y;
-	float tmp_x;
-	float tmp_z;
-	float angle;
+	double tmp_y;
+	double tmp_x;
+	double tmp_z;
+	double angle;
 
 	if (!win)
 		return ;
@@ -37,10 +37,10 @@ static void	rotate_y(t_win *win, size_t x, size_t y, int new_angle)
 
 static void	rotate_x(t_win *win, size_t x, size_t y, int new_angle)
 {
-	float tmp_y;
-	float tmp_x;
-	float tmp_z;
-	float angle;
+	double tmp_y;
+	double tmp_x;
+	double tmp_z;
+	double angle;
 
 	if (!win)
 		return ;
@@ -59,10 +59,10 @@ static void	rotate_x(t_win *win, size_t x, size_t y, int new_angle)
 
 static void	rotate_z(t_win *win, size_t x, size_t y, int new_angle)
 {
-	float tmp_y;
-	float tmp_x;
-	float tmp_z;
-	float angle;
+	double tmp_y;
+	double tmp_x;
+	double tmp_z;
+	double angle;
 
 	if (!win)
 		return ;
@@ -86,11 +86,11 @@ void		rotate_map(t_win *win, char axis, int new_angle)
 
 	if (!win)
 		return ;
-	y = -1;
-	while (++y < win->param->rows)
+	y = 0;
+	while (y < win->param->rows)
 	{
-		x = -1;
-		while (++x < win->param->cols)
+		x = 0;
+		while (x < win->param->cols)
 		{
 			if (axis == 'y' || axis == 'a')
 				rotate_y(win, x, y, new_angle);
@@ -98,7 +98,9 @@ void		rotate_map(t_win *win, char axis, int new_angle)
 				rotate_x(win, x, y, new_angle);
 			if (axis == 'z' || axis == 'a')
 				rotate_z(win, x, y, new_angle);
+			x++;
 		}
+		y++;
 	}
 	draw_map(win);
 }
@@ -110,16 +112,18 @@ void		reset(t_win *win)
 
 	if (!win)
 		return ;
-	y = -1;
-	while (++y < win->param->rows)
+	y = 0;
+	while (y < win->param->rows)
 	{
-		x = -1;
-		while (++x < win->param->cols)
+		x = 0;
+		while (x < win->param->cols)
 		{
 			win->map[y][x].x = x;
 			win->map[y][x].y = y;
 			win->map[y][x].z = win->map[y][x].z_orig;
+			x++;
 		}
+		y++;
 	}
 	win->param->offset_x = DEF_OFFSET_X;
 	win->param->offset_y = DEF_OFFSET_Y;

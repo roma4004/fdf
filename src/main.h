@@ -32,10 +32,10 @@
 
 typedef struct	s_px
 {
-	float	x;
-	float	y;
-	float	z;
-	float	z_orig;
+	double	x;
+	double	y;
+	double	z;
+	double	z_orig;
 	int		color;
 }				t_px;
 

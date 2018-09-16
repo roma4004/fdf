@@ -6,13 +6,13 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:43:55 by dromanic          #+#    #+#             */
-/*   Updated: 2018/09/13 20:34:14 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/09/16 21:21:18 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	px_to_img(t_win *win, int x, int y, int color)
+void		px_to_img(t_win *win, int x, int y, int color)
 {
 	x += win->param->offset_x;
 	y += win->param->offset_y;
@@ -49,38 +49,44 @@ void		draw_line(t_win *win, t_line *l, int x, int y)
 	}
 }
 
-void		draw_map(t_win *win)
+static void	draw_map_dots(t_win *win)
 {
-	mlx_clear_window(win->mlx_ptr, win->win_ptr);
-	clear_img(win);
-	if (win->flags->ver_on)
-		draw_map_vertical(win, win->param, win->flags->con_on);
-	if (win->flags->sla_on)
-		draw_map_slash(win, win->param, win->flags->con_on);
-	if (win->flags->hor_on)
-		draw_map_horizontal(win, win->param, win->flags->con_on);
-	if (win->flags->bsl_on)
-		draw_map_backslash(win, win->param, win->flags->con_on);
-	if (win->flags->fdf_on)
-		draw_map_fdf(win, win->param, win->flags->con_on);
-	if (win->flags->dot_on)
-		draw_map_dots(win);
-	if (win->flags->interface_on )
-		show_interface(win);
-}
+	size_t x;
+	size_t y;
 
-void		draw_map_dots(t_win *win)
-{
-	size_t	x;
-	size_t	y;
-
-	if (!win || !(y = -1))
+	if (!win)
 		return ;
-	while (++y < win->param->rows && (x = -1))
+	y = -1;
+	while (++y < win->param->rows)
+	{
+		x = -1;
 		while (++x < win->param->cols)
 			px_to_img(win, (int)win->map[y][x].x * win->param->sc_x,
 							(int)win->map[y][x].y * win->param->sc_y -
 							(int)win->map[y][x].z * win->param->sc_z,
 								win->map[y][x].color);
+	}
 	redraw_img(win);
+}
+
+void		draw_map(t_win *win)
+{
+	t_line	line;
+
+	mlx_clear_window(win->mlx_ptr, win->win_ptr);
+	clear_img(win);
+	if (win->flags->ver_on)
+		draw_map_vertical(win, &line, win->param, win->flags->con_on);
+	if (win->flags->sla_on)
+		draw_map_slash(win, &line, win->param, win->flags->con_on);
+	if (win->flags->hor_on)
+		draw_map_horizontal(win, &line, win->param, win->flags->con_on);
+	if (win->flags->bsl_on)
+		draw_map_backslash(win, &line, win->param, win->flags->con_on);
+	if (win->flags->fdf_on)
+		draw_map_fdf(win, &line, win->param, win->flags->con_on);
+	if (win->flags->dot_on)
+		draw_map_dots(win);
+	if (win->flags->interface_on)
+		show_interface(win);
 }

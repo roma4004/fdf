@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 14:23:50 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/22 20:35:22 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/09/16 21:15:56 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int		free_win(t_win *win)
 		if (win->param)
 			ft_memdel((void *)&win->param);
 		ft_memdel((void *)&win->flags);
-		//ft_memdel((void *)&win->img);
+		ft_memdel((void *)&win->img);
 		ft_memdel((void *)&win);
 		return (1);
 	}
@@ -47,12 +47,15 @@ int		free_win(t_win *win)
 
 t_win	*clear_img(t_win *win)
 {
-	int		y;
-	int		x;
+	int y;
+	int x;
 
 	y = -1;
-	while (++y < WIN_HEIGHT && (x = -1))
+	while (++y < WIN_HEIGHT)
+	{
+		x = -1;
 		while (++x < WIN_WIDTH)
 			win->img->data[y * WIN_WIDTH + x] = 0;
+	}
 	return (win);
 }

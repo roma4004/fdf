@@ -49,7 +49,8 @@ size_t	ft_cnt_words(char *str, size_t max_i, char separator)
 void	redraw_img(t_win *win)
 {
 	mlx_clear_window(win->mlx_ptr, win->win_ptr);
-	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr,
+	mlx_put_image_to_window(win->mlx_ptr,
+							win->win_ptr,
 							win->img->img_ptr,
 							0,
 							0);

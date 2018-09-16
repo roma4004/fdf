@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/17 15:18:37 by dromanic          #+#    #+#             */
-/*   Updated: 2018/09/13 20:30:06 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/09/16 21:07:54 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	toggles(t_win *win, int key)
 
 void	animate(t_win *win)
 {
+	t_line	line;
+
 	mlx_clear_window(win->mlx_ptr, win->win_ptr);
 	clear_img(win);
 	if (win->flags->interface_on)
@@ -72,11 +74,11 @@ void	animate(t_win *win)
 	if (++win->param->frame_cnt == 4)
 		win->param->frame_cnt = 0;
 	if (win->param->frame_cnt == 0)
-		draw_map_vertical(win, NULL, win->flags->con_on);
+		draw_map_vertical(win, &line, win->param, win->flags->con_on);
 	else if (win->param->frame_cnt == 1)
-		draw_map_slash(win, NULL, win->flags->con_on);
+		draw_map_slash(win, &line, win->param, win->flags->con_on);
 	else if (win->param->frame_cnt == 2)
-		draw_map_horizontal(win, NULL, win->flags->con_on);
+		draw_map_horizontal(win, &line, win->param, win->flags->con_on);
 	else if (win->param->frame_cnt == 3)
-		draw_map_backslash(win, NULL, win->flags->con_on);
+		draw_map_backslash(win, &line, win->param, win->flags->con_on);
 }

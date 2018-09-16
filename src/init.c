@@ -6,36 +6,36 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 17:23:17 by dromanic          #+#    #+#             */
-/*   Updated: 2018/09/04 16:48:50 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/09/16 21:15:56 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-t_line	*init_line(void)
+t_img			*init_img(void *mlx_ptr, int width, int height)
 {
-	t_line *new_line;
+	t_img	*new_img;
 
-	new_line = NULL;
-	if ((new_line = (t_line *)malloc(sizeof(t_line))))
+	if (!mlx_ptr)
+		return (NULL);
+	if ((new_img = (t_img *)malloc(sizeof(t_img))))
 	{
-		new_line->end_x = 0;
-		new_line->end_y = 0;
-		new_line->len_y = 0;
-		new_line->len_x = 0;
-		new_line->len = 0;
-		new_line->dy = 0;
-		new_line->dx = 0;
-		new_line->d = 0;
+		new_img->bits_per_pixel = 0;
+		new_img->size_line = 0;
+		new_img->endian = 0;
+		new_img->img_ptr = mlx_new_image(mlx_ptr, width, height);
+		new_img->data = (int *)mlx_get_data_addr(new_img->img_ptr,
+												&new_img->size_line,
+												&new_img->bits_per_pixel,
+												&new_img->endian);
 	}
-	return (new_line);
+	return (new_img);
 }
 
 static t_param	*init_param(void)
 {
 	t_param *new_param;
 
-	new_param = NULL;
 	if ((new_param = (t_param *)malloc(sizeof(t_param))))
 	{
 		new_param->rows = 0;
@@ -58,7 +58,6 @@ static t_flags	*init_flags(void)
 {
 	t_flags	*new_flags;
 
-	new_flags = NULL;
 	if ((new_flags = (t_flags *)malloc(sizeof(t_flags))))
 	{
 		new_flags->ver_on = 0;
@@ -74,11 +73,10 @@ static t_flags	*init_flags(void)
 	return (new_flags);
 }
 
-t_win	*init_win(void)
+t_win			*init_win(void)
 {
 	t_win	*new_win;
 
-	new_win = NULL;
 	if (!(new_win = (t_win *)malloc(sizeof(t_win)))
 	|| (new_win->map = NULL)
 	|| !(new_win->param = init_param())
@@ -90,6 +88,5 @@ t_win	*init_win(void)
 								new_win->param->width,
 								new_win->param->height)))
 		free_win(new_win);
-	///need to create img for each effect
 	return (new_win);
 }

@@ -31,5 +31,5 @@ void	show_interface(t_win *win)
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 20, 150, DEF_COLOR,
 		"add visual style: 1..7 or numpad 1..7 (|, /, -, \\, fdf, layer, dot)");
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 20, 170, DEF_COLOR,
-				   "exit the program: esc or hit the (x) at the corner window");
+				"exit the program: esc or hit the (x) at the corner window");
 }

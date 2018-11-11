@@ -1,30 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_append_list.c                                   :+:      :+:    :+:   */
+/*   ft_lstappend.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/19 16:00:41 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/15 16:34:58 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/11/11 18:38:53 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include <stdlib.h>
+#include "libft.h"
 
-int		ft_append_or_new_lst(t_list **lst, char *buf, size_t size)
+t_list	**ft_lstappend(t_list **lst, void *data, size_t data_size)
 {
 	t_list *cur;
 
+	if (!lst)
+		return (NULL);
 	if (!(*lst))
-		*lst = ft_lstnew(buf, size);
+		*lst = ft_lstnew(data, data_size);
 	else
 	{
 		cur = *lst;
 		while (cur->next)
 			cur = cur->next;
-		cur->next = ft_lstnew(buf, size);
+		cur->next = ft_lstnew(data, data_size);
 	}
-	return (1);
+	return (lst);
 }

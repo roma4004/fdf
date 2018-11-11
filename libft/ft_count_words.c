@@ -1,30 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   ft_count_words.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/18 22:11:49 by dromanic          #+#    #+#             */
-/*   Updated: 2018/11/03 11:41:21 by dromanic         ###   ########.fr       */
+/*   Created: 2018/10/23 17:46:00 by dromanic          #+#    #+#             */
+/*   Updated: 2018/11/03 14:06:41 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "libft.h"
+#include "string.h"
 
-void	ft_lstdelone(t_list **alst, void (*del)(void *, size_t))
+size_t	ft_count_words(const char *str, size_t max_i, char separator)
 {
-	t_list	*head;
-	t_list	*cur_node;
+	size_t	i;
+	size_t	num;
 
-	if (!alst || !del || !(head = *alst))
-		return ;
-	if (head)
-	{
-		cur_node = head->next;
-		del(head, head->content_size);
-		head = cur_node;
-	}
-	*alst = NULL;
+	if (str == NULL)
+		return (0);
+	i = 0;
+	num = 0;
+	if (str[0] != separator)
+		++num;
+	while (++i < max_i && str[i])
+		if (str[i] != separator && str[i - 1] == separator)
+			++num;
+	return (num);
 }

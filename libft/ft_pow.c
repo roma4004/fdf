@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   ft_pow.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/18 22:11:49 by dromanic          #+#    #+#             */
-/*   Updated: 2018/11/03 11:41:21 by dromanic         ###   ########.fr       */
+/*   Created: 2018/09/12 12:41:00 by dromanic          #+#    #+#             */
+/*   Updated: 2018/09/12 12:41:42 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "libft.h"
-
-void	ft_lstdelone(t_list **alst, void (*del)(void *, size_t))
+double	ft_pow(double num, int exp)
 {
-	t_list	*head;
-	t_list	*cur_node;
+	double	result;
 
-	if (!alst || !del || !(head = *alst))
-		return ;
-	if (head)
+	result = 1.0;
+	while (exp > 0)
 	{
-		cur_node = head->next;
-		del(head, head->content_size);
-		head = cur_node;
+		if (exp % 2 == 1)
+			result *= num;
+		exp >>= 1;
+		num *= num;
 	}
-	*alst = NULL;
+	return (result);
 }

@@ -24,7 +24,7 @@
 # define WIDTH_ERR_SKIP 0
 
 # include <stdio.h>
-# include "../minilibx/mlx.h"
+# include "mlx.h"
 # include "../libft/libft.h"
 # include "get_next_line.h"
 # include <string.h>
@@ -134,7 +134,6 @@ t_line			*init_line(void);
 t_win			*init_win(void);
 t_img			*init_img(void *mlx_ptr, int width, int height);
 
-int				is_valid_row(t_win *win, void *cont, size_t max_i);
 t_win			*parse_map(char *file_name, t_win *win);
 int				get_col(t_win *win, char *hex, size_t *i, size_t max_i);
 

@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/18 20:25:10 by dromanic          #+#    #+#             */
-/*   Updated: 2017/11/29 16:31:47 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/11/08 14:02:47 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,23 @@
 
 char	**ft_strsplit(char const *s, char c)
 {
-	size_t	i;
-	size_t	j;
-	size_t	str_num;
-	char	**alloc_arr;
+	size_t		len;
+	size_t		i;
+	size_t		j;
+	char		**res;
 
-	i = 0;
-	j = 0;
-	if (s == NULL)
-		return (0);
-	str_num = ft_split_count_str(s, c);
-	if (!(alloc_arr = (char **)malloc(sizeof(char *)
-		* str_num + sizeof(char *))))
+	if (!s)
 		return (NULL);
+	len = ft_count_words(s, ft_strlen(s), c);
+	if (!(res = (char **)malloc(sizeof(char *) * (len + 1))))
+		return (NULL);
+	i = 0;
 	while (s[i] == c && s[i])
 		i++;
-	while (j < str_num && s[i])
-	{
-		alloc_arr[j] = ft_get_word(s, &i, c);
-		j++;
-	}
-	alloc_arr[j] = NULL;
-	return (alloc_arr);
+	j = 0;
+	while (j < len && s[i] && (res[j++] = ft_get_word(s, &i, c)))
+		while (s[i] == c && s[i])
+			i++;
+	res[j] = NULL;
+	return (res);
 }

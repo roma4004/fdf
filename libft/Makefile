@@ -6,19 +6,29 @@
 #    By: dromanic <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/08/07 12:17:01 by dromanic          #+#    #+#              #
-#    Updated: 2018/08/15 16:34:12 by dromanic         ###   ########.fr        #
+#    Updated: 2018/11/03 18:37:32 by dromanic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
-SRC = ft_append_list.c \
+INC_DIR = ./
+
+BUILDFLAGS = -Wall -Wextra -Werror -std=c99
+
+NORMFLAGS = -R CheckForbiddenSourceHeader
+
+SRC = ft_lstappend.c \
 	ft_atoi.c \
 	ft_atol_base.c \
 	ft_begin_trim.c \
 	ft_bzero.c \
+	ft_count_words.c \
 	ft_destroy_lst.c \
+	ft_digits_len.c \
 	ft_end_trim.c \
+	ft_free_arr.c \
+	ft_get_processors_num.c \
 	ft_get_word.c \
 	ft_i_atoi.c \
 	ft_isalnum.c \
@@ -27,6 +37,7 @@ SRC = ft_append_list.c \
 	ft_isdigit.c \
 	ft_isprint.c \
 	ft_itoa.c \
+	ft_lltoa.c \
 	ft_lstadd.c \
 	ft_lstdel.c \
 	ft_lstdelone.c \
@@ -41,6 +52,8 @@ SRC = ft_append_list.c \
 	ft_memdel.c \
 	ft_memmove.c \
 	ft_memset.c \
+	ft_num_width.c \
+	ft_pow.c \
 	ft_putchar.c \
 	ft_putchar_fd.c \
 	ft_putendl.c \
@@ -50,7 +63,6 @@ SRC = ft_append_list.c \
 	ft_putstr.c \
 	ft_putstr_fd.c \
 	ft_skip_white_spases.c \
-	ft_split_count_str.c \
 	ft_strcat.c \
 	ft_strchr.c \
 	ft_strclr.c \
@@ -80,53 +92,30 @@ SRC = ft_append_list.c \
 	ft_strtrim.c \
 	ft_substr_copy.c \
 	ft_tolower.c \
-	ft_toupper.c
+	ft_toupper.c \
+	ft_word_len.c
 
 OBJ = $(SRC:.c=.o)
-
-INC_DIR = ./
-
-COMPFLAGS = -c
-
-BUILDFLAGS = -Wall -Wextra -Werror
-
-LIBFLAGS = -I$(INC_DIR)
-
-NORMFLAGS = -R CheckForbiddenSourceHeader
 
 all: $(NAME)
 
 $(NAME):
-	@gcc $(COMPFLAGS) $(SRC) -I./
+	@gcc -c $(BUILDFLAGS) $(SRC) -I$(INC_DIR)
 	@ar rc $(NAME) $(OBJ)
 	@ranlib $(NAME)
 
 clean:
-	@/bin/rm -f ./*.o
+	@/bin/rm -f ./$(OBJ)
 
 fclean: clean
 	@/bin/rm -f ./$(NAME)
 
 normf:
-	@norminette $(NORMFLAGS) # | grep -E '^(Error|Warning)'
+	@norminette $(NORMFLAGS)
 
 norm:
-	@norminette # | grep -E '^(Error|Warning)'
-
-build:
-	@gcc $(BUILDFLAGS) -o $(NAME) $(SRC) -I$(INC_DIR)
-
-buildall:
-	@gcc $(BUILDFLAGS) -o $(NAME) *.c -I./*.h
-
-buildlib:
-	@gcc $(BUILDFLAGS) -o $(NAME) $(SRC) -L. -lft $(LIBFLAGS) -I./
-
-complib:
-	@gcc $(COMPFLAGS) $(SRC) -I./
-
-makelib:
-	@ar rc $(NAME) $(OBJ)
-	@ranlib $(NAME)
+	@norminette
 
 re: fclean all
+
+.phony: all clean fclean re

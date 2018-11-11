@@ -14,13 +14,13 @@
 
 static void	show_errors(t_win *win)
 {
-	if (win->flags->error_code == 404)
+	if (win->flags->error_code == MAP_INVALID)
 		ft_putstr_fd("MAP_INVALID", 2);
-	if (win->flags->error_code == 405)
+	if (win->flags->error_code == WIDTH_ERR)
 		ft_putstr_fd("WIDTH_ERR", 2);
-	if (win->flags->error_code == 406)
+	if (win->flags->error_code == READ_ERR)
 		ft_putstr_fd("FILE_ERR", 2);
-	if (win->flags->error_code == 407)
+	if (win->flags->error_code == COLOR_ERR)
 		ft_putstr_fd("COLOR_ERR", 2);
 	if (win->flags->error_code && errno)
 		ft_putstr_fd(" - ", 2);

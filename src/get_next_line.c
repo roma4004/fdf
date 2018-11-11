@@ -6,115 +6,106 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 17:59:40 by dromanic          #+#    #+#             */
-/*   Updated: 2018/08/15 16:33:49 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/11/11 20:14:32 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int	ln_len(char *str)
+static size_t	line_len(char *str)
 {
-	int i;
-	int	len;
+	size_t	len;
 
-	if (str == NULL)
+	if (!str)
 		return (0);
-	i = 0;
 	len = 0;
-	while (str[i] != '\n' && str[i] != '\0' && str[i++] != '\3')
+	while (*str != '\n' && *str != '\0' && ++str)
 		len++;
 	return (len);
 }
 
-static int	data_mod(char **data, int fd, char *buf, unsigned int line_len)
+static int	data_mod(t_list **lst, size_t fd, char *buf, size_t size)
 {
-	char	*temp;
+	t_list	*cur;
+	char	*tmp;
 
-	temp = NULL;
-	if (data == NULL || buf == NULL || line_len == 0)
+	if (!lst || (cur = *lst) < 0 || !buf || size < 1)
 		return (0);
-	if (data[fd] == NULL)
+	while (cur)
 	{
-		if ((data[fd] = ft_strnew(line_len)))
-			ft_strncpy(data[fd], buf, line_len);
-	}
-	else
-	{
-		temp = ft_strjoin(data[fd], buf);
-		free(data[fd]);
-		data[fd] = NULL;
-		data[fd] = temp;
-	}
-	return (1);
-}
-
-static int	del_line(char **data, int fd)
-{
-	unsigned int	i;
-	unsigned int	j;
-	unsigned int	rem_size;
-	char			*nline;
-	int				line_len;
-
-	if (data[fd] == NULL)
-		return (0);
-	nline = NULL;
-	if (ft_strchr(data[fd], '\n'))
-	{
-		line_len = ln_len(data[fd]);
-		rem_size = ft_strlen(data[fd]) - line_len - 1;
-		if (rem_size > 0)
-			nline = ft_strnew(rem_size);
-		if (nline && (i = ln_len(data[fd]) + 1))
+		if (cur->content_size == fd && cur->content)
 		{
-			j = 0;
-			while (data[fd][i])
-				nline[j++] = data[fd][i++];
+			if ((tmp = cur->content) && (cur->content = ft_strjoin(tmp, buf)))
+				free(tmp);
+			else
+				cur->content = ft_strdup(buf);
+			return (1);
 		}
+		cur = cur->next;
 	}
-	free(data[fd]);
-	data[fd] = nline;
+	if (!(*lst))
+		*lst = ft_lstnew(buf, size);
+	else
+		ft_lstadd(lst, ft_lstnew(buf, size));
+	(*lst)->content_size = fd;
 	return (1);
 }
 
-static char	**init_data(void)
+static int	get_line(t_list *lst, char **line, size_t fd)
 {
-	int		i;
-	char	**new_data;
+	t_list	*cur;
+	size_t	len;
 
-	if ((new_data = (char **)malloc(sizeof(char *) * MAX_FD)))
+	cur = lst;
+	while (cur)
 	{
-		i = 0;
-		while (i < MAX_FD)
-			new_data[i++] = NULL;
+		if (cur->content_size == fd && cur->content
+		&& (len = line_len(cur->content)))
+		{
+			if ((*line = ft_strnew(len)))
+				ft_strncpy(*line, cur->content, len);
+			if (!ft_strchr(cur->content, '\n'))
+				ft_memdel(&cur->content);
+			else
+				ft_strcpy(cur->content, cur->content + len + 1);
+			return (1);
+		}
+		cur = cur->next;
 	}
-	return (new_data);
+	return (0);
 }
 
 int			get_next_line(const int fd, char **line)
 {
-	static char		**data = NULL;
-	int				len;
-	char			*buf;
+	static t_list	*lst = NULL;
+	t_list			*cur;
+	ssize_t			len;
+	char			buf[BUFF_SIZE];
 
-	if (fd < 0 || fd > MAX_FD)
+	if (fd < 0 || BUFF_SIZE < 1 || fd > MAX_FD)
 		return (-1);
-	if (data == NULL)
-		data = init_data();
-	buf = ft_strnew(BUFF_SIZE);
-	while ((len = read(fd, buf, BUFF_SIZE)) > 0 && data_mod(data, fd, buf, len))
+	cur = lst;
+	while (cur)
 	{
-		if (ft_strchr(buf, '\n'))
-			break ;
-		ft_bzero(buf, BUFF_SIZE);
+		if ((int)cur->content_size == fd && cur->content
+		&& ft_strchr(cur->content, '\n'))
+		{
+			get_line(lst, line, (size_t)fd);
+			return (1);
+		}
+		cur = cur->next;
 	}
-	free(buf);
+	while ((len = read(fd, buf, BUFF_SIZE)) > 0
+	&& data_mod(&lst, (size_t)fd, buf, (size_t)len) )
+	{
+		buf[len] = '\0';
+		if (ft_strchr(buf, '\n'))
+		{
+			ft_bzero(buf, BUFF_SIZE);
+			break ;
+		}
+	}
 	if (len == -1)
 		return (-1);
-	if (data[fd] == NULL)
-		return (0);
-	*line = ft_strnew(ln_len(data[fd]));
-	if ((*line) && (ft_strncpy(*line, data[fd], ln_len(data[fd]))))
-		return (del_line(data, fd));
-	return (0);
+	return (get_line(lst, line, (size_t)fd));
 }

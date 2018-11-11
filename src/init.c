@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 17:23:17 by dromanic          #+#    #+#             */
-/*   Updated: 2018/09/16 21:15:56 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/09/25 14:49:29 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,7 @@ t_win			*init_win(void)
 	|| !(new_win->mlx_ptr = mlx_init())
 	|| !(new_win->win_ptr = mlx_new_window(new_win->mlx_ptr,
 										WIN_WIDTH, WIN_HEIGHT, WIN_NAME))
-	|| !(new_win->img = init_img(new_win->mlx_ptr,
-								new_win->param->width,
-								new_win->param->height)))
+	|| !(new_win->img = init_img(new_win->mlx_ptr, WIN_WIDTH, WIN_HEIGHT)))
 		free_win(new_win);
 	return (new_win);
 }

@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2018/09/16 21:12:58 by dromanic         ###   ########.fr       */
+/*   Updated: 2018/12/17 18:25:57 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # define WIN_NAME "FDF by dromanic (@Dentair)"
 # define DEF_COLOR 0x0f9100FF
 # define PI 3.14159265359
-# define WIDTH_ERR_SKIP 0
+# define WIDTH_ERR_SKIP 1
 
 # include <stdio.h>
 # include "mlx.h"

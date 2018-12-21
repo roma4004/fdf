@@ -46,8 +46,8 @@ long long			ft_atol_base(const char *str, int base)
 	if (base == 10 && (*str == '-' || *str == '+'))
 		i++;
 	if (base == 16 && str[i] == '0' && ft_tolower(str[i + 1]) == 'x')
-		result = ft_atol_base2(str + 2, base);
+		result = ft_atol_base2(str + i + 2, base);
 	else
-		result = ft_atol_base2(str, base);
+		result = ft_atol_base2(str + i, base);
 	return (result * sign);
 }

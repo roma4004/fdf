@@ -6,7 +6,7 @@
 #    By: dromanic <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/24 18:20:17 by dromanic          #+#    #+#              #
-#    Updated: 2018/08/05 14:20:27 by dromanic         ###   ########.fr        #
+#    Updated: 2018/12/22 16:19:38 by dromanic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,15 +34,17 @@ SRC = $(addprefix src/, $(SRC_N))
 
 OBJ = $(SRC:.c=.o)
 
-LIBS = libft/libft.a
+LIBS = libraries/libft/libft.a
+
+INC = -I libraries/libft/ -I Includes/
 
 all: $(NAME)
 
 %.o : %.c
-	$(CC) -c $< -o $@
+	$(CC) $(INC) -c $< -o $@
 
 $(NAME): liball $(OBJ)
-	$(CC) $(LIBKEY) $(OBJ) $(LIBS) -o $(NAME) 
+	$(CC) $(LIBKEY) $(OBJ) $(INC) $(LIBS) -o $(NAME)
 
 clean: libclean
 	rm -f $(OBJ)
@@ -53,13 +55,13 @@ fclean: clean libfclean
 re: fclean all
 
 liball:
-	@make -C libft/ all
+	@make -C libraries/libft/ all
 
 libclean:
-	@make -C libft/ clean
+	@make -C libraries/libft/ clean
 
 libfclean:
-	@make -C libft/ fclean
+	@make -C libraries/libft/ fclean
 
 libre:
-	@make -C libft/ re
+	@make -C libraries/libft/ re

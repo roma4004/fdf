@@ -6,7 +6,7 @@
 #    By: dromanic <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/24 18:20:17 by dromanic          #+#    #+#              #
-#    Updated: 2018/12/22 16:19:38 by dromanic         ###   ########.fr        #
+#    Updated: 2018/12/22 16:51:20 by dromanic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,13 @@ NAME = fdf
 
 CC = gcc -O3 -Wall -Wextra -Werror
 
-LIBKEY = -I minilibx -L minilibx -lmlx -framework OpenGL -framework AppKit
+LIBKEY = -L ./libraries/minilibx -lmlx \
+		 -framework OpenGL \
+		 -framework AppKit
 
-SRC_N =	main.c \
+INC = -I ./libraries/minilibx -I libraries/libft/ -I Includes/
+
+SRC_N = main.c \
 		draw.c \
 		keys.c \
 		init.c \
@@ -36,7 +40,7 @@ OBJ = $(SRC:.c=.o)
 
 LIBS = libraries/libft/libft.a
 
-INC = -I libraries/libft/ -I Includes/
+
 
 all: $(NAME)
 

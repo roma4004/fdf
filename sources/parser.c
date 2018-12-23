@@ -110,26 +110,26 @@ static int	get_map_param(t_win *win, t_list *lst)
 //	}
 //	return (0);
 //}
-
-t_list	**ft_lstappend2(t_list **lst, void *data, size_t data_size)
-{
-	t_list *cur;
-
-	if (!lst)
-		return (NULL);
-	if (!(*lst))
-		*lst =
-				ft_lstnew(data, data_size);
-	else
-	{
-		cur = *lst;
-		while (cur->next)
-			cur = cur->next;
-		cur->next =
-				ft_lstnew(data, data_size);
-	}
-	return (lst);
-}
+//
+//t_list	**ft_lstappend2(t_list **lst, void *data, size_t data_size)
+//{
+//	t_list *cur;
+//
+//	if (!lst)
+//		return (NULL);
+//	if (!(*lst))
+//		*lst =
+//				ft_lstnew(data, data_size);
+//	else
+//	{
+//		cur = *lst;
+//		while (cur->next)
+//			cur = cur->next;
+//		cur->next =
+//				ft_lstnew(data, data_size);
+//	}
+//	return (lst);
+//}
 
 #include <stdio.h>
 t_win		*parse_map(char *file_name, t_win *win)
@@ -147,23 +147,23 @@ t_win		*parse_map(char *file_name, t_win *win)
 		return (NULL);
 	}
 	while (get_next_line(fd, &buf) > 0
-	&& (ft_lstappend2(&lst, buf, ft_strlen(buf)))
+	&& (ft_lstappend(&lst, buf, ft_strlen(buf)))
 	&& (++win->param->rows))
 		ft_memdel((void *)&buf);
 	close(fd);
 
-	t_list *cur;
-	int i;
-
-	i = 0;
-	cur = lst;
-	while (cur)
-	{
-		printf("\n%d\n", i++);
-		if (cur->content)
-			printf("%s", (char *)cur->content);
-		cur = cur->next;
-	}
+//	t_list *cur;
+//	int i;
+//
+//	i = 0;
+//	cur = lst;
+//	while (cur)
+//	{
+//		printf("\n%d\n", i++);
+//		if (cur->content)
+//			printf("%s", (char *)cur->content);
+//		cur = cur->next;
+//	}
 
 
 	if (lst == NULL && !(errno) && !WIDTH_ERR_SKIP)

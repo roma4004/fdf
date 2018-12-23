@@ -6,7 +6,7 @@
 #    By: dromanic <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/24 18:20:17 by dromanic          #+#    #+#              #
-#    Updated: 2018/12/22 16:51:20 by dromanic         ###   ########.fr        #
+#    Updated: 2018/12/23 18:45:58 by dromanic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,9 @@ CC = gcc -O3 -Wall -Wextra -Werror
 LIBKEY = -L ./libraries/minilibx -lmlx \
 		 -framework OpenGL \
 		 -framework AppKit
+
+PROJ_OBJ_PATH = objectives
+PROJ_SRC_PATH = sources
 
 INC = -I ./libraries/minilibx -I libraries/libft/ -I Includes/
 
@@ -34,24 +37,25 @@ SRC_N = main.c \
 		service_func.c \
 		get_next_line.c
 
-SRC = $(addprefix src/, $(SRC_N))
+SRC = $(addprefix $(PROJ_SRC_PATH)/, $(SRC_N))
 
-OBJ = $(SRC:.c=.o)
+OBJ = $(addprefix ./$(PROJ_OBJ_PATH)/, $(SRC_N:.c=.o))
 
 LIBS = libraries/libft/libft.a
 
-
-
 all: $(NAME)
 
-%.o : %.c
+./$(PROJ_OBJ_PATH)/%.o : ./$(PROJ_SRC_PATH)/%.c
 	$(CC) $(INC) -c $< -o $@
 
-$(NAME): liball $(OBJ)
+$(NAME): objdir liball $(OBJ)
 	$(CC) $(LIBKEY) $(OBJ) $(INC) $(LIBS) -o $(NAME)
 
+objdir:
+	mkdir -p $(PROJ_OBJ_PATH)
+
 clean: libclean
-	rm -f $(OBJ)
+	rm -rf $(PROJ_OBJ_PATH)
 
 fclean: clean libfclean
 	rm -f $(NAME)

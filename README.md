@@ -24,7 +24,7 @@ Each number corresponds to a point in space:
 
 **Mandatory part:**
 
-We cannot use global variables, must follow the [Norm](https://github.com/roma4004/fdf/blob/master/norme.en.pdf), **this explains many unobvious decisions solutions that I applied, like function in 25 row, or only 4 argument in function**).
+We cannot use global variables, must follow the [Norm](https://github.com/roma4004/fdf/blob/master/Documentation/norme.en.pdf), **this explains many unobvious decisions solutions that I applied, like function in 25 row, or only 4 argument in function**).
 
 We have to handle errors carefully. In no way can quit my program in an unexpected
 manner (Segmentation fault, bus error, double free, etc).

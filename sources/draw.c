@@ -6,87 +6,96 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:43:55 by dromanic          #+#    #+#             */
-/*   Updated: 2018/09/16 21:21:18 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/03/15 16:20:20 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void		px_to_img(t_win *win, int x, int y, int color)
+void			redraw_img(t_env *win)
 {
-	x += win->param->offset_x;
-	y += win->param->offset_y;
-	if (x >= 0 && x < WIN_WIDTH && y >= 0 && y < WIN_HEIGHT)
-		win->img->data[y * WIN_WIDTH + x] = color;
+	mlx_clear_window(win->mlx_ptr, win->win_ptr);
+	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
+	if (win->flags.interface_on)
+		show_interface(win);
 }
 
-void		draw_line(t_win *win, t_line *l, int x, int y)
+int				px_to_img(int *buffer, t_line *l, t_si_pt crd, int color)
 {
-	l->dx = (l->end_x - x >= 0 ? 1 : -1);
-	l->dy = (l->end_y - y >= 0 ? 1 : -1);
-	l->len_x = ((l->end_x - x) < 0) ? (l->end_x - x) * -1 : l->end_x - x;
-	l->len_y = ((l->end_y - y) < 0) ? (l->end_y - y) * -1 : l->end_y - y;
-	l->len = (l->len_y > l->len_x) ? l->len_y : l->len_x;
-	if (l->len++ == 0)
-		px_to_img(win, x, y, l->color);
-	l->d = ((l->len_y <= l->len_x) ? -l->len_x : -l->len_y);
-	while (l->len--)
+	crd.x += l->offset.x;
+	crd.y += l->offset.y;
+	if (crd.x >= 0 && crd.x < WIN_WIDTH && crd.y >= 0 && crd.y < WIN_HEIGHT)
+		buffer[crd.y * WIN_WIDTH + crd.x] = color;
+	return (1);
+}
+
+void			draw_line(int *buffer, t_line *l, int x, int y)
+{
+	l->delt = (t_si_pt){ l->end.x - x < 0 ? -1 : 1, l->end.y - y < 0 ? -1 : 1 };
+	l->len = (t_si_pt){ l->end.x - x < 0 ? (l->end.x - x) * -1 : l->end.x - x,
+						l->end.y - y < 0 ? (l->end.y - y) * -1 : l->end.y - y };
+	l->len_max = (l->len.y > l->len.x) ? l->len.y : l->len.x;
+	if (l->len_max++ == 0)
+		px_to_img(buffer, l, (t_si_pt){ x, y }, l->color);
+	l->d = l->len.y <= l->len.x ? -l->len.x : -l->len.y;
+	while (l->len_max--)
 	{
-		px_to_img(win, x, y, l->color);
-		l->d += 2 * ((l->len_y <= l->len_x) ? l->len_y : l->len_x);
-		if (l->len_y <= l->len_x)
-			x += l->dx;
+		px_to_img(buffer, l, (t_si_pt){ x, y }, l->color);
+		l->d += 2 * (l->len.y <= l->len.x ? l->len.y : l->len.x);
+		if (l->len.y <= l->len.x)
+			x += l->delt.x;
 		else
-			y += l->dy;
+			y += l->delt.y;
 		if (l->d > 0)
 		{
-			l->d -= 2 * ((l->len_y <= l->len_x) ? l->len_x : l->len_y);
-			if (l->len_y <= l->len_x)
-				y += l->dy;
+			l->d -= 2 * (l->len.y <= l->len.x ? l->len.x : l->len.y);
+			if (l->len.y <= l->len.x)
+				y += l->delt.y;
 			else
-				x += l->dx;
+				x += l->delt.x;
 		}
 	}
 }
 
-static void	draw_map_dots(t_win *win)
+static void		draw_map_dots(t_env *win)
 {
-	size_t x;
-	size_t y;
+	t_line	line;
+	size_t	x;
+	size_t	y;
+	t_si_pt	pt;
 
 	if (!win)
 		return ;
-	y = -1;
-	while (++y < win->param->rows)
+	y = UINT64_MAX;
+	while (++y < win->param.rows)
 	{
-		x = -1;
-		while (++x < win->param->cols)
-			px_to_img(win, (int)win->map[y][x].x * win->param->sc_x,
-							(int)win->map[y][x].y * win->param->sc_y -
-							(int)win->map[y][x].z * win->param->sc_z,
-								win->map[y][x].color);
+		x = UINT64_MAX;
+		while (++x < win->param.cols)
+		{
+			pt = (t_si_pt){ (int)win->map[y][x].x * win->param.scale.x,
+							(int)win->map[y][x].y * win->param.scale.y -
+							(int)win->map[y][x].z * win->param.scale.z };
+			line.offset = win->param.offset;
+			px_to_img(win->buffer, &line, pt, win->map[y][x].color);
+		}
 	}
 	redraw_img(win);
 }
 
-void		draw_map(t_win *win)
+void			draw_map(t_env *win)
 {
-	t_line	line;
-
-	mlx_clear_window(win->mlx_ptr, win->win_ptr);
 	clear_img(win);
-	if (win->flags->ver_on)
-		draw_map_vertical(win, &line, win->param, win->flags->con_on);
-	if (win->flags->sla_on)
-		draw_map_slash(win, &line, win->param, win->flags->con_on);
-	if (win->flags->hor_on)
-		draw_map_horizontal(win, &line, win->param, win->flags->con_on);
-	if (win->flags->bsl_on)
-		draw_map_backslash(win, &line, win->param, win->flags->con_on);
-	if (win->flags->fdf_on)
-		draw_map_fdf(win, &line, win->param, win->flags->con_on);
-	if (win->flags->dot_on)
+	if (win->flags.ver_on)
+		draw_map_vertical(win, win->buffer, &win->param, win->flags.con_on);
+	if (win->flags.sla_on)
+		draw_map_slash(win, win->buffer, &win->param, win->flags.con_on);
+	if (win->flags.hor_on)
+		draw_map_horizontal(win, win->buffer, &win->param, win->flags.con_on);
+	if (win->flags.bsl_on)
+		draw_map_backslash(win, win->buffer, &win->param, win->flags.con_on);
+	if (win->flags.fdf_on)
+		draw_map_fdf(win, win->buffer, &win->param, win->flags.con_on);
+	if (win->flags.dot_on)
 		draw_map_dots(win);
-	if (win->flags->interface_on)
-		show_interface(win);
+	redraw_img(win);
 }

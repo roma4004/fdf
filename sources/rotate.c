@@ -6,106 +6,105 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/23 14:59:52 by dromanic          #+#    #+#             */
-/*   Updated: 2018/09/14 06:05:26 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/03/15 16:14:07 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 #include "math.h"
 
-static void	rotate_y(t_win *win, size_t x, size_t y, int new_angle)
+static void	rotate_y(t_env *win, t_px *px, int new_angle)
 {
-	double tmp_y;
-	double tmp_x;
-	double tmp_z;
-	double angle;
+	t_db_3pt	tmp;
+	double		angle;
 
 	if (!win)
 		return ;
-	win->map[y][x].x -= win->param->centr_x;
-	win->map[y][x].y -= win->param->centr_y;
+	px->x -= win->param.centr.x;
+	px->y -= win->param.centr.y;
 	angle = new_angle * PI / 180;
-	tmp_x = win->map[y][x].x;
-	tmp_y = win->map[y][x].y * cos(angle) + win->map[y][x].z * sin(angle);
-	tmp_z = -win->map[y][x].y * sin(angle) + win->map[y][x].z * cos(angle);
-	tmp_x += win->param->centr_x;
-	tmp_y += win->param->centr_y;
-	win->map[y][x].x = tmp_x;
-	win->map[y][x].y = tmp_y;
-	win->map[y][x].z = tmp_z;
+	tmp.x = px->x;
+	tmp.y = px->y * cos(angle)
+			+ px->z * sin(angle);
+	tmp.z = -px->y * sin(angle)
+			+ px->z * cos(angle);
+	tmp.x += win->param.centr.x;
+	tmp.y += win->param.centr.y;
+	px->x = tmp.x;
+	px->y = tmp.y;
+	px->z = tmp.z;
 }
 
-static void	rotate_x(t_win *win, size_t x, size_t y, int new_angle)
+static void	rotate_x(t_env *win, t_px *px, int new_angle)
 {
-	double tmp_y;
-	double tmp_x;
-	double tmp_z;
-	double angle;
+	t_db_3pt	tmp;
+	double		angle;
 
 	if (!win)
 		return ;
-	win->map[y][x].x -= win->param->centr_x;
-	win->map[y][x].y -= win->param->centr_y;
+	px->x -= win->param.centr.x;
+	px->y -= win->param.centr.y;
 	angle = new_angle * PI / 180;
-	tmp_x = win->map[y][x].x * cos(angle) + win->map[y][x].z * sin(angle);
-	tmp_y = win->map[y][x].y;
-	tmp_z = -win->map[y][x].x * sin(angle) + win->map[y][x].z * cos(angle);
-	tmp_x += win->param->centr_x;
-	tmp_y += win->param->centr_y;
-	win->map[y][x].x = tmp_x;
-	win->map[y][x].y = tmp_y;
-	win->map[y][x].z = tmp_z;
+	tmp.x = px->x * cos(angle)
+			+ px->z * sin(angle);
+	tmp.y = px->y;
+	tmp.z = -px->x * sin(angle)
+			+ px->z * cos(angle);
+	tmp.x += win->param.centr.x;
+	tmp.y += win->param.centr.y;
+	px->x = tmp.x;
+	px->y = tmp.y;
+	px->z = tmp.z;
 }
 
-static void	rotate_z(t_win *win, size_t x, size_t y, int new_angle)
+static void	rotate_z(t_env *win, t_px *px, int new_angle)
 {
-	double tmp_y;
-	double tmp_x;
-	double tmp_z;
-	double angle;
+	t_db_3pt	tmp;
+	double		angle;
 
 	if (!win)
 		return ;
-	win->map[y][x].x -= win->param->centr_x;
-	win->map[y][x].y -= win->param->centr_y;
+	px->x -= win->param.centr.x;
+	px->y -= win->param.centr.y;
 	angle = new_angle * PI / 180;
-	tmp_x = win->map[y][x].x * cos(angle) - win->map[y][x].y * sin(angle);
-	tmp_y = win->map[y][x].x * sin(angle) + win->map[y][x].y * cos(angle);
-	tmp_z = win->map[y][x].z;
-	tmp_x += win->param->centr_x;
-	tmp_y += win->param->centr_y;
-	win->map[y][x].x = tmp_x;
-	win->map[y][x].y = tmp_y;
-	win->map[y][x].z = tmp_z;
+	tmp.x = px->x * cos(angle)
+			- px->y * sin(angle);
+	tmp.y = px->x * sin(angle)
+			+ px->y * cos(angle);
+	tmp.z = px->z;
+	tmp.x += win->param.centr.x;
+	tmp.y += win->param.centr.y;
+	px->x = tmp.x;
+	px->y = tmp.y;
+	px->z = tmp.z;
 }
 
-void		rotate_map(t_win *win, char axis, int new_angle)
+void		rotate_map(t_env *win, char axis, int new_angle)
 {
-	size_t	y;
-	size_t	x;
+	t_ui_pt pt;
 
 	if (!win)
 		return ;
-	y = 0;
-	while (y < win->param->rows)
+	pt.y = 0;
+	while (pt.y < win->param.rows)
 	{
-		x = 0;
-		while (x < win->param->cols)
+		pt.x = 0;
+		while (pt.x < win->param.cols)
 		{
 			if (axis == 'y' || axis == 'a')
-				rotate_y(win, x, y, new_angle);
+				rotate_y(win, &win->map[pt.y][pt.x], new_angle);
 			if (axis == 'x' || axis == 'a')
-				rotate_x(win, x, y, new_angle);
+				rotate_x(win, &win->map[pt.y][pt.x], new_angle);
 			if (axis == 'z' || axis == 'a')
-				rotate_z(win, x, y, new_angle);
-			x++;
+				rotate_z(win, &win->map[pt.y][pt.x], new_angle);
+			pt.x++;
 		}
-		y++;
+		pt.y++;
 	}
 	draw_map(win);
 }
 
-void		reset(t_win *win)
+void		reset(t_env *win)
 {
 	size_t	y;
 	size_t	x;
@@ -113,10 +112,10 @@ void		reset(t_win *win)
 	if (!win)
 		return ;
 	y = 0;
-	while (y < win->param->rows)
+	while (y < win->param.rows)
 	{
 		x = 0;
-		while (x < win->param->cols)
+		while (x < win->param.cols)
 		{
 			win->map[y][x].x = x;
 			win->map[y][x].y = y;
@@ -125,10 +124,7 @@ void		reset(t_win *win)
 		}
 		y++;
 	}
-	win->param->offset_x = DEF_OFFSET_X;
-	win->param->offset_y = DEF_OFFSET_Y;
-	win->param->sc_x = DEF_SCALE;
-	win->param->sc_y = DEF_SCALE;
-	win->param->sc_z = DEF_SCALE;
+	win->param.offset = (t_si_pt){ DEF_OFFSET_X, DEF_OFFSET_Y };
+	win->param.scale = (t_si_3pt){ DEF_SCALE, DEF_SCALE, DEF_SCALE };
 	draw_map(win);
 }

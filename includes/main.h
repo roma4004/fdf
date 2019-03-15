@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2018/12/17 18:25:57 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/03/15 16:41:38 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 # define DEF_OFFSET_Y 200
 # define DEF_OFFSET_X 100
 # define DEF_SCALE 1
-# define WIN_NAME "FDF by dromanic (@Dentair)"
-# define DEF_COLOR 0x0f9100FF
+# define TITLE "FDF by dromanic (@Dentair)"
+# define DEF_COLOR 0x009100FF
 # define PI 3.14159265359
 # define WIDTH_ERR_SKIP 1
 
@@ -30,75 +30,96 @@
 # include <string.h>
 # include <errno.h>
 
+typedef struct	s_uint32_point
+{
+	uint32_t	x;
+	uint32_t	y;
+}				t_ui_pt;
+
+typedef struct	s_sint32_point
+{
+	int32_t		x;
+	int32_t		y;
+}				t_si_pt;
+
+typedef struct	s_double_2point
+{
+	double		x;
+	double		y;
+}				t_db_2pt;
+
+typedef struct	s_double_3point
+{
+	double		x;
+	double		y;
+	double		z;
+}				t_db_3pt;
+
+typedef struct	s_sint32_3point
+{
+	int32_t		x;
+	int32_t		y;
+	int32_t		z;
+}				t_si_3pt;
+
 typedef struct	s_px
 {
-	double	x;
-	double	y;
-	double	z;
-	double	z_orig;
-	int		color;
+	double		x;
+	double		y;
+	double		z;
+	double		z_orig;
+	int			color;
 }				t_px;
 
 typedef struct	s_line
 {
-	int	color;
-	int	end_x;
-	int	end_y;
-	int	len_y;
-	int	len_x;
-	int	len;
-	int	dy;
-	int	dx;
-	int	d;
+	int		color;
+	t_si_pt	end;
+	t_si_pt	len;
+	t_si_pt	delt;
+	t_si_pt	offset;
+	int		len_max;
+	int		d;
 }				t_line;
 
 typedef struct	s_param
 {
-	size_t	rows;
-	size_t	cols;
-	int		width;
-	int		height;
-	int		frame_cnt;
-	int		offset_y;
-	int		offset_x;
-	int		sc_x;
-	int		sc_y;
-	int		sc_z;
-	float	centr_x;
-	float	centr_y;
+	uint32_t	width;
+	uint32_t	height;
+	t_si_pt		offset;
+	t_si_3pt	scale;
+	t_db_2pt	centr;
+	size_t		rows;
+	size_t		cols;
+	int			frame_cnt;
 }				t_param;
 
 typedef struct	s_flags
 {
+	int		interface_on;
+	int		fdf_on;
 	int		con_on;
 	int		ver_on;
 	int		sla_on;
 	int		hor_on;
 	int		bsl_on;
-	int		fdf_on;
 	int		dot_on;
-	int		interface_on;
 	int		error_code;
 }				t_flags;
 
-typedef struct	s_img
+typedef struct	s_enviroments
 {
-	void	*img_ptr;
-	int		*data;
+	t_px	**map;
+	t_param	param;
+	t_flags	flags;
 	int		bits_per_pixel;
 	int		size_line;
 	int		endian;
-}				t_img;
-
-typedef struct	s_win
-{
-	t_px	**map;
-	t_param	*param;
-	t_flags	*flags;
-	t_img	*img;
 	void	*mlx_ptr;
 	void	*win_ptr;
-}				t_win;
+	void	*img_ptr;
+	int		*buffer;
+}				t_env;
 
 enum			e_keys
 {
@@ -130,46 +151,41 @@ enum			e_errors
 	ITS_A_DIRECTORY = 21
 };
 
-t_line			*init_line(void);
-t_win			*init_win(void);
-t_img			*init_img(void *mlx_ptr, int width, int height);
+t_env			*init_win(t_env *e);
 
-t_win			*parse_map(char *file_name, t_win *win);
-int				get_col(t_win *win, char *hex, size_t *i, size_t max_i);
+t_env			*parse_map(char *file_name, t_env *env);
+int				is_hex(char ch);
+int				get_col(t_env *win, char *hex, size_t *i, size_t max_i);
 
-void			draw_line(t_win *win, t_line *line, int x, int y);
-void			draw_map(t_win *win);
+void			draw_line(int *buffer, t_line *l, int x, int y);
+void			draw_map(t_env *win);
 
-void			draw_map_vertical(t_win *win, t_line *line, t_param *p,
-									int con);
-void			draw_map_backslash(t_win *win, t_line *line, t_param *p,
-									int con);
-void			draw_map_horizontal(t_win *win, t_line *line, t_param *p,
-									int con);
-void			draw_map_slash(t_win *win, t_line *l, t_param *p, int con);
-void			draw_map_fdf(t_win *win, t_line *line, t_param *p, int con);
+void			draw_map_vertical(t_env *win, int *buf, t_param *p, int c);
+void			draw_map_backslash(t_env *win, int *buf, t_param *p, int c);
+void			draw_map_horizontal(t_env *win, int *buf, t_param *p, int c);
+void			draw_map_slash(t_env *win, int *buf, t_param *p, int c);
+void			draw_map_fdf(t_env *win, int *buf, t_param *p, int c);
 
-int				deal_keyboard(int key, t_win *win);
-int				deal_mouse(int key, int x, int y, t_win *win);
-int				exit_x(t_win *par);
+int				deal_keyboard(int key, t_env *win);
+int				deal_mouse(int key, int x, int y, t_env *win);
+int				exit_x(t_env *par);
 
-void			map_offset(t_win *win, int offset_x, int offset_y);
-void			zoom_offset(t_win *win, int zoom_offset, int only_z);
-void			toggles(t_win *win, int key);
-void			animate(t_win *win);
+void			map_offset(t_env *win, t_si_pt *offsets, t_si_pt new_offsets);
+void			toggles(t_env *win, int key);
 
-void			show_interface(t_win *win);
+void			show_interface(t_env *win);
 
-int				toggle_param(int *param);
-int				set_vec(t_win *win, long long x, long long y, long long z);
+int				toggle(int *param);
 size_t			ft_cnt_words(char *str, size_t max_i, char ch);
-void			redraw_img(t_win *win);
+void			redraw_img(t_env *win);
 
-void			rotate_map(t_win *win, char axis, int new_angle);
-void			reset(t_win *win);
+void			rotate_map(t_env *win, char axis, int new_angle);
+void			reset(t_env *win);
 
-void			free_map(t_win *win);
-int				free_win(t_win *win);
-t_win			*clear_img(t_win *win);
+void			free_map(t_env *win);
+int				free_win(t_env *win);
+t_env			*clear_img(t_env *win);
+
+int				print_map(t_env *env, t_px **map);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: dromanic <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/24 18:20:17 by dromanic          #+#    #+#              #
-#    Updated: 2018/12/23 18:45:58 by dromanic         ###   ########.fr        #
+#    Updated: 2019/03/15 16:53:41 by dromanic         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,20 +21,15 @@ LIBKEY = -L ./libraries/minilibx -lmlx \
 PROJ_OBJ_PATH = objectives
 PROJ_SRC_PATH = sources
 
-INC = -I ./libraries/minilibx -I libraries/libft/ -I Includes/
+INC = -I ./libraries/minilibx -I libraries/libft/ -I includes/
 
 SRC_N = main.c \
 		draw.c \
 		keys.c \
-		init.c \
-		hooks.c \
-		color.c \
 		parser.c \
 		rotate.c \
-		ram_man.c \
+		ram_manager.c \
 		effects.c \
-		interface.c \
-		service_func.c \
 		get_next_line.c
 
 SRC = $(addprefix $(PROJ_SRC_PATH)/, $(SRC_N))

@@ -6,40 +6,40 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2019/03/15 16:41:38 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/03/18 18:11:58 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAIN_H
 # define MAIN_H
 
-# define WIN_WIDTH 1920
-# define WIN_HEIGHT 1080
-# define DEF_OFFSET_Y 200
-# define DEF_OFFSET_X 100
-# define DEF_SCALE 1
-# define TITLE "FDF by dromanic (@Dentair)"
-# define DEF_COLOR 0x009100FF
-# define PI 3.14159265359
-# define WIDTH_ERR_SKIP 1
+# define WIN_WIDTH		1920
+# define WIN_HEIGHT		1080
+# define DEF_OFFSET_Y	200
+# define DEF_OFFSET_X	100
+# define DEF_SCALE		1
+# define TITLE			"FDF by dromanic (@Dentair)"
+# define DEF_COLOR		0x009100FF
+# define PI				3.14159265359
+# define WIDTH_ERR_SKIP	0
 
 # include <stdio.h>
+# include <string.h>
+# include <errno.h>
 # include "mlx.h"
 # include "libft.h"
 # include "get_next_line.h"
-# include <string.h>
-# include <errno.h>
 
 typedef struct	s_uint32_point
 {
-	uint32_t	x;
-	uint32_t	y;
+	uint64_t	x;
+	uint64_t	y;
 }				t_ui_pt;
 
 typedef struct	s_sint32_point
 {
-	int32_t		x;
-	int32_t		y;
+	int64_t		x;
+	int64_t		y;
 }				t_si_pt;
 
 typedef struct	s_double_2point
@@ -57,9 +57,9 @@ typedef struct	s_double_3point
 
 typedef struct	s_sint32_3point
 {
-	int32_t		x;
-	int32_t		y;
-	int32_t		z;
+	int64_t		x;
+	int64_t		y;
+	int64_t		z;
 }				t_si_3pt;
 
 typedef struct	s_px
@@ -73,13 +73,13 @@ typedef struct	s_px
 
 typedef struct	s_line
 {
-	int		color;
-	t_si_pt	end;
-	t_si_pt	len;
-	t_si_pt	delt;
-	t_si_pt	offset;
-	int		len_max;
-	int		d;
+	int			color;
+	t_si_pt		end;
+	t_si_pt		len;
+	t_si_pt		delt;
+	t_si_pt		offset;
+	int64_t		len_max;
+	int64_t		d;
 }				t_line;
 
 typedef struct	s_param
@@ -96,29 +96,29 @@ typedef struct	s_param
 
 typedef struct	s_flags
 {
-	int		interface_on;
-	int		fdf_on;
-	int		con_on;
-	int		ver_on;
-	int		sla_on;
-	int		hor_on;
-	int		bsl_on;
-	int		dot_on;
-	int		error_code;
+	int			interface_on;
+	int			fdf_on;
+	int			con_on;
+	int			ver_on;
+	int			sla_on;
+	int			hor_on;
+	int			bsl_on;
+	int			dot_on;
+	int			error_code;
 }				t_flags;
 
 typedef struct	s_enviroments
 {
-	t_px	**map;
-	t_param	param;
-	t_flags	flags;
-	int		bits_per_pixel;
-	int		size_line;
-	int		endian;
-	void	*mlx_ptr;
-	void	*win_ptr;
-	void	*img_ptr;
-	int		*buffer;
+	t_px		**map;
+	t_param		param;
+	t_flags		flags;
+	int			bits_per_pixel;
+	int			size_line;
+	int			endian;
+	void		*mlx_ptr;
+	void		*win_ptr;
+	void		*img_ptr;
+	int			*buffer;
 }				t_env;
 
 enum			e_keys
@@ -151,13 +151,9 @@ enum			e_errors
 	ITS_A_DIRECTORY = 21
 };
 
-t_env			*init_win(t_env *e);
+int				parse_map(char *file_name, t_env *env);
 
-t_env			*parse_map(char *file_name, t_env *env);
-int				is_hex(char ch);
-int				get_col(t_env *win, char *hex, size_t *i, size_t max_i);
-
-void			draw_line(int *buffer, t_line *l, int x, int y);
+void			draw_line(int *buffer, t_line *l, int64_t x, int64_t y);
 void			draw_map(t_env *win);
 
 void			draw_map_vertical(t_env *win, int *buf, t_param *p, int c);
@@ -166,26 +162,15 @@ void			draw_map_horizontal(t_env *win, int *buf, t_param *p, int c);
 void			draw_map_slash(t_env *win, int *buf, t_param *p, int c);
 void			draw_map_fdf(t_env *win, int *buf, t_param *p, int c);
 
+void			redraw_img(t_env *win);
+
 int				deal_keyboard(int key, t_env *win);
 int				deal_mouse(int key, int x, int y, t_env *win);
-int				exit_x(t_env *par);
 
-void			map_offset(t_env *win, t_si_pt *offsets, t_si_pt new_offsets);
-void			toggles(t_env *win, int key);
-
+int				exit_x(t_env *e);
 void			show_interface(t_env *win);
-
-int				toggle(int *param);
-size_t			ft_cnt_words(char *str, size_t max_i, char ch);
-void			redraw_img(t_env *win);
 
 void			rotate_map(t_env *win, char axis, int new_angle);
 void			reset(t_env *win);
-
-void			free_map(t_env *win);
-int				free_win(t_env *win);
-t_env			*clear_img(t_env *win);
-
-int				print_map(t_env *env, t_px **map);
 
 #endif

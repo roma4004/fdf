@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:43:55 by dromanic          #+#    #+#             */
-/*   Updated: 2019/03/15 16:20:20 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/03/18 16:51:48 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void			redraw_img(t_env *win)
 		show_interface(win);
 }
 
-int				px_to_img(int *buffer, t_line *l, t_si_pt crd, int color)
+static int		px_to_img(int *buffer, t_line *l, t_si_pt crd, int color)
 {
 	crd.x += l->offset.x;
 	crd.y += l->offset.y;
@@ -29,7 +29,7 @@ int				px_to_img(int *buffer, t_line *l, t_si_pt crd, int color)
 	return (1);
 }
 
-void			draw_line(int *buffer, t_line *l, int x, int y)
+void			draw_line(int *buffer, t_line *l, int64_t x, int64_t y)
 {
 	l->delt = (t_si_pt){ l->end.x - x < 0 ? -1 : 1, l->end.y - y < 0 ? -1 : 1 };
 	l->len = (t_si_pt){ l->end.x - x < 0 ? (l->end.x - x) * -1 : l->end.x - x,
@@ -84,7 +84,7 @@ static void		draw_map_dots(t_env *win)
 
 void			draw_map(t_env *win)
 {
-	clear_img(win);
+	ft_clear_img_buff(win->buffer, WIN_WIDTH, WIN_HEIGHT);
 	if (win->flags.ver_on)
 		draw_map_vertical(win, win->buffer, &win->param, win->flags.con_on);
 	if (win->flags.sla_on)

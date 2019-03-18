@@ -51,8 +51,7 @@ Module.symvers
 Mkfile.old
 dkms.conf
 .DS_Store
-CMakeLists.txt
-.idea/*
-.vscode/*
-cmake-build-debug/*
+.idea/
+.vscode/
+cmake-build-debug/
 libft/.DS_Store

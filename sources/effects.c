@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:44:39 by dromanic          #+#    #+#             */
-/*   Updated: 2019/03/15 16:22:38 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/03/18 11:54:24 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	draw_map_fdf(t_env *win, int *buf, t_param *p, int c)
 
 	y = UINT64_MAX;
 	map = win->map;
-	while (++y < p->rows && (x = UINT64_MAX))
+	while ((++y < p->rows) & (x = UINT64_MAX))
 		while (++x < p->cols)
 		{
 			line.color = map[y][x].color;

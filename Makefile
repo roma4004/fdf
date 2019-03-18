@@ -28,7 +28,6 @@ SRC_N = main.c \
 		keys.c \
 		parser.c \
 		rotate.c \
-		ram_manager.c \
 		effects.c \
 		get_next_line.c
 

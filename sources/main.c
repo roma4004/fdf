@@ -6,43 +6,36 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2019/03/15 16:41:13 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/03/18 19:45:14 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-int			is_hex(char ch)
+static t_env	*init_win(t_env *e)
 {
-	if (ft_isdigit(ch)
-	|| (ch >= 'A' && ch <= 'F')
-	|| (ch >= 'a' && ch <= 'f'))
-		return (1);
-	return (0);
+	if (!e)
+		return (NULL);
+	e->param = (t_param){ WIN_WIDTH, WIN_HEIGHT,
+		(t_si_pt){ DEF_OFFSET_X, DEF_OFFSET_Y },
+		(t_si_3pt){ DEF_SCALE, DEF_SCALE, DEF_SCALE },
+		(t_db_2pt){ 0.0f, 0.0f },
+		0, 0, 0 };
+	e->flags = (t_flags){ 1, 1, 1, 0, 0, 0, 0, 0, 0};
+	e->map = NULL;
+	e->bits_per_pixel = 0;
+	e->size_line = 0;
+	e->endian = 0;
+	if (!(e->mlx_ptr = mlx_init())
+	|| !(e->win_ptr = mlx_new_window(e->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, TITLE))
+	|| !(e->img_ptr = mlx_new_image(e->mlx_ptr, WIN_WIDTH, WIN_HEIGHT))
+	|| !(e->buffer = (int *)mlx_get_data_addr(e->img_ptr,
+			&e->bits_per_pixel, &e->size_line, &e->endian)))
+		exit_x(e);
+	return (e);
 }
 
-int			get_col(t_env *win, char *s, size_t *i, size_t max_i)
-{
-	int		res;
-	size_t	j;
-
-	res = DEF_COLOR;
-	j = UINT64_MAX;
-	if (*i + 3 < max_i && s && s[++j] == ',' && s[++j] == '0' && s[++j] == 'x')
-	{
-		while (*i + ++j < max_i && is_hex(s[j]))
-			if (j > 10)
-			{
-				win->flags.error_code = COLOR_ERR;
-				return (DEF_COLOR);
-			}
-		(*i) += j;
-		res = (int)ft_atol_base(s + 1, 16);
-	}
-	return (res);
-}
-
-void		show_interface(t_env *win)
+void			show_interface(t_env *win)
 {
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 20, 10, DEF_COLOR,
 		"move            : arrows left, up, down, right");
@@ -64,13 +57,42 @@ void		show_interface(t_env *win)
 		"exit the program: esc or hit the (x) at the corner window");
 }
 
-int			main(int argc, char **argv)
+int				exit_x(t_env *e)
+{
+	size_t	i;
+	int		err;
+	char	*msg;
+
+	err = e->flags.error_code;
+	if (e->mlx_ptr && e->win_ptr)
+		mlx_destroy_window(e->mlx_ptr, e->win_ptr);
+	if (e->map && err != WIDTH_ERR && (err != MAP_INVALID) & (i = UINT64_MAX))
+	{
+		while (++i < e->param.rows)
+			ft_memdel((void *)&e->map[i]);
+		ft_memdel((void *)&e->map);
+	}
+	if (((err == MAP_INVALID) && (msg = "MAP_INVALID"))
+	|| ((err == WIDTH_ERR) && (msg = "WIDTH_ERR"))
+	|| ((err == READ_ERR) && (msg = "FILE_ERR"))
+	|| ((err == COLOR_ERR) && (msg = "COLOR_ERR")))
+		ft_putstr_fd(msg, 2);
+	if (err && errno && (msg = " - "))
+		ft_putstr_fd(msg, 2);
+	if (errno && (msg = strerror(errno)))
+		ft_putstr_fd(msg, 2);
+	if (err || errno)
+		ft_putstr_fd("\n", 2);
+	exit(0);
+}
+
+int				main(int argc, char **argv)
 {
 	t_env	win;
 
 	if (argc == 2 && (init_win(&win)))
 	{
-		if (parse_map(argv[1], &win))
+		if (!parse_map(argv[1], &win))
 		{
 			draw_map(&win);
 			mlx_hook(win.win_ptr, 17, 1L << 17, exit_x, &win);

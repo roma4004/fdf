@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/17 15:21:59 by dromanic          #+#    #+#             */
-/*   Updated: 2019/03/18 12:59:43 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/03/21 19:59:28 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,10 @@ static int	convert_map(t_env *e, t_list *lst)
 				return (1);
 			i = UINT64_MAX;
 			while (++i < cur->content_size && ++pt.x < e->param.width)
-				e->map[pt.y][pt.x] = (t_px){ pt.x, pt.y,
-							(pt.z = ft_iatoi(str, &i, cur->content_size)),
-							pt.z, get_col(e, str, &i, cur->content_size) };
+				e->map[pt.y][pt.x] = (t_px){
+					(t_db_3pt){ pt.x, pt.y,
+								(pt.z = ft_iatoi(str, &i, cur->content_size)) },
+								pt.z, get_col(e, str, &i, cur->content_size) };
 			cur = cur->next;
 		}
 	return (0);
@@ -82,7 +83,8 @@ static int	get_map_param(t_env *e, t_list *lst)
 	{
 		i = UINT64_MAX;
 		while (i < cur->content_size)
-			if (!(is_hex(str[++i])) || !(str[i] == ' ') || !(str[i] == 'x'))
+			if (!(str[i] == ' ') || !(str[i] == ',') || !(str[i] == 'x')
+			|| !(is_hex(str[++i])))
 				return ((e->flags.error_code = MAP_INVALID));
 		width = ft_count_words((char *)cur->content, cur->content_size, ' ');
 		if (e->param.cols == 0)
@@ -106,7 +108,8 @@ int			parse_map(char *file_name, t_env *env)
 	if (!env || !file_name)
 		return (1);
 	lst = NULL;
-	if ((fd = open(file_name, O_RDONLY)) == -1 || errno == ITS_A_DIRECTORY)
+	if ((fd = open(file_name, O_RDONLY)) == -1
+	|| errno == ITS_A_DIRECTORY)
 		return ((env->flags.error_code = READ_ERR));
 	while (get_next_line(fd, &buf) > 0
 	&& (ft_lstappend(&lst, buf, ft_strlen(buf)))

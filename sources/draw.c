@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:43:55 by dromanic          #+#    #+#             */
-/*   Updated: 2019/03/18 16:51:48 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/14 22:17:19 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static int		px_to_img(int *buffer, t_line *l, t_si_pt crd, int color)
 {
 	crd.x += l->offset.x;
 	crd.y += l->offset.y;
-	if (crd.x >= 0 && crd.x < WIN_WIDTH && crd.y >= 0 && crd.y < WIN_HEIGHT)
+	if (crd.x >= 0 && crd.x < WIN_WIDTH
+	&& crd.y >= 0 && crd.y < WIN_HEIGHT)
 		buffer[crd.y * WIN_WIDTH + crd.x] = color;
 	return (1);
 }
@@ -57,45 +58,43 @@ void			draw_line(int *buffer, t_line *l, int64_t x, int64_t y)
 	}
 }
 
-static void		draw_map_dots(t_env *win)
+static void		draw_map_dots(t_px **map, int *buf, t_param p)
 {
 	t_line	line;
 	size_t	x;
 	size_t	y;
-	t_si_pt	pt;
 
-	if (!win)
+	if (!map || !(*map) || !buf)
 		return ;
 	y = UINT64_MAX;
-	while (++y < win->param.rows)
+	while (++y < p.rows)
 	{
 		x = UINT64_MAX;
-		while (++x < win->param.cols)
+		while (++x < p.cols)
 		{
-			pt = (t_si_pt){ (int)win->map[y][x].x * win->param.scale.x,
-							(int)win->map[y][x].y * win->param.scale.y -
-							(int)win->map[y][x].z * win->param.scale.z };
-			line.offset = win->param.offset;
-			px_to_img(win->buffer, &line, pt, win->map[y][x].color);
+			line.offset = p.offset;
+			px_to_img(buf, &line,
+				(t_si_pt){ (int)map[y][x].pt.x * p.scale.x,
+							(int)map[y][x].pt.y * p.scale.y -
+							(int)map[y][x].pt.z * p.scale.z }, map[y][x].color);
 		}
 	}
-	redraw_img(win);
 }
 
-void			draw_map(t_env *win)
+void			draw_map(t_env *win, t_px **map, int *buf, t_param param)
 {
-	ft_clear_img_buff(win->buffer, WIN_WIDTH, WIN_HEIGHT);
+	ft_clear_img_buff(buf, WIN_WIDTH, WIN_HEIGHT);
 	if (win->flags.ver_on)
-		draw_map_vertical(win, win->buffer, &win->param, win->flags.con_on);
+		conn_vertical(map, buf, param, win->flags.con_on);
 	if (win->flags.sla_on)
-		draw_map_slash(win, win->buffer, &win->param, win->flags.con_on);
+		conn_slash(map, buf, param, win->flags.con_on);
 	if (win->flags.hor_on)
-		draw_map_horizontal(win, win->buffer, &win->param, win->flags.con_on);
+		conn_horizontal(map, buf, param, win->flags.con_on);
 	if (win->flags.bsl_on)
-		draw_map_backslash(win, win->buffer, &win->param, win->flags.con_on);
+		conn_backslash(map, buf, param, win->flags.con_on);
 	if (win->flags.fdf_on)
-		draw_map_fdf(win, win->buffer, &win->param, win->flags.con_on);
+		conn_fdf(map, buf, param, win->flags.con_on);
 	if (win->flags.dot_on)
-		draw_map_dots(win);
+		draw_map_dots(map, buf, param);
 	redraw_img(win);
 }

@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2019/03/18 18:11:58 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/14 22:17:19 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,7 @@ typedef struct	s_sint32_3point
 
 typedef struct	s_px
 {
-	double		x;
-	double		y;
-	double		z;
+	t_db_3pt	pt;
 	double		z_orig;
 	int			color;
 }				t_px;
@@ -154,13 +152,13 @@ enum			e_errors
 int				parse_map(char *file_name, t_env *env);
 
 void			draw_line(int *buffer, t_line *l, int64_t x, int64_t y);
-void			draw_map(t_env *win);
+void			draw_map(t_env *win, t_px **map, int *buf, t_param param);
 
-void			draw_map_vertical(t_env *win, int *buf, t_param *p, int c);
-void			draw_map_backslash(t_env *win, int *buf, t_param *p, int c);
-void			draw_map_horizontal(t_env *win, int *buf, t_param *p, int c);
-void			draw_map_slash(t_env *win, int *buf, t_param *p, int c);
-void			draw_map_fdf(t_env *win, int *buf, t_param *p, int c);
+void			conn_vertical(t_px **map, int *buffer, t_param p, int c);
+void			conn_backslash(t_px **map, int *buffer, t_param p, int c);
+void			conn_horizontal(t_px **map, int *buffer, t_param p, int c);
+void			conn_slash(t_px **map, int *buffer, t_param p, int c);
+void			conn_fdf(t_px **map, int *buffer, t_param p, int c);
 
 void			redraw_img(t_env *win);
 

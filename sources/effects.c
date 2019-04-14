@@ -6,143 +6,140 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:44:39 by dromanic          #+#    #+#             */
-/*   Updated: 2019/03/18 11:54:24 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/14 22:17:19 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	draw_map_vertical(t_env *win, int *buf, t_param *p, int c)
+void	conn_vertical(t_px **map, int *buffer, t_param p, int c)
 {
 	t_line	line;
 	size_t	y;
 	size_t	x;
-	t_px	**map;
 
-	if (!win)
+	if (!map || !(*map) || !buffer)
 		return ;
 	y = UINT64_MAX;
-	map = win->map;
-	while (++y < p->rows - 1)
+	while (++y < p.rows - 1)
 	{
 		x = UINT64_MAX;
-		while (++x < p->cols - 1)
+		while (++x < p.cols - 1)
 		{
 			line.color = map[y][x].color;
-			line.offset = win->param.offset;
-			line.end = (t_si_pt){ (int)(map[y][x].x * p->scale.x),
-				(int)(map[y][x].y * p->scale.y - map[y][x].z * p->scale.z) };
-			draw_line(buf, &line, (int)(map[y + 1][x].x * p->scale.x),
-				(int)(map[y + 1][x].y * p->scale.y
-				- map[y + c][x].z * p->scale.z));
+			line.offset = p.offset;
+			line.end = (t_si_pt){ (int)(map[y][x].pt.x * p.scale.x),
+									(int)(map[y][x].pt.y * p.scale.y
+										- map[y][x].pt.z * p.scale.z) };
+			draw_line(buffer, &line, (int)(map[y + 1][x].pt.x * p.scale.x),
+									(int)(map[y + 1][x].pt.y * p.scale.y
+										- map[y + c][x].pt.z * p.scale.z));
 		}
 	}
-	redraw_img(win);
 }
 
-void	draw_map_backslash(t_env *win, int *buf, t_param *p, int c)
+void	conn_backslash(t_px **map, int *buffer, t_param p, int c)
 {
 	t_line	line;
 	size_t	y;
 	size_t	x;
-	t_px	**map;
 
+	if (!map || !(*map) || !buffer)
+		return ;
 	y = UINT64_MAX;
-	map = win->map;
-	while (++y < p->rows - 1)
+	while (++y < p.rows - 1)
 	{
 		x = UINT64_MAX;
-		while (++x < p->cols - 1)
+		while (++x < p.cols - 1)
 		{
 			line.color = map[y][x].color;
-			line.offset = win->param.offset;
-			line.end = (t_si_pt){ (int)(map[y][x].x * p->scale.x),
-				(int)(map[y][x].y * p->scale.y - map[y][x].z * p->scale.z) };
-			draw_line(buf, &line, (int)(map[y + 1][x + 1].x * p->scale.x),
-				(int)(map[y + 1][x + 1].y * p->scale.y
-				- map[y + c][x + c].z * p->scale.z));
+			line.offset = p.offset;
+			line.end = (t_si_pt){ (int)(map[y][x].pt.x * p.scale.x),
+									(int)(map[y][x].pt.y * p.scale.y
+										- map[y][x].pt.z * p.scale.z) };
+			draw_line(buffer, &line, (int)(map[y + 1][x + 1].pt.x * p.scale.x),
+									(int)(map[y + 1][x + 1].pt.y * p.scale.y
+										- map[y + c][x + c].pt.z * p.scale.z));
 		}
 	}
-	redraw_img(win);
 }
 
-void	draw_map_horizontal(t_env *win, int *buf, t_param *p, int c)
+void	conn_horizontal(t_px **map, int *buffer, t_param p, int c)
 {
 	t_line	line;
 	size_t	y;
 	size_t	x;
-	t_px	**map;
 
+	if (!map || !(*map) || !buffer)
+		return ;
 	y = UINT64_MAX;
-	map = win->map;
-	while (++y < p->rows - 1)
+	while (++y < p.rows - 1)
 	{
 		x = UINT64_MAX;
-		while (++x < p->cols - 1)
+		while (++x < p.cols - 1)
 		{
 			line.color = map[y][x].color;
-			line.offset = win->param.offset;
-			line.end = (t_si_pt){ (int)(map[y][x].x * p->scale.x),
-				(int)(map[y][x].y * p->scale.y - map[y][x].z * p->scale.z) };
-			draw_line(buf, &line, (int)(map[y][x + 1].x * p->scale.x),
-				(int)(map[y][x + 1].y * p->scale.y
-				- map[y][x + c].z * p->scale.z));
+			line.offset = p.offset;
+			line.end = (t_si_pt){ (int)(map[y][x].pt.x * p.scale.x),
+									(int)(map[y][x].pt.y * p.scale.y
+										- map[y][x].pt.z * p.scale.z) };
+			draw_line(buffer, &line, (int)(map[y][x + 1].pt.x * p.scale.x),
+									(int)(map[y][x + 1].pt.y * p.scale.y
+										- map[y][x + c].pt.z * p.scale.z));
 		}
 	}
-	redraw_img(win);
 }
 
-void	draw_map_slash(t_env *win, int *buf, t_param *p, int c)
+void	conn_slash(t_px **map, int *buffer, t_param p, int c)
 {
 	t_line	line;
 	size_t	x;
 	size_t	y;
-	t_px	**map;
 
+	if (!map || !(*map) || !buffer)
+		return ;
 	y = UINT64_MAX;
-	map = win->map;
-	while (++y < p->rows - 1)
+	while (++y < p.rows - 1)
 	{
 		x = UINT64_MAX;
-		while (++x < p->cols - 1)
+		while (++x < p.cols - 1)
 		{
 			line.color = map[y][x].color;
-			line.offset = win->param.offset;
-			line.end = (t_si_pt){ (int)(map[y][x + 1].x * p->scale.x),
-				(int)(map[y][x + 1].y * p->scale.y
-				- map[y][x + c].z * p->scale.z) };
-			draw_line(buf, &line, (int)(map[y + 1][x].x * p->scale.x),
-				(int)(map[y + 1][x].y * p->scale.y
-				- map[y + c][x].z * p->scale.z));
+			line.offset = p.offset;
+			line.end = (t_si_pt){ (int)(map[y][x + 1].pt.x * p.scale.x),
+									(int)(map[y][x + 1].pt.y * p.scale.y
+										- map[y][x + c].pt.z * p.scale.z) };
+			draw_line(buffer, &line, (int)(map[y + 1][x].pt.x * p.scale.x),
+									(int)(map[y + 1][x].pt.y * p.scale.y
+										- map[y + c][x].pt.z * p.scale.z));
 		}
 	}
-	redraw_img(win);
 }
 
-void	draw_map_fdf(t_env *win, int *buf, t_param *p, int c)
+void	conn_fdf(t_px **map, int *buffer, t_param p, int c)
 {
 	t_line	line;
 	size_t	x;
 	size_t	y;
-	t_px	**map;
 
+	if (!map || !(*map) || !buffer)
+		return ;
 	y = UINT64_MAX;
-	map = win->map;
-	while ((++y < p->rows) & (x = UINT64_MAX))
-		while (++x < p->cols)
+	while ((p.rows > ++y) & (x = UINT64_MAX))
+		while (p.cols > ++x)
 		{
 			line.color = map[y][x].color;
-			line.offset = win->param.offset;
-			line.end = (t_si_pt){ (int)(map[y][x].x * p->scale.x),
-				(int)(map[y][x].y * p->scale.y - map[y][x].z * p->scale.z) };
-			if (x < p->cols - 1)
-				draw_line(buf, &line, (int)(map[y][x + 1].x * p->scale.x),
-					(int)(map[y][x + 1].y * p->scale.y
-					- map[y][x + c].z * p->scale.z));
-			if (y < p->rows - 1)
-				draw_line(buf, &line, (int)(map[y + 1][x].x * p->scale.x),
-					(int)(map[y + 1][x].y * p->scale.y
-					- map[y + c][x].z * p->scale.z));
+			line.offset = p.offset;
+			line.end = (t_si_pt){ (int)(map[y][x].pt.x * p.scale.x),
+									(int)(map[y][x].pt.y * p.scale.y
+										- map[y][x].pt.z * p.scale.z) };
+			if (x < p.cols - 1)
+				draw_line(buffer, &line, (int)(map[y][x + 1].pt.x * p.scale.x),
+										(int)(map[y][x + 1].pt.y * p.scale.y
+											- map[y][x + c].pt.z * p.scale.z));
+			if (y < p.rows - 1)
+				draw_line(buffer, &line, (int)(map[y + 1][x].pt.x * p.scale.x),
+										(int)(map[y + 1][x].pt.y * p.scale.y
+											- map[y + c][x].pt.z * p.scale.z));
 		}
-	redraw_img(win);
 }

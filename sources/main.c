@@ -69,8 +69,8 @@ int				exit_x(t_env *e)
 	if (e->map && err != WIDTH_ERR && (err != MAP_INVALID) & (i = UINT64_MAX))
 	{
 		while (++i < e->param.rows)
-			ft_memdel((void *)&e->map[i]);
-		ft_memdel((void *)&e->map);
+			ft_memdel((void **)&e->map[i]);
+		ft_memdel((void **)&e->map);
 	}
 	if (((err == MAP_INVALID) && (msg = "MAP_INVALID"))
 	|| ((err == WIDTH_ERR) && (msg = "WIDTH_ERR"))
@@ -94,7 +94,7 @@ int				main(int argc, char **argv)
 	{
 		if (!parse_map(argv[1], &win))
 		{
-			draw_map(&win);
+			draw_map(&win, win.map, win.buffer, win.param);
 			mlx_hook(win.win_ptr, 17, 1L << 17, exit_x, &win);
 			mlx_hook(win.win_ptr, 2, 5, deal_keyboard, &win);
 			mlx_mouse_hook(win.win_ptr, deal_mouse, &win);

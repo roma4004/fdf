@@ -6,26 +6,41 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:43:55 by dromanic          #+#    #+#             */
-/*   Updated: 2019/04/14 22:17:19 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/15 12:29:45 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void			redraw_img(t_env *win)
+void			redraw_img(t_env *e)
 {
-	mlx_clear_window(win->mlx_ptr, win->win_ptr);
-	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
-	if (win->flags.interface_on)
-		show_interface(win);
+	const int		col = DEF_COLOR;
+	const int		x = 20;
+	int				y;
+
+	mlx_clear_window(e->mlx_ptr, e->win_ptr);
+	mlx_put_image_to_window(e->mlx_ptr, e->win_ptr, e->img_ptr, 0, 0);
+	if (e->flags.interface_on)
+	{
+		y = 10;
+		mlx_string_put(e->mlx_ptr, e->win_ptr, x, y, col, MSG_MOVE);
+		mlx_string_put(e->mlx_ptr, e->win_ptr, x, y += 20, col, MSG_ZOOM_A);
+		mlx_string_put(e->mlx_ptr, e->win_ptr, x, y += 20, col, MSG_ZOOM_Z);
+		mlx_string_put(e->mlx_ptr, e->win_ptr, x, y += 20, col, MSG_INTERF);
+		mlx_string_put(e->mlx_ptr, e->win_ptr, x, y += 20, col, MSG_ROTATE);
+		mlx_string_put(e->mlx_ptr, e->win_ptr, x, y += 20, col, MSG_ANIMATE);
+		mlx_string_put(e->mlx_ptr, e->win_ptr, x, y += 20, col, MSG_RESET);
+		mlx_string_put(e->mlx_ptr, e->win_ptr, x, y += 20, col, MSG_STYLE);
+		mlx_string_put(e->mlx_ptr, e->win_ptr, x, y += 20, col, MSG_EXIT);
+	}
 }
 
 static int		px_to_img(int *buffer, t_line *l, t_si_pt crd, int color)
 {
 	crd.x += l->offset.x;
 	crd.y += l->offset.y;
-	if (crd.x >= 0 && crd.x < WIN_WIDTH
-	&& crd.y >= 0 && crd.y < WIN_HEIGHT)
+	if (0 <= crd.x && WIN_WIDTH > crd.x
+	&& 0 <= crd.y && WIN_HEIGHT > crd.y)
 		buffer[crd.y * WIN_WIDTH + crd.x] = color;
 	return (1);
 }
@@ -67,12 +82,12 @@ static void		draw_map_dots(t_px **map, int *buf, t_param p)
 	if (!map || !(*map) || !buf)
 		return ;
 	y = UINT64_MAX;
-	while (++y < p.rows)
+	while (p.rows > ++y)
 	{
 		x = UINT64_MAX;
-		while (++x < p.cols)
+		while (p.cols > ++x)
 		{
-			line.offset = p.offset;
+			line.offset = p.move;
 			px_to_img(buf, &line,
 				(t_si_pt){ (int)map[y][x].pt.x * p.scale.x,
 							(int)map[y][x].pt.y * p.scale.y -
@@ -81,20 +96,23 @@ static void		draw_map_dots(t_px **map, int *buf, t_param p)
 	}
 }
 
-void			draw_map(t_env *win, t_px **map, int *buf, t_param param)
+void			draw_map(t_env *e, t_px **map, int *buf, t_param param)
 {
+	const t_flags	flags = e->flags;
+	const int		connection_on = flags.con_on;
+
 	ft_clear_img_buff(buf, WIN_WIDTH, WIN_HEIGHT);
-	if (win->flags.ver_on)
-		conn_vertical(map, buf, param, win->flags.con_on);
-	if (win->flags.sla_on)
-		conn_slash(map, buf, param, win->flags.con_on);
-	if (win->flags.hor_on)
-		conn_horizontal(map, buf, param, win->flags.con_on);
-	if (win->flags.bsl_on)
-		conn_backslash(map, buf, param, win->flags.con_on);
-	if (win->flags.fdf_on)
-		conn_fdf(map, buf, param, win->flags.con_on);
-	if (win->flags.dot_on)
+	if (flags.ver_on)
+		conn_vertical(map, buf, param, connection_on);
+	if (flags.sla_on)
+		conn_slash(map, buf, param, connection_on);
+	if (flags.hor_on)
+		conn_horizontal(map, buf, param, connection_on);
+	if (flags.bsl_on)
+		conn_backslash(map, buf, param, connection_on);
+	if (flags.fdf_on)
+		conn_fdf(map, buf, param, connection_on);
+	if (flags.dot_on)
 		draw_map_dots(map, buf, param);
-	redraw_img(win);
+	redraw_img(e);
 }

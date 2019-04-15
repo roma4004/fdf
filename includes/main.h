@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2019/04/14 22:17:19 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/15 12:29:45 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,16 @@
 # define DEF_COLOR		0x009100FF
 # define PI				3.14159265359
 # define WIDTH_ERR_SKIP	0
+
+# define MSG_MOVE		"move            : arrows left, up, down, right"
+# define MSG_ZOOM_A		"zoom all        : -, + or mouse scroll"
+# define MSG_ZOOM_Z		"zoom only Z     : 9, 0 or numpad +, -"
+# define MSG_INTERF		"interface       : 8 or numpad 8"
+# define MSG_ROTATE		"rotate X,Y,Z(+-): QA, WS, ED"
+# define MSG_ANIMATE	"next style      : enter (hold to animate)"
+# define MSG_RESET		"reset           : R"
+# define MSG_STYLE		"set visual style: 1..7 (|, /, -, \\, fdf, layer, dot)"
+# define MSG_EXIT		"exit the program: esc or hit (x) at the corner window"
 
 # include <stdio.h>
 # include <string.h>
@@ -84,7 +94,7 @@ typedef struct	s_param
 {
 	uint32_t	width;
 	uint32_t	height;
-	t_si_pt		offset;
+	t_si_pt		move;
 	t_si_3pt	scale;
 	t_db_2pt	centr;
 	size_t		rows;
@@ -149,10 +159,10 @@ enum			e_errors
 	ITS_A_DIRECTORY = 21
 };
 
-int				parse_map(char *file_name, t_env *env);
+int				parse_map(t_env *e, char *file_name);
 
 void			draw_line(int *buffer, t_line *l, int64_t x, int64_t y);
-void			draw_map(t_env *win, t_px **map, int *buf, t_param param);
+void			draw_map(t_env *e, t_px **map, int *buf, t_param param);
 
 void			conn_vertical(t_px **map, int *buffer, t_param p, int c);
 void			conn_backslash(t_px **map, int *buffer, t_param p, int c);
@@ -160,15 +170,14 @@ void			conn_horizontal(t_px **map, int *buffer, t_param p, int c);
 void			conn_slash(t_px **map, int *buffer, t_param p, int c);
 void			conn_fdf(t_px **map, int *buffer, t_param p, int c);
 
-void			redraw_img(t_env *win);
+void			redraw_img(t_env *e);
 
-int				deal_keyboard(int key, t_env *win);
-int				deal_mouse(int key, int x, int y, t_env *win);
+int				deal_keyboard(int key, t_env *e);
+int				deal_mouse(int key, int x, int y, t_env *env);
 
 int				exit_x(t_env *e);
-void			show_interface(t_env *win);
 
-void			rotate_map(t_env *win, char axis, int new_angle);
-void			reset(t_env *win);
+void			rotate_map(t_env *e, t_px **map, char axis, int new_angle);
+void			reset(t_env *e);
 
 #endif

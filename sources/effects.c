@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:44:39 by dromanic          #+#    #+#             */
-/*   Updated: 2019/04/14 22:17:19 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/15 11:11:19 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ void	conn_vertical(t_px **map, int *buffer, t_param p, int c)
 	if (!map || !(*map) || !buffer)
 		return ;
 	y = UINT64_MAX;
-	while (++y < p.rows - 1)
+	while (p.rows - 1 > ++y)
 	{
 		x = UINT64_MAX;
-		while (++x < p.cols - 1)
+		while (p.cols - 1 > ++x)
 		{
 			line.color = map[y][x].color;
-			line.offset = p.offset;
+			line.offset = p.move;
 			line.end = (t_si_pt){ (int)(map[y][x].pt.x * p.scale.x),
 									(int)(map[y][x].pt.y * p.scale.y
 										- map[y][x].pt.z * p.scale.z) };
@@ -47,13 +47,13 @@ void	conn_backslash(t_px **map, int *buffer, t_param p, int c)
 	if (!map || !(*map) || !buffer)
 		return ;
 	y = UINT64_MAX;
-	while (++y < p.rows - 1)
+	while (p.rows - 1 > ++y)
 	{
 		x = UINT64_MAX;
-		while (++x < p.cols - 1)
+		while (p.cols - 1 > ++x)
 		{
 			line.color = map[y][x].color;
-			line.offset = p.offset;
+			line.offset = p.move;
 			line.end = (t_si_pt){ (int)(map[y][x].pt.x * p.scale.x),
 									(int)(map[y][x].pt.y * p.scale.y
 										- map[y][x].pt.z * p.scale.z) };
@@ -73,13 +73,13 @@ void	conn_horizontal(t_px **map, int *buffer, t_param p, int c)
 	if (!map || !(*map) || !buffer)
 		return ;
 	y = UINT64_MAX;
-	while (++y < p.rows - 1)
+	while (p.rows - 1 > ++y)
 	{
 		x = UINT64_MAX;
-		while (++x < p.cols - 1)
+		while (p.cols - 1 > ++x)
 		{
 			line.color = map[y][x].color;
-			line.offset = p.offset;
+			line.offset = p.move;
 			line.end = (t_si_pt){ (int)(map[y][x].pt.x * p.scale.x),
 									(int)(map[y][x].pt.y * p.scale.y
 										- map[y][x].pt.z * p.scale.z) };
@@ -99,13 +99,13 @@ void	conn_slash(t_px **map, int *buffer, t_param p, int c)
 	if (!map || !(*map) || !buffer)
 		return ;
 	y = UINT64_MAX;
-	while (++y < p.rows - 1)
+	while (p.rows - 1 > ++y)
 	{
 		x = UINT64_MAX;
-		while (++x < p.cols - 1)
+		while (p.cols - 1 > ++x)
 		{
 			line.color = map[y][x].color;
-			line.offset = p.offset;
+			line.offset = p.move;
 			line.end = (t_si_pt){ (int)(map[y][x + 1].pt.x * p.scale.x),
 									(int)(map[y][x + 1].pt.y * p.scale.y
 										- map[y][x + c].pt.z * p.scale.z) };
@@ -129,17 +129,17 @@ void	conn_fdf(t_px **map, int *buffer, t_param p, int c)
 		while (p.cols > ++x)
 		{
 			line.color = map[y][x].color;
-			line.offset = p.offset;
+			line.offset = p.move;
 			line.end = (t_si_pt){ (int)(map[y][x].pt.x * p.scale.x),
 									(int)(map[y][x].pt.y * p.scale.y
 										- map[y][x].pt.z * p.scale.z) };
-			if (x < p.cols - 1)
-				draw_line(buffer, &line, (int)(map[y][x + 1].pt.x * p.scale.x),
-										(int)(map[y][x + 1].pt.y * p.scale.y
-											- map[y][x + c].pt.z * p.scale.z));
-			if (y < p.rows - 1)
+			if (p.rows - 1 > y)
 				draw_line(buffer, &line, (int)(map[y + 1][x].pt.x * p.scale.x),
 										(int)(map[y + 1][x].pt.y * p.scale.y
 											- map[y + c][x].pt.z * p.scale.z));
+			if (p.cols - 1 > x)
+				draw_line(buffer, &line, (int)(map[y][x + 1].pt.x * p.scale.x),
+										(int)(map[y][x + 1].pt.y * p.scale.y
+											- map[y][x + c].pt.z * p.scale.z));
 		}
 }

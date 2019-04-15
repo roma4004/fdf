@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/17 15:21:59 by dromanic          #+#    #+#             */
-/*   Updated: 2019/03/21 19:59:28 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/15 12:29:45 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	is_hex(char ch)
 	return (0);
 }
 
-static int	get_col(t_env *win, char *s, size_t *i, size_t max_i)
+static int	get_col(t_env *e, char *s, size_t *i, size_t max_i)
 {
 	int		res;
 	size_t	j;
@@ -34,7 +34,7 @@ static int	get_col(t_env *win, char *s, size_t *i, size_t max_i)
 		while (*i + ++j < max_i && is_hex(s[*i + j]))
 			if (j > 10)
 			{
-				win->flags.error_code = COLOR_ERR;
+				e->flags.error_code = COLOR_ERR;
 				return (DEF_COLOR);
 			}
 		res = (int)ft_atol_base(s + *i + 1, 16);
@@ -99,27 +99,27 @@ static int	get_map_param(t_env *e, t_list *lst)
 	return (e->flags.error_code);
 }
 
-int			parse_map(char *file_name, t_env *env)
+int			parse_map(t_env *e, char *file_name)
 {
 	int		fd;
 	t_list	*lst;
 	char	*buf;
 
-	if (!env || !file_name)
+	if (!e || !file_name)
 		return (1);
 	lst = NULL;
 	if ((fd = open(file_name, O_RDONLY)) == -1
 	|| errno == ITS_A_DIRECTORY)
-		return ((env->flags.error_code = READ_ERR));
+		return ((e->flags.error_code = READ_ERR));
 	while (get_next_line(fd, &buf) > 0
 	&& (ft_lstappend(&lst, buf, ft_strlen(buf)))
-	&& (++env->param.rows))
+	&& (++e->param.rows))
 		ft_memdel((void *)&buf);
 	close(fd);
 	if (!lst && !(errno) && !WIDTH_ERR_SKIP)
-		return ((env->flags.error_code = WIDTH_ERR));
-	if (get_map_param(env, lst) || env->flags.error_code
-	|| convert_map(env, lst) || ft_destroy_lst(lst))
-		return (env->flags.error_code);
+		return ((e->flags.error_code = WIDTH_ERR));
+	if (get_map_param(e, lst) || e->flags.error_code
+	|| convert_map(e, lst) || ft_destroy_lst(lst))
+		return (e->flags.error_code);
 	return (0);
 }

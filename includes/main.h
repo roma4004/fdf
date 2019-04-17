@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2019/04/15 12:29:45 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/17 15:19:36 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ typedef struct	s_param
 	uint32_t	height;
 	t_si_pt		move;
 	t_si_3pt	scale;
-	t_db_2pt	centr;
+	t_db_2pt	center;
 	size_t		rows;
 	size_t		cols;
 	int			frame_cnt;
@@ -177,7 +177,7 @@ int				deal_mouse(int key, int x, int y, t_env *env);
 
 int				exit_x(t_env *e);
 
-void			rotate_map(t_env *e, t_px **map, char axis, int new_angle);
+void			rotate_map(t_env *e, t_px **map, char axis, double angle);
 void			reset(t_env *e);
 
 #endif

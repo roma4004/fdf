@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/17 15:21:59 by dromanic          #+#    #+#             */
-/*   Updated: 2019/04/15 12:29:45 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/17 15:00:36 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ static int	get_map_param(t_env *e, t_list *lst)
 	}
 	if (e->param.cols == 0 && !WIDTH_ERR_SKIP)
 		return ((e->flags.error_code = WIDTH_ERR));
-	e->param.centr = (t_db_2pt){ e->param.rows / 2.f, e->param.cols / 2.f };
+	e->param.center = (t_db_2pt){ e->param.cols / 2.f, e->param.rows / 2.f};
 	return (e->flags.error_code);
 }
 

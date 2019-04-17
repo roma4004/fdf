@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/22 15:22:29 by dromanic          #+#    #+#             */
-/*   Updated: 2019/04/15 12:20:28 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/17 15:25:15 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,11 @@ static void		deal_keyboard2(int key, t_env *env)
 	else if ((Q == key && (ch = 'y'))
 		|| (W == key && (ch = 'x'))
 		|| (E == key && (ch = 'z')))
-		rotate_map(env, env->map, ch, 2);
+		rotate_map(env, env->map, ch, 2.0);
 	else if ((A == key && (ch = 'y'))
 		|| (S == key && (ch = 'x'))
 		|| (D == key && (ch = 'z')))
-		rotate_map(env, env->map, ch, -2);
+		rotate_map(env, env->map, ch, -2.0);
 	else if (ENTER == key)
 		animate(env, env->map, env->buffer);
 	else if (R == key)

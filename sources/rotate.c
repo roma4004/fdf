@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/23 14:59:52 by dromanic          #+#    #+#             */
-/*   Updated: 2019/04/17 15:20:41 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/17 15:39:24 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ void				rotate_map(t_env *e, t_px **map, char axis, double angle)
 		{
 			pt = map[y][x].pt;
 			pt = (t_db_3pt){ pt.x - center.x, pt.y - center.y, pt.z };
-			if (axis == 'y' || axis == 'a')
+			if ('y' == axis)
 				pt = rotate_y(pt, angle_radian);
-			if (axis == 'x' || axis == 'a')
+			if ('x' == axis)
 				pt = rotate_x(pt, angle_radian);
-			if (axis == 'z' || axis == 'a')
+			if ('z' == axis)
 				pt = rotate_z(pt, angle_radian);
 			map[y][x].pt = (t_db_3pt){ pt.x + center.x, pt.y + center.y, pt.z };
 		}

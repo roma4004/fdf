@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 17:13:08 by dromanic          #+#    #+#             */
-/*   Updated: 2019/04/15 12:08:41 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/17 15:41:03 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int				main(int argc, char **argv)
 
 	if (argc == 2 && (init_win(&e)))
 	{
-		if (!parse_map(&e, argv[1]))
+		if (!parse_file(&e, argv[1]))
 		{
 			draw_map(&e, e.map, e.buffer, e.param);
 			mlx_hook(e.win_ptr, 17, 1L << 17, exit_x, &e);

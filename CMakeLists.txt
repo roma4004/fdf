@@ -16,8 +16,10 @@ include_directories(	${INC_PATH}
 						${LFT_INC_PATH})
 aux_source_directory(	${LFT_LIB} LFT_SRC)
 aux_source_directory(	${SRC_PATH} SOURCE_FILES)
-add_library(			${LFT_NAME} STATIC ${LFT_SRC})
-add_executable(			${CMAKE_PROJECT_NAME} ${SOURCE_FILES})
+add_library(			${LFT_NAME} STATIC
+						${LFT_SRC})
+add_executable(			${CMAKE_PROJECT_NAME}
+						${SOURCE_FILES})
 target_link_libraries(	${CMAKE_PROJECT_NAME}
 						${LFT_NAME}
 						${MLX}

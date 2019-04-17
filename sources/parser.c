@@ -6,100 +6,100 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/17 15:21:59 by dromanic          #+#    #+#             */
-/*   Updated: 2019/04/17 15:00:36 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/17 18:51:43 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-static int	is_hex(char ch)
+static t_px				set_px(double x, double y, double z, unsigned int color)
 {
-	if (ft_isdigit(ch)
-	|| (ch >= 'A' && ch <= 'F')
-	|| (ch >= 'a' && ch <= 'f'))
-		return (1);
-	return (0);
+	return ((t_px){
+					(t_db_3pt){ x, y, z },
+					z,
+					color });
 }
 
-static int	get_col(t_env *e, char *s, size_t *i, size_t max_i)
+static unsigned int		parse_color(t_flags *flags, char *s,
+									   size_t *i, size_t max_i)
 {
-	int		res;
-	size_t	j;
+	unsigned int	res;
+	size_t			j;
 
 	res = DEF_COLOR;
 	j = UINT64_MAX;
 	if (*i + 3 < max_i
-		&& s && s[*i + ++j] == ',' && s[*i + ++j] == '0' && s[*i + ++j] == 'x')
+	&& s && s[*i + ++j] == ',' && s[*i + ++j] == '0' && s[*i + ++j] == 'x')
 	{
-		while (*i + ++j < max_i && is_hex(s[*i + j]))
+		while (*i + ++j < max_i && ft_ishex(s[*i + j]))
 			if (j > 10)
 			{
-				e->flags.error_code = COLOR_ERR;
+				flags->error_code = COLOR_ERR;
 				return (DEF_COLOR);
 			}
-		res = (int)ft_atol_base(s + *i + 1, 16);
+		res = (unsigned int)ft_atol_base(s + *i + 1, 16);
 		(*i) += j;
 	}
 	return (res);
 }
 
-static int	convert_map(t_env *e, t_list *lst)
+static int				parse_map(t_px ***map, t_param param,
+									t_flags *flags, t_list *lst)
 {
-	t_list		*cur;
 	char		*str;
 	size_t		i;
-	t_si_3pt	pt;
+	size_t		y;
+	size_t		x;
 
-	if (!e || !(cur = lst))
+	if (!lst)
 		return (1);
-	pt.y = -1;
-	if ((e->map = (t_px **)malloc(sizeof(t_px *) * e->param.rows)))
-		while (cur && (str = (char *)cur->content))
+	y = UINT64_MAX;
+	if ((*map = (t_px **)malloc(sizeof(t_px *) * param.rows)))
+		while (lst)
 		{
-			if ((pt.x = -1)
-			& !(e->map[++pt.y] = (t_px *)malloc(sizeof(t_px) * e->param.cols)))
-				return (1);
+			(*map)[++y] = (t_px *)malloc(sizeof(t_px) * param.cols);
+			str = (char *)lst->content;
+			x = UINT64_MAX;
 			i = UINT64_MAX;
-			while (++i < cur->content_size && ++pt.x < e->param.width)
-				e->map[pt.y][pt.x] = (t_px){
-					(t_db_3pt){ pt.x, pt.y,
-								(pt.z = ft_iatoi(str, &i, cur->content_size)) },
-								pt.z, get_col(e, str, &i, cur->content_size) };
-			cur = cur->next;
+			while (++i < lst->content_size && ++x < param.width)
+				(*map)[y][x] = set_px(x, y,
+						ft_iatoi(str, &i, lst->content_size),
+						parse_color(flags, str, &i, lst->content_size));
+			lst = lst->next;
 		}
 	return (0);
 }
 
-static int	get_map_param(t_env *e, t_list *lst)
+static int				validate_and_set_map_param(t_env *e, t_list *lst)
 {
-	t_list	*cur;
 	size_t	width;
 	size_t	i;
 	char	*str;
 
-	if (!(cur = lst) || !e)
+	if (!lst || !e)
 		return (1);
-	while (cur && (str = (char *)cur->content))
+	while (lst)
 	{
+		str = (char *)lst->content;
 		i = UINT64_MAX;
-		while (i < cur->content_size)
+		while (i < lst->content_size)
 			if (!(str[i] == ' ') || !(str[i] == ',') || !(str[i] == 'x')
-			|| !(is_hex(str[++i])))
+			|| !(ft_ishex(str[++i])))
 				return ((e->flags.error_code = MAP_INVALID));
-		width = ft_count_words((char *)cur->content, cur->content_size, ' ');
+		width = ft_count_words((char *)lst->content, lst->content_size, ' ');
 		if (e->param.cols == 0)
 			e->param.cols = width;
 		else if (e->param.cols != width && !WIDTH_ERR_SKIP)
 			e->flags.error_code = WIDTH_ERR;
-		cur = cur->next;
+		lst = lst->next;
 	}
 	if (e->param.cols == 0 && !WIDTH_ERR_SKIP)
 		return ((e->flags.error_code = WIDTH_ERR));
-	e->param.center = (t_db_2pt){ e->param.cols / 2.f, e->param.rows / 2.f};
+	e->param.center = (t_db_2pt){ e->param.cols / 2.f, e->param.rows / 2.f };
 	return (e->flags.error_code);
 }
 
-int			parse_map(t_env *e, char *file_name)
+int						parse_file(t_env *e, char *file_name)
 {
 	int		fd;
 	t_list	*lst;
@@ -118,8 +118,8 @@ int			parse_map(t_env *e, char *file_name)
 	close(fd);
 	if (!lst && !(errno) && !WIDTH_ERR_SKIP)
 		return ((e->flags.error_code = WIDTH_ERR));
-	if (get_map_param(e, lst) || e->flags.error_code
-	|| convert_map(e, lst) || ft_destroy_lst(lst))
+	if (validate_and_set_map_param(e, lst) || e->flags.error_code
+	|| parse_map(&e->map, e->param, &e->flags, lst) || ft_destroy_lst(lst))
 		return (e->flags.error_code);
 	return (0);
 }

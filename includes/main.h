@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2019/04/17 15:24:48 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/17 15:38:18 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ enum			e_errors
 	ITS_A_DIRECTORY = 21
 };
 
-int				parse_map(t_env *e, char *file_name);
+int				parse_file(t_env *e, char *file_name);
 
 void			draw_line(int *buffer, t_line *l, int64_t x, int64_t y);
 void			draw_map(t_env *e, t_px **map, int *buf, t_param param);

@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/25 19:41:05 by dromanic          #+#    #+#             */
-/*   Updated: 2019/04/17 15:38:18 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/18 14:59:45 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ typedef struct	s_uint32_point
 {
 	uint64_t	x;
 	uint64_t	y;
-}				t_ui_pt;
+}				t_ui_2pt;
 
 typedef struct	s_sint32_point
 {
 	int64_t		x;
 	int64_t		y;
-}				t_si_pt;
+}				t_si_2pt;
 
 typedef struct	s_double_2point
 {
@@ -81,20 +81,20 @@ typedef struct	s_px
 
 typedef struct	s_line
 {
-	int			color;
-	t_si_pt		end;
-	t_si_pt		len;
-	t_si_pt		delt;
-	t_si_pt		offset;
+	t_si_2pt	end;
+	t_si_2pt	len;
+	t_si_2pt	delta;
+	t_si_2pt	offset;
 	int64_t		len_max;
 	int64_t		d;
+	int			color;
 }				t_line;
 
 typedef struct	s_param
 {
 	uint32_t	width;
 	uint32_t	height;
-	t_si_pt		move;
+	t_si_2pt	move;
 	t_si_3pt	scale;
 	t_db_2pt	center;
 	size_t		rows;
@@ -117,16 +117,16 @@ typedef struct	s_flags
 
 typedef struct	s_enviroments
 {
-	t_px		**map;
 	t_param		param;
 	t_flags		flags;
-	int			bits_per_pixel;
-	int			size_line;
-	int			endian;
+	t_px		**map;
 	void		*mlx_ptr;
 	void		*win_ptr;
 	void		*img_ptr;
 	int			*buffer;
+	int			bits_per_pixel;
+	int			size_line;
+	int			endian;
 }				t_env;
 
 enum			e_keys
@@ -143,7 +143,7 @@ enum			e_keys
 	NUM_PLUS = 69, ZERO = 29,
 	Q = 12, W = 13, E = 14,
 	A = 0, S = 1, D = 2,
-	R = 15, ENTER = 36, ESC = 53,
+	ESC = 53, R = 15, ENTER = 36,
 	ARROW_UP = 126, ARROW_DOWN = 125,
 	ARROW_LEFT = 123, ARROW_RIGHT = 124,
 	MOUSE_SCROLL_UP = 4, MINUS = 27,
@@ -162,7 +162,7 @@ enum			e_errors
 int				parse_file(t_env *e, char *file_name);
 
 void			draw_line(int *buffer, t_line *l, int64_t x, int64_t y);
-void			draw_map(t_env *e, t_px **map, int *buf, t_param param);
+void			draw_map(t_env *e, t_px **map, int *buffer, t_param param);
 
 void			conn_vertical(t_px **map, int *buffer, t_param p, int c);
 void			conn_backslash(t_px **map, int *buffer, t_param p, int c);
@@ -173,11 +173,11 @@ void			conn_fdf(t_px **map, int *buffer, t_param p, int c);
 void			redraw_img(t_env *e);
 
 int				deal_keyboard(int key, t_env *e);
-int				deal_mouse(int key, int x, int y, t_env *env);
+int				deal_mouse(int key, int x, int y, t_env *e);
 
 int				exit_x(t_env *e);
 
 void			rotate_map(t_env *e, t_px **map, char axis, double angle);
-void			reset(t_env *e);
+void			reset(t_env *e, t_px **map, int *buffer, t_param param);
 
 #endif

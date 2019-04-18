@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/21 20:43:55 by dromanic          #+#    #+#             */
-/*   Updated: 2019/04/15 12:29:45 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/18 13:34:37 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void			redraw_img(t_env *e)
 	}
 }
 
-static int		px_to_img(int *buffer, t_line *l, t_si_pt crd, int color)
+static int		px_to_img(int *buffer, t_line *l, t_si_2pt crd, int color)
 {
 	crd.x += l->offset.x;
 	crd.y += l->offset.y;
@@ -47,40 +47,39 @@ static int		px_to_img(int *buffer, t_line *l, t_si_pt crd, int color)
 
 void			draw_line(int *buffer, t_line *l, int64_t x, int64_t y)
 {
-	l->delt = (t_si_pt){ l->end.x - x < 0 ? -1 : 1, l->end.y - y < 0 ? -1 : 1 };
-	l->len = (t_si_pt){ l->end.x - x < 0 ? (l->end.x - x) * -1 : l->end.x - x,
-						l->end.y - y < 0 ? (l->end.y - y) * -1 : l->end.y - y };
+	l->delta = (t_si_2pt){ 0 > l->end.x - x ? -1 : 1,
+							0 > l->end.y - y ? -1 : 1 };
+	l->len = (t_si_2pt){ 0 > l->end.x - x ? (l->end.x - x) * -1 : l->end.x - x,
+						0 > l->end.y - y ? (l->end.y - y) * -1 : l->end.y - y };
 	l->len_max = (l->len.y > l->len.x) ? l->len.y : l->len.x;
-	if (l->len_max++ == 0)
-		px_to_img(buffer, l, (t_si_pt){ x, y }, l->color);
+	if (0 == l->len_max++)
+		px_to_img(buffer, l, (t_si_2pt){ x, y }, l->color);
 	l->d = l->len.y <= l->len.x ? -l->len.x : -l->len.y;
 	while (l->len_max--)
 	{
-		px_to_img(buffer, l, (t_si_pt){ x, y }, l->color);
+		px_to_img(buffer, l, (t_si_2pt){ x, y }, l->color);
 		l->d += 2 * (l->len.y <= l->len.x ? l->len.y : l->len.x);
 		if (l->len.y <= l->len.x)
-			x += l->delt.x;
+			x += l->delta.x;
 		else
-			y += l->delt.y;
-		if (l->d > 0)
+			y += l->delta.y;
+		if (0 < l->d)
 		{
 			l->d -= 2 * (l->len.y <= l->len.x ? l->len.x : l->len.y);
 			if (l->len.y <= l->len.x)
-				y += l->delt.y;
+				y += l->delta.y;
 			else
-				x += l->delt.x;
+				x += l->delta.x;
 		}
 	}
 }
 
 static void		draw_map_dots(t_px **map, int *buf, t_param p)
 {
-	t_line	line;
-	size_t	x;
-	size_t	y;
+	t_line		line;
+	size_t		x;
+	size_t		y;
 
-	if (!map || !(*map) || !buf)
-		return ;
 	y = UINT64_MAX;
 	while (p.rows > ++y)
 	{
@@ -88,31 +87,35 @@ static void		draw_map_dots(t_px **map, int *buf, t_param p)
 		while (p.cols > ++x)
 		{
 			line.offset = p.move;
-			px_to_img(buf, &line,
-				(t_si_pt){ (int)map[y][x].pt.x * p.scale.x,
-							(int)map[y][x].pt.y * p.scale.y -
-							(int)map[y][x].pt.z * p.scale.z }, map[y][x].color);
+			px_to_img(buf,
+						&line,
+						(t_si_2pt){ (int)map[y][x].pt.x * p.scale.x,
+									(int)map[y][x].pt.y * p.scale.y -
+									(int)map[y][x].pt.z * p.scale.z },
+						map[y][x].color);
 		}
 	}
 }
 
-void			draw_map(t_env *e, t_px **map, int *buf, t_param param)
+void			draw_map(t_env *e, t_px **map, int *buffer, t_param param)
 {
-	const t_flags	flags = e->flags;
-	const int		connection_on = flags.con_on;
+	const t_flags		flags = e->flags;
+	const int			connection_on = flags.con_on;
 
-	ft_clear_img_buff(buf, WIN_WIDTH, WIN_HEIGHT);
+	if (!map || !(*map) || !buffer)
+		return ;
+	ft_clear_img_buff(buffer, WIN_WIDTH, WIN_HEIGHT);
 	if (flags.ver_on)
-		conn_vertical(map, buf, param, connection_on);
+		conn_vertical(map, buffer, param, connection_on);
 	if (flags.sla_on)
-		conn_slash(map, buf, param, connection_on);
+		conn_slash(map, buffer, param, connection_on);
 	if (flags.hor_on)
-		conn_horizontal(map, buf, param, connection_on);
+		conn_horizontal(map, buffer, param, connection_on);
 	if (flags.bsl_on)
-		conn_backslash(map, buf, param, connection_on);
+		conn_backslash(map, buffer, param, connection_on);
 	if (flags.fdf_on)
-		conn_fdf(map, buf, param, connection_on);
+		conn_fdf(map, buffer, param, connection_on);
 	if (flags.dot_on)
-		draw_map_dots(map, buf, param);
+		draw_map_dots(map, buffer, param);
 	redraw_img(e);
 }

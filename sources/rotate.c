@@ -6,7 +6,7 @@
 /*   By: dromanic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/23 14:59:52 by dromanic          #+#    #+#             */
-/*   Updated: 2019/04/17 15:39:24 by dromanic         ###   ########.fr       */
+/*   Updated: 2019/04/18 13:46:40 by dromanic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ static t_db_3pt		rotate_z(t_db_3pt pt, double angle)
 
 void				rotate_map(t_env *e, t_px **map, char axis, double angle)
 {
-	const double	angle_radian = angle * PI / 180;
-	const t_db_2pt	center = e->param.center;
-	t_db_3pt		pt;
-	size_t			y;
-	size_t			x;
+	const double		angle_radian = angle * PI / 180;
+	const t_db_2pt		center = e->param.center;
+	t_db_3pt			pt;
+	size_t				y;
+	size_t				x;
 
 	y = UINT64_MAX;
 	while (e->param.rows > ++y)
@@ -62,21 +62,21 @@ void				rotate_map(t_env *e, t_px **map, char axis, double angle)
 	draw_map(e, map, e->buffer, e->param);
 }
 
-void				reset(t_env *e)
+void				reset(t_env *e, t_px **map, int *buffer, t_param param)
 {
-	size_t	y;
-	size_t	x;
+	size_t		y;
+	size_t		x;
 
 	if (!e)
 		return ;
 	y = UINT64_MAX;
-	while (e->param.rows > ++y)
+	while (param.rows > ++y)
 	{
 		x = UINT64_MAX;
-		while (e->param.cols > ++x)
-			e->map[y][x].pt = (t_db_3pt){ x, y, e->map[y][x].z_orig };
+		while (param.cols > ++x)
+			map[y][x].pt = (t_db_3pt){ x, y, map[y][x].z_orig };
 	}
-	e->param.move = (t_si_pt){ DEF_OFFSET_X, DEF_OFFSET_Y };
+	e->param.move = (t_si_2pt){ DEF_OFFSET_X, DEF_OFFSET_Y };
 	e->param.scale = (t_si_3pt){ DEF_SCALE, DEF_SCALE, DEF_SCALE };
-	draw_map(e, e->map, e->buffer, e->param);
+	draw_map(e, map, buffer, param);
 }

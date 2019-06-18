@@ -1,3 +1,18 @@
+*note:
+
+**to clone:** (please use comand including key --recurse-submodules)
+
+```git clone --recurse-submodules https://github.com/roma4004/fractol.git```
+
+**to run**:
+
+ ```./fdf maps/42.fdf```
+
+to run other maps change MAPS_NAME to name any other maps name from folder fdf/maps/:
+
+ ```./fdf maps/MAPS_NAME.fdf```
+
+
 ![title](https://github.com/roma4004/fdf/raw/master/images/title.png)
 # fdf is about creating a simplified graphic representation of a relief landscape, linking various points (x, y, z) via segments with algorithm of [Bresenham](https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm). 
 The coordinates of this landscape are stored in a file passed as a parameter to your program.
